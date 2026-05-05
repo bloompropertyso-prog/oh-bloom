@@ -1,0 +1,859 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>FreelancerOS — Bryttani Patterson</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&family=Jost:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg:#0A0908;--bg2:#111010;--bg3:#1a1918;--bg4:#222120;
+  --gold:#C9A84C;--gold-light:#e0c06a;--gold-dim:rgba(201,168,76,0.12);--gold-border:rgba(201,168,76,0.28);
+  --text:#F5F0E8;--text-muted:#9a9490;--text-dim:#6b6660;
+  --danger:#d95f5f;--success:#5b9e6d;--warning:#d4944a;--info:#6b8fde;
+  --sidebar-w:252px;--radius:8px;--radius-lg:12px;
+}
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+html,body,#root{height:100%}
+body{background:var(--bg);color:var(--text);font-family:'Jost',sans-serif;font-size:14px;line-height:1.6;overflow:hidden}
+.app{display:flex;height:100vh;overflow:hidden}
+
+/* SIDEBAR */
+.sidebar{width:var(--sidebar-w);background:var(--bg2);border-right:1px solid var(--gold-border);display:flex;flex-direction:column;flex-shrink:0;overflow-y:auto}
+.sidebar-logo{padding:26px 24px 20px;border-bottom:1px solid var(--gold-border)}
+.sidebar-logo h1{font-family:'Playfair Display',serif;font-size:18px;color:var(--gold);letter-spacing:0.3px}
+.sidebar-logo p{font-size:10px;color:var(--text-dim);font-weight:400;letter-spacing:1.8px;text-transform:uppercase;margin-top:3px}
+.sidebar-nav{padding:12px 0;flex:1}
+.nav-item{display:flex;align-items:center;gap:11px;padding:11px 22px;cursor:pointer;color:var(--text-muted);font-size:13px;font-weight:400;border-left:3px solid transparent;transition:all .18s;user-select:none}
+.nav-item:hover{color:var(--text);background:var(--gold-dim)}
+.nav-item.active{color:var(--gold);background:var(--gold-dim);border-left-color:var(--gold);font-weight:500}
+.nav-item svg{flex-shrink:0;opacity:.75}
+.nav-item.active svg{opacity:1}
+.sidebar-footer{padding:14px 22px;border-top:1px solid var(--gold-border);font-size:10px;color:var(--text-dim);letter-spacing:.8px}
+
+/* MAIN */
+.main{flex:1;overflow-y:auto;background:var(--bg)}
+.page-header{padding:26px 38px 20px;border-bottom:1px solid rgba(255,255,255,.055);display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;background:rgba(10,9,8,.95);z-index:10;backdrop-filter:blur(12px)}
+.page-title{font-family:'Playfair Display',serif;font-size:23px;font-weight:600;color:var(--text)}
+.page-subtitle{font-size:11px;color:var(--text-dim);margin-top:3px;letter-spacing:1px;text-transform:uppercase}
+.page-content{padding:28px 38px}
+
+/* CARDS */
+.card{background:var(--bg2);border:1px solid rgba(255,255,255,.055);border-radius:var(--radius-lg);padding:20px 22px}
+.card-gold{border-color:var(--gold-border)}
+.card-title{font-size:10px;letter-spacing:1.8px;text-transform:uppercase;color:var(--text-dim);font-weight:600;margin-bottom:13px}
+
+/* STATS */
+.stats-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:13px;margin-bottom:22px}
+.stat-card{background:var(--bg2);border:1px solid rgba(255,255,255,.055);border-radius:var(--radius-lg);padding:18px 20px;position:relative;overflow:hidden}
+.stat-card::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,var(--gold) 0%,transparent 70%)}
+.stat-label{font-size:10px;letter-spacing:1.8px;text-transform:uppercase;color:var(--text-dim);margin-bottom:8px;font-weight:600}
+.stat-value{font-family:'Playfair Display',serif;font-size:28px;color:var(--text);font-weight:600;line-height:1}
+.stat-value.gold{color:var(--gold)}
+.stat-change{font-size:11px;color:var(--text-dim);margin-top:5px}
+
+/* BUTTONS */
+.btn{display:inline-flex;align-items:center;gap:7px;padding:9px 18px;border:none;border-radius:var(--radius);cursor:pointer;font-family:'Jost',sans-serif;font-size:13px;font-weight:500;letter-spacing:.4px;transition:all .18s;white-space:nowrap;user-select:none}
+.btn-gold{background:var(--gold);color:#0A0908;font-weight:600}
+.btn-gold:hover{background:var(--gold-light);transform:translateY(-1px);box-shadow:0 4px 18px rgba(201,168,76,.22)}
+.btn-outline{background:transparent;color:var(--text-muted);border:1px solid rgba(255,255,255,.11)}
+.btn-outline:hover{border-color:var(--gold-border);color:var(--text)}
+.btn-ghost{background:transparent;color:var(--text-muted);padding:7px 11px}
+.btn-ghost:hover{color:var(--text);background:var(--bg3)}
+.btn-danger{background:transparent;color:var(--danger);border:1px solid rgba(217,95,95,.28);padding:8px 16px;font-size:13px}
+.btn-danger:hover{background:rgba(217,95,95,.09)}
+.btn-sm{padding:6px 13px;font-size:12px}
+.btn-icon{padding:6px;width:30px;height:30px;justify-content:center}
+.btn:disabled{opacity:.4;cursor:not-allowed}
+.btn:disabled:hover{transform:none;box-shadow:none}
+
+/* TABLE */
+.table-wrap{overflow-x:auto;border-radius:var(--radius-lg);border:1px solid rgba(255,255,255,.055)}
+table{width:100%;border-collapse:collapse}
+thead tr{border-bottom:1px solid rgba(255,255,255,.07);background:var(--bg3)}
+th{padding:12px 15px;text-align:left;font-size:10px;font-weight:600;letter-spacing:1.4px;text-transform:uppercase;color:var(--text-dim);white-space:nowrap}
+tbody tr{border-bottom:1px solid rgba(255,255,255,.04);cursor:pointer;transition:background .13s}
+tbody tr:last-child{border-bottom:none}
+tbody tr:hover{background:rgba(255,255,255,.025)}
+tbody tr.row-selected{background:var(--gold-dim)!important}
+td{padding:12px 15px;font-size:13px;color:var(--text-muted);vertical-align:middle}
+td.primary{color:var(--text);font-weight:500}
+
+/* BADGES */
+.badge{display:inline-flex;align-items:center;padding:3px 10px;border-radius:100px;font-size:11px;font-weight:600;letter-spacing:.3px;white-space:nowrap}
+.badge-lead{background:rgba(100,130,200,.13);color:#7b9de0;border:1px solid rgba(100,130,200,.22)}
+.badge-proposal{background:rgba(201,168,76,.13);color:var(--gold);border:1px solid var(--gold-border)}
+.badge-active,.badge-converted,.badge-published{background:rgba(91,158,109,.14);color:#68b87e;border:1px solid rgba(91,158,109,.24)}
+.badge-completed{background:rgba(130,180,140,.1);color:#7daa88;border:1px solid rgba(130,180,140,.18)}
+.badge-lost,.badge-unpaid,.badge-not-interested{background:rgba(217,95,95,.1);color:#c97070;border:1px solid rgba(217,95,95,.2)}
+.badge-deposit,.badge-emailed,.badge-scheduled{background:rgba(201,168,76,.12);color:var(--gold);border:1px solid var(--gold-border)}
+.badge-paid{background:rgba(91,158,109,.14);color:#68b87e;border:1px solid rgba(91,158,109,.24)}
+.badge-not-contacted,.badge-draft{background:rgba(255,255,255,.07);color:var(--text-dim);border:1px solid rgba(255,255,255,.1)}
+.badge-followed-up{background:rgba(180,120,220,.13);color:#c090e0;border:1px solid rgba(180,120,220,.22)}
+.badge-call-scheduled{background:rgba(100,170,220,.13);color:#70bce0;border:1px solid rgba(100,170,220,.22)}
+.badge-showcase{background:rgba(201,168,76,.12);color:var(--gold);border:1px solid var(--gold-border)}
+.badge-value{background:rgba(100,130,200,.13);color:#7b9de0;border:1px solid rgba(100,130,200,.22)}
+.badge-bts{background:rgba(180,120,220,.13);color:#c090e0;border:1px solid rgba(180,120,220,.22)}
+.badge-social-proof{background:rgba(91,158,109,.14);color:#68b87e;border:1px solid rgba(91,158,109,.24)}
+.badge-opinion{background:rgba(212,148,74,.13);color:var(--warning);border:1px solid rgba(212,148,74,.22)}
+
+/* MODAL */
+.modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.72);backdrop-filter:blur(5px);display:flex;align-items:center;justify-content:center;z-index:1000;padding:20px}
+.modal{background:var(--bg2);border:1px solid var(--gold-border);border-radius:var(--radius-lg);padding:28px;width:100%;max-width:560px;max-height:90vh;overflow-y:auto}
+.modal-lg{max-width:700px}
+.modal-xl{max-width:860px}
+.modal-title{font-family:'Playfair Display',serif;font-size:18px;color:var(--text);margin-bottom:20px;display:flex;align-items:center;justify-content:space-between}
+.modal-close{background:none;border:none;color:var(--text-dim);cursor:pointer;display:flex;align-items:center;justify-content:center;padding:3px;border-radius:4px;transition:color .15s}
+.modal-close:hover{color:var(--text)}
+
+/* FORMS */
+.form-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.form-field{display:flex;flex-direction:column;gap:5px}
+.form-field.full{grid-column:1/-1}
+label{font-size:10px;font-weight:600;letter-spacing:1.4px;text-transform:uppercase;color:var(--text-dim)}
+input,select,textarea{background:var(--bg3);border:1px solid rgba(255,255,255,.09);border-radius:var(--radius);color:var(--text);font-family:'Jost',sans-serif;font-size:13px;padding:10px 12px;outline:none;transition:border-color .18s;width:100%}
+input:focus,select:focus,textarea:focus{border-color:var(--gold)}
+input::placeholder,textarea::placeholder{color:var(--text-dim)}
+select option{background:var(--bg3);color:var(--text)}
+textarea{resize:vertical;min-height:76px}
+.form-actions{display:flex;justify-content:flex-end;gap:9px;margin-top:20px;padding-top:16px;border-top:1px solid rgba(255,255,255,.055)}
+
+/* FILTERS */
+.filter-tabs{display:flex;gap:4px;flex-wrap:wrap;margin-bottom:16px}
+.filter-tab{padding:6px 14px;border-radius:100px;font-size:12px;font-weight:500;cursor:pointer;border:1px solid rgba(255,255,255,.09);background:transparent;color:var(--text-muted);transition:all .18s;font-family:'Jost',sans-serif;user-select:none}
+.filter-tab:hover{border-color:var(--gold-border);color:var(--text)}
+.filter-tab.active{background:var(--gold-dim);border-color:var(--gold);color:var(--gold)}
+
+/* PROGRESS */
+.progress-bar{height:5px;background:rgba(255,255,255,.07);border-radius:100px;overflow:hidden}
+.progress-fill{height:100%;background:linear-gradient(90deg,var(--gold),var(--gold-light));border-radius:100px;transition:width .5s ease}
+
+/* EMPTY STATE */
+.empty-state{text-align:center;padding:52px 36px;color:var(--text-dim)}
+.empty-state-icon{font-size:42px;margin-bottom:13px;opacity:.45}
+.empty-state h3{font-family:'Playfair Display',serif;font-size:17px;color:var(--text-muted);margin-bottom:7px}
+.empty-state p{font-size:13px;max-width:280px;margin:0 auto 16px;line-height:1.75}
+
+/* LAYOUT */
+.two-col{display:grid;grid-template-columns:1fr 1fr;gap:18px}
+.flex-between{display:flex;align-items:center;justify-content:space-between}
+.flex{display:flex;align-items:center}
+.gap-8{gap:8px}
+.gap-12{gap:12px}
+.mt-16{margin-top:16px}
+.mt-20{margin-top:20px}
+.w-full{width:100%}
+hr.divider{border:none;border-top:1px solid rgba(255,255,255,.055);margin:16px 0}
+
+/* PROJECTS */
+.projects-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(330px,1fr));gap:16px}
+.project-card{background:var(--bg2);border:1px solid rgba(255,255,255,.055);border-radius:var(--radius-lg);padding:20px;transition:border-color .18s}
+.project-card:hover{border-color:var(--gold-border)}
+.project-client{font-family:'Playfair Display',serif;font-size:15px;color:var(--text);font-weight:600}
+.project-type{font-size:12px;color:var(--text-muted);margin-top:2px}
+.project-meta{display:grid;grid-template-columns:1fr 1fr;gap:9px;margin:12px 0}
+.project-meta-item label{display:block;font-size:9px;letter-spacing:1.4px;text-transform:uppercase;color:var(--text-dim);margin-bottom:2px}
+.project-meta-item span{font-size:13px;color:var(--text-muted)}
+.deliverables-title{font-size:10px;letter-spacing:1.4px;text-transform:uppercase;color:var(--text-dim);margin-bottom:8px;font-weight:600}
+.deliverable-item{display:flex;align-items:center;gap:9px;padding:6px 0;border-bottom:1px solid rgba(255,255,255,.04);cursor:pointer}
+.deliverable-item:last-child{border-bottom:none}
+.deliverable-item.done span{text-decoration:line-through;color:var(--text-dim)}
+.checkbox{width:15px;height:15px;border:1.5px solid rgba(255,255,255,.18);border-radius:3px;display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:all .15s}
+.checkbox.checked{background:var(--gold);border-color:var(--gold)}
+
+/* PROPOSAL */
+.proposal-layout{display:grid;grid-template-columns:1fr 1fr;gap:26px;align-items:start}
+.proposal-preview{background:var(--bg2);border:1px solid var(--gold-border);border-radius:var(--radius-lg);overflow:hidden}
+.proposal-header{background:linear-gradient(140deg,#1c1710 0%,#231d10 100%);padding:26px 28px;border-bottom:1px solid var(--gold-border);text-align:center}
+.proposal-header h2{font-family:'Playfair Display',serif;font-size:20px;color:var(--gold);margin-bottom:3px}
+.proposal-header p{font-size:11px;color:var(--text-dim);letter-spacing:1.2px;text-transform:uppercase}
+.proposal-body{padding:26px 28px}
+.proposal-sec{margin-bottom:20px}
+.proposal-sec h4{font-family:'Playfair Display',serif;font-size:13px;color:var(--gold);margin-bottom:7px;padding-bottom:6px;border-bottom:1px solid rgba(201,168,76,.18)}
+.proposal-sec p{font-size:13px;color:var(--text-muted);line-height:1.75}
+.proposal-price-box{background:var(--bg3);border:1px solid var(--gold-border);border-radius:var(--radius);padding:13px 16px;display:flex;align-items:center;justify-content:space-between;margin-top:12px}
+.proposal-price-label{font-size:11px;text-transform:uppercase;letter-spacing:1px;color:var(--text-dim)}
+.proposal-price-value{font-family:'Playfair Display',serif;font-size:24px;color:var(--gold);font-weight:600}
+.proposal-footer{padding:14px 28px;border-top:1px solid rgba(255,255,255,.055);text-align:center;font-size:11px;color:var(--text-dim);letter-spacing:.5px}
+
+/* INCOME */
+.income-layout{display:grid;grid-template-columns:1fr 350px;gap:24px;align-items:start}
+.income-stats{display:grid;grid-template-columns:1fr 1fr;gap:13px;margin-bottom:18px}
+.bar-chart-wrap{background:var(--bg2);border:1px solid rgba(255,255,255,.055);border-radius:var(--radius-lg);padding:20px 22px;margin-bottom:18px}
+.payment-item{display:flex;align-items:center;justify-content:space-between;padding:11px 0;border-bottom:1px solid rgba(255,255,255,.05)}
+.payment-item:last-child{border-bottom:none}
+
+/* DETAIL PANEL */
+.detail-panel{position:fixed;right:0;top:0;bottom:0;width:370px;background:var(--bg2);border-left:1px solid var(--gold-border);z-index:100;overflow-y:auto;padding:26px 24px;transform:translateX(100%);transition:transform .28s ease}
+.detail-panel.open{transform:translateX(0)}
+.panel-overlay{position:fixed;inset:0;background:rgba(0,0,0,.38);z-index:99}
+.detail-field{margin-bottom:14px}
+.detail-field label{display:block;font-size:10px;letter-spacing:1.4px;text-transform:uppercase;color:var(--text-dim);margin-bottom:2px}
+.detail-field p{font-size:14px;color:var(--text-muted);line-height:1.65}
+
+/* FOLLOW-UPS */
+.followup-item{display:flex;align-items:center;gap:11px;padding:10px 0;border-bottom:1px solid rgba(255,255,255,.045)}
+.followup-item:last-child{border-bottom:none}
+.followup-dot{width:7px;height:7px;border-radius:50%;background:var(--gold);flex-shrink:0}
+.followup-dot.overdue{background:var(--danger)}
+.followup-dot.today{background:var(--warning)}
+.avatar{width:32px;height:32px;border-radius:50%;background:var(--gold-dim);border:1px solid var(--gold-border);display:flex;align-items:center;justify-content:center;font-size:13px;color:var(--gold);font-family:'Playfair Display',serif;font-weight:600;flex-shrink:0}
+
+/* TOAST */
+.toast{position:fixed;bottom:20px;right:20px;background:var(--bg2);border:1px solid var(--gold-border);border-radius:var(--radius);padding:12px 16px;font-size:13px;color:var(--text);z-index:9999;display:flex;align-items:center;gap:8px;animation:fadeUp .25s ease}
+
+/* OUTREACH */
+.outreach-layout{display:grid;grid-template-columns:1fr 340px;gap:24px;align-items:start}
+.template-box{background:var(--bg3);border:1px solid rgba(255,255,255,.09);border-radius:var(--radius);padding:14px 16px;font-size:12px;color:var(--text-muted);line-height:1.8;white-space:pre-wrap;min-height:200px;font-family:'Jost',sans-serif;max-height:380px;overflow-y:auto}
+.overdue-chip{display:inline-flex;align-items:center;gap:4px;background:rgba(217,95,95,.12);color:var(--danger);border:1px solid rgba(217,95,95,.22);border-radius:100px;padding:2px 9px;font-size:10px;font-weight:600;letter-spacing:.5px}
+
+/* LINKEDIN */
+.cal-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:8px;margin-top:16px}
+.cal-day{background:var(--bg3);border:1px solid rgba(255,255,255,.06);border-radius:var(--radius);min-height:90px;padding:10px 10px 8px;cursor:pointer;transition:border-color .18s}
+.cal-day:hover{border-color:var(--gold-border)}
+.cal-day.today{border-color:var(--gold);background:var(--gold-dim)}
+.cal-day-label{font-size:10px;color:var(--text-dim);letter-spacing:1px;text-transform:uppercase;margin-bottom:6px;font-weight:600}
+.cal-day-date{font-family:'Playfair Display',serif;font-size:16px;color:var(--text-muted);margin-bottom:7px}
+.cal-day.today .cal-day-date{color:var(--gold)}
+.cal-post-chip{background:rgba(201,168,76,.14);border:1px solid var(--gold-border);border-radius:5px;padding:3px 7px;font-size:10px;color:var(--text-muted);margin-bottom:4px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;cursor:pointer}
+.cal-post-chip.published{background:rgba(91,158,109,.14);border-color:rgba(91,158,109,.24);color:#68b87e}
+.cal-post-chip.draft{background:rgba(255,255,255,.05);border-color:rgba(255,255,255,.09);color:var(--text-dim)}
+.post-card{background:var(--bg2);border:1px solid rgba(255,255,255,.055);border-radius:var(--radius-lg);padding:18px 20px;margin-bottom:12px;transition:border-color .18s}
+.post-card:hover{border-color:var(--gold-border)}
+.idea-card{background:var(--bg3);border:1px solid rgba(255,255,255,.07);border-radius:var(--radius);padding:13px 15px;cursor:pointer;transition:all .18s;margin-bottom:8px}
+.idea-card:hover{border-color:var(--gold-border);background:var(--gold-dim)}
+.streak-badge{display:inline-flex;align-items:center;gap:7px;background:linear-gradient(135deg,#2a1f08,#1f1a0a);border:1px solid var(--gold-border);border-radius:var(--radius);padding:10px 16px}
+.streak-number{font-family:'Playfair Display',serif;font-size:26px;color:var(--gold);font-weight:700;line-height:1}
+
+/* GOAL EDITOR */
+.goal-edit-btn{background:none;border:none;color:var(--text-dim);font-size:11px;cursor:pointer;font-family:'Jost',sans-serif;letter-spacing:.4px;text-decoration:underline;transition:color .15s;margin-top:2px}
+.goal-edit-btn:hover{color:var(--gold)}
+.goal-inline{display:flex;gap:6px;align-items:center;margin-top:3px}
+
+/* ADD DELIVERABLE */
+.add-del{display:flex;gap:7px;margin-top:7px}
+.add-del input{flex:1;padding:7px 11px;font-size:12px}
+
+/* SCROLLBAR */
+::-webkit-scrollbar{width:5px}
+::-webkit-scrollbar-track{background:transparent}
+::-webkit-scrollbar-thumb{background:rgba(255,255,255,.09);border-radius:3px}
+::-webkit-scrollbar-thumb:hover{background:rgba(201,168,76,.28)}
+
+@keyframes fadeUp{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:translateY(0)}}
+.animate-in{animation:fadeUp .28s ease forwards}
+
+@media print{.sidebar,.page-header,.proposal-form-col{display:none!important}.main{overflow:visible}.proposal-preview{border:none;box-shadow:none}body{background:white!important;color:black!important}.proposal-header{background:#f5f0e0!important}}
+@media(max-width:1100px){:root{--sidebar-w:200px}.stats-grid{grid-template-columns:1fr 1fr}.proposal-layout,.income-layout,.outreach-layout{grid-template-columns:1fr}}
+@media(max-width:720px){.page-content{padding:18px 16px}.page-header{padding:16px}.stats-grid{grid-template-columns:1fr}.two-col{grid-template-columns:1fr}.form-grid{grid-template-columns:1fr}.detail-panel{width:100%}.projects-grid{grid-template-columns:1fr}.cal-grid{grid-template-columns:repeat(4,1fr)}}
+</style>
+</head>
+<body>
+<div id="root"></div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/react/18.2.0/umd/react.production.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/react-dom/18.2.0/umd/react-dom.production.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/7.23.2/babel.min.js"></script>
+<script type="text/babel">
+const {useState,useEffect,useMemo,useRef} = React;
+
+/* ── UTILS ── */
+function useLS(key,def){
+  const [v,setV]=useState(()=>{try{const s=localStorage.getItem(key);return s?JSON.parse(s):def}catch{return def}});
+  useEffect(()=>{try{localStorage.setItem(key,JSON.stringify(v))}catch{}},[key,v]);
+  return[v,setV];
+}
+function uid(){return Date.now().toString(36)+Math.random().toString(36).slice(2,7)}
+function fmtDate(d){if(!d)return'—';try{return new Date(d+'T12:00:00').toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'})}catch{return d}}
+function fmtCur(n){return'$'+(Number(n)||0).toLocaleString('en-US',{minimumFractionDigits:0,maximumFractionDigits:0})}
+function todayStr(){return new Date().toISOString().split('T')[0]}
+function monthKey(d){return d?d.slice(0,7):''}
+function getWeekDays(offset){
+  const d=new Date();d.setHours(0,0,0,0);
+  const day=d.getDay();const mon=new Date(d);
+  mon.setDate(d.getDate()-(day===0?6:day-1)+offset*7);
+  return Array.from({length:7},(_,i)=>{const x=new Date(mon);x.setDate(mon.getDate()+i);return x});
+}
+
+/* ── ICONS ── */
+const Ic={
+  grid:()=><svg width="14"height="14"viewBox="0 0 24 24"fill="none"stroke="currentColor"strokeWidth="1.8"strokeLinecap="round"strokeLinejoin="round"><rect x="3"y="3"width="7"height="7"/><rect x="14"y="3"width="7"height="7"/><rect x="3"y="14"width="7"height="7"/><rect x="14"y="14"width="7"height="7"/></svg>,
+  users:()=><svg width="14"height="14"viewBox="0 0 24 24"fill="none"stroke="currentColor"strokeWidth="1.8"strokeLinecap="round"strokeLinejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9"cy="7"r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>,
+  folder:()=><svg width="14"height="14"viewBox="0 0 24 24"fill="none"stroke="currentColor"strokeWidth="1.8"strokeLinecap="round"strokeLinejoin="round"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/></svg>,
+  doc:()=><svg width="14"height="14"viewBox="0 0 24 24"fill="none"stroke="currentColor"strokeWidth="1.8"strokeLinecap="round"strokeLinejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16"y1="13"x2="8"y2="13"/><line x1="16"y1="17"x2="8"y2="17"/></svg>,
+  dollar:()=><svg width="14"height="14"viewBox="0 0 24 24"fill="none"stroke="currentColor"strokeWidth="1.8"strokeLinecap="round"strokeLinejoin="round"><line x1="12"y1="1"x2="12"y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>,
+  mail:()=><svg width="14"height="14"viewBox="0 0 24 24"fill="none"stroke="currentColor"strokeWidth="1.8"strokeLinecap="round"strokeLinejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>,
+  linkedin:()=><svg width="14"height="14"viewBox="0 0 24 24"fill="none"stroke="currentColor"strokeWidth="1.8"strokeLinecap="round"strokeLinejoin="round"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"/><rect x="2"y="9"width="4"height="12"/><circle cx="4"cy="4"r="2"/></svg>,
+  plus:()=><svg width="13"height="13"viewBox="0 0 24 24"fill="none"stroke="currentColor"strokeWidth="2.5"strokeLinecap="round"><line x1="12"y1="5"x2="12"y2="19"/><line x1="5"y1="12"x2="19"y2="12"/></svg>,
+  edit:()=><svg width="12"height="12"viewBox="0 0 24 24"fill="none"stroke="currentColor"strokeWidth="2"strokeLinecap="round"strokeLinejoin="round"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>,
+  trash:()=><svg width="12"height="12"viewBox="0 0 24 24"fill="none"stroke="currentColor"strokeWidth="2"strokeLinecap="round"strokeLinejoin="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/><path d="M10 11v6"/><path d="M14 11v6"/><path d="M9 6V4h6v2"/></svg>,
+  x:()=><svg width="15"height="15"viewBox="0 0 24 24"fill="none"stroke="currentColor"strokeWidth="2.5"strokeLinecap="round"><line x1="18"y1="6"x2="6"y2="18"/><line x1="6"y1="6"x2="18"y2="18"/></svg>,
+  check:()=><svg width="9"height="9"viewBox="0 0 24 24"fill="none"stroke="#0A0908"strokeWidth="3.5"strokeLinecap="round"strokeLinejoin="round"><polyline points="20 6 9 17 4 12"/></svg>,
+  copy:()=><svg width="13"height="13"viewBox="0 0 24 24"fill="none"stroke="currentColor"strokeWidth="2"strokeLinecap="round"strokeLinejoin="round"><rect x="9"y="9"width="13"height="13"rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>,
+  print:()=><svg width="13"height="13"viewBox="0 0 24 24"fill="none"stroke="currentColor"strokeWidth="2"strokeLinecap="round"strokeLinejoin="round"><polyline points="6 9 6 2 18 2 18 9"/><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><rect x="6"y="14"width="12"height="8"/></svg>,
+  cal:()=><svg width="11"height="11"viewBox="0 0 24 24"fill="none"stroke="currentColor"strokeWidth="2"strokeLinecap="round"strokeLinejoin="round"><rect x="3"y="4"width="18"height="18"rx="2"/><line x1="16"y1="2"x2="16"y2="6"/><line x1="8"y1="2"x2="8"y2="6"/><line x1="3"y1="10"x2="21"y2="10"/></svg>,
+  spark:()=><svg width="13"height="13"viewBox="0 0 24 24"fill="none"stroke="currentColor"strokeWidth="2"strokeLinecap="round"strokeLinejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>,
+  chevL:()=><svg width="14"height="14"viewBox="0 0 24 24"fill="none"stroke="currentColor"strokeWidth="2.5"strokeLinecap="round"><polyline points="15 18 9 12 15 6"/></svg>,
+  chevR:()=><svg width="14"height="14"viewBox="0 0 24 24"fill="none"stroke="currentColor"strokeWidth="2.5"strokeLinecap="round"><polyline points="9 18 15 12 9 6"/></svg>,
+  list:()=><svg width="14"height="14"viewBox="0 0 24 24"fill="none"stroke="currentColor"strokeWidth="2"strokeLinecap="round"><line x1="8"y1="6"x2="21"y2="6"/><line x1="8"y1="12"x2="21"y2="12"/><line x1="8"y1="18"x2="21"y2="18"/><line x1="3"y1="6"x2="3.01"y2="6"/><line x1="3"y1="12"x2="3.01"y2="12"/><line x1="3"y1="18"x2="3.01"y2="18"/></svg>,
+};
+
+/* ── SHARED ── */
+function Badge({status}){
+  const map={'Lead':'badge-lead','Proposal Sent':'badge-proposal','Active':'badge-active','Completed':'badge-completed','Lost':'badge-lost','Unpaid':'badge-unpaid','Deposit Paid':'badge-deposit','Paid in Full':'badge-paid','Not Contacted':'badge-not-contacted','Emailed':'badge-emailed','Followed Up':'badge-followed-up','Call Scheduled':'badge-call-scheduled','Converted':'badge-converted','Not Interested':'badge-not-interested','Draft':'badge-draft','Scheduled':'badge-scheduled','Published':'badge-published','Project Showcase':'badge-showcase','Value Post':'badge-value','Behind the Scenes':'badge-bts','Social Proof':'badge-social-proof','Opinion':'badge-opinion'};
+  return <span className={`badge ${map[status]||'badge-draft'}`}>{status}</span>;
+}
+function Modal({open,onClose,title,children,large,xl}){
+  if(!open)return null;
+  return <div className="modal-overlay"onClick={e=>e.target===e.currentTarget&&onClose()}><div className={`modal ${xl?'modal-xl':large?'modal-lg':''} animate-in`}><div className="modal-title"><span>{title}</span><button className="modal-close"onClick={onClose}><Ic.x/></button></div>{children}</div></div>;
+}
+function Toast({msg,onDone}){
+  useEffect(()=>{const t=setTimeout(onDone,2600);return()=>clearTimeout(t)},[]);
+  return <div className="toast"><span style={{color:'var(--gold)'}}>✓</span>{msg}</div>;
+}
+function GoalEditor({settings,setSettings}){
+  const[editing,setEditing]=useState(false);const[val,setVal]=useState(settings.monthlyGoal||5000);
+  if(!editing)return <button className="goal-edit-btn"onClick={()=>{setVal(settings.monthlyGoal||5000);setEditing(true)}}>Edit goal</button>;
+  return <div className="goal-inline"><input type="number"value={val}onChange={e=>setVal(e.target.value)}style={{width:88,padding:'4px 8px',fontSize:12}}autoFocus/><button className="btn btn-gold btn-sm"onClick={()=>{setSettings({...settings,monthlyGoal:Number(val)});setEditing(false)}}>Save</button><button className="btn btn-ghost btn-sm"onClick={()=>setEditing(false)}>✕</button></div>;
+}
+
+/* ── DASHBOARD ── */
+function Dashboard({clients,projects,payments,outreach,settings,setSettings}){
+  const thisMonth=todayStr().slice(0,7);
+  const monthlyRev=payments.filter(p=>monthKey(p.date)===thisMonth).reduce((s,p)=>s+(Number(p.amount)||0),0);
+  const annualRev=payments.reduce((s,p)=>s+(Number(p.amount)||0),0);
+  const goal=settings.monthlyGoal||5000;
+  const goalPct=Math.min((monthlyRev/goal)*100,100);
+  const now=new Date();now.setHours(0,0,0,0);
+  function fuStatus(d){const dt=new Date(d+'T12:00:00');dt.setHours(0,0,0,0);if(dt<now)return'overdue';if(dt.getTime()===now.getTime())return'today';return'upcoming'}
+  const followUps=[...clients].filter(c=>c.followUpDate).sort((a,b)=>a.followUpDate.localeCompare(b.followUpDate)).slice(0,5);
+  const outreachDue=outreach.filter(o=>o.followUpDate&&o.followUpDate<=todayStr()&&o.status!=='Converted'&&o.status!=='Not Interested').length;
+  const recentClients=[...clients].sort((a,b)=>(b.createdAt||'').localeCompare(a.createdAt||'')).slice(0,5);
+  return(
+    <div className="animate-in">
+      <div className="stats-grid">
+        <div className="stat-card"><div className="stat-label">Total Leads</div><div className="stat-value">{clients.length}</div><div className="stat-change">{clients.filter(c=>c.status==='Active').length} active clients</div></div>
+        <div className="stat-card"><div className="stat-label">Active Projects</div><div className="stat-value">{projects.length}</div><div className="stat-change">{projects.filter(p=>p.paymentStatus==='Unpaid').length} awaiting payment</div></div>
+        <div className="stat-card"><div className="stat-label">Revenue This Month</div><div className="stat-value gold">{fmtCur(monthlyRev)}</div><div className="stat-change">of {fmtCur(goal)} goal</div></div>
+        <div className="stat-card"><div className="stat-label">Annual Total</div><div className="stat-value gold">{fmtCur(annualRev)}</div><div className="stat-change">{payments.length} payments logged</div></div>
+      </div>
+      <div className="card card-gold"style={{marginBottom:20}}>
+        <div className="flex-between"style={{marginBottom:9}}>
+          <div><div className="card-title"style={{marginBottom:2}}>Monthly Revenue Goal</div><div style={{fontSize:13,color:'var(--text-muted)'}}>{fmtCur(monthlyRev)} <span style={{color:'var(--text-dim)'}}>of</span> {fmtCur(goal)}</div><GoalEditor settings={settings}setSettings={setSettings}/></div>
+          <div style={{fontFamily:'Playfair Display,serif',fontSize:26,color:'var(--gold)',fontWeight:600}}>{Math.round(goalPct)}%</div>
+        </div>
+        <div className="progress-bar"><div className="progress-fill"style={{width:goalPct+'%'}}/></div>
+      </div>
+      {outreachDue>0&&<div style={{background:'rgba(217,95,95,.08)',border:'1px solid rgba(217,95,95,.22)',borderRadius:'var(--radius)',padding:'12px 16px',marginBottom:20,fontSize:13,color:'var(--danger)',display:'flex',alignItems:'center',gap:10}}>⚠ <strong>{outreachDue}</strong> outreach follow-up{outreachDue>1?'s':''} overdue — check your Outreach Manager.</div>}
+      <div className="two-col">
+        <div className="card"><div className="card-title">Upcoming Follow-ups</div>
+          {followUps.length===0?<div style={{color:'var(--text-dim)',fontSize:13,padding:'10px 0'}}>No follow-ups scheduled.</div>
+          :followUps.map(c=>{const st=fuStatus(c.followUpDate);return(
+            <div key={c.id}className="followup-item">
+              <div className={`followup-dot ${st}`}/>
+              <div style={{flex:1,minWidth:0}}><div style={{fontSize:13,color:'var(--text)',fontWeight:500,overflow:'hidden',textOverflow:'ellipsis',whiteSpace:'nowrap'}}>{c.name}</div><div style={{fontSize:11,color:'var(--text-dim)',marginTop:1}}>{c.service||'No service'}</div></div>
+              <div style={{textAlign:'right',flexShrink:0}}><div style={{fontSize:11,color:st==='overdue'?'var(--danger)':st==='today'?'var(--warning)':'var(--text-muted)',marginBottom:3}}>{st==='overdue'?'Overdue':st==='today'?'Today':fmtDate(c.followUpDate)}</div><Badge status={c.status}/></div>
+            </div>
+          )})}
+        </div>
+        <div className="card"><div className="card-title">Recent Leads & Clients</div>
+          {recentClients.length===0?<div style={{color:'var(--text-dim)',fontSize:13,padding:'10px 0'}}>No clients yet.</div>
+          :recentClients.map(c=>(
+            <div key={c.id}className="followup-item">
+              <div className="avatar">{(c.name||'?').charAt(0).toUpperCase()}</div>
+              <div style={{flex:1,minWidth:0}}><div style={{fontSize:13,color:'var(--text)',fontWeight:500,overflow:'hidden',textOverflow:'ellipsis',whiteSpace:'nowrap'}}>{c.name}</div><div style={{fontSize:11,color:'var(--text-dim)',marginTop:1}}>{c.business||c.email||'—'}</div></div>
+              <Badge status={c.status}/>
+            </div>
+          ))}
+        </div>
+      </div>
+    </div>
+  );
+}
+
+/* ── CLIENT TRACKER ── */
+const STATUSES=['Lead','Proposal Sent','Active','Completed','Lost'];
+const EC={id:'',name:'',business:'',email:'',phone:'',service:'',budget:'',status:'Lead',followUpDate:'',retainerStatus:'None',retainerAmount:'',notes:''};
+function ClientTracker({clients,setClients}){
+  const[filter,setFilter]=useState('All');const[modal,setModal]=useState(false);const[isEdit,setIsEdit]=useState(false);const[form,setForm]=useState(EC);const[panel,setPanel]=useState(null);const[toast,setToast]=useState('');const[delId,setDelId]=useState(null);
+  const filtered=filter==='All'?clients:clients.filter(c=>c.status===filter);
+  const counts=useMemo(()=>{const o={All:clients.length};STATUSES.forEach(s=>o[s]=clients.filter(c=>c.status===s).length);return o},[clients]);
+  function openAdd(){setForm({...EC,id:uid()});setIsEdit(false);setModal(true)}
+  function openEdit(c,e){e&&e.stopPropagation();setForm({...c});setIsEdit(true);setModal(true)}
+  function save(){if(!form.name.trim())return;if(isEdit){setClients(clients.map(c=>c.id===form.id?{...form}:c));setToast('Client updated.')}else{setClients([...clients,{...form,createdAt:new Date().toISOString()}]);setToast('Lead added.')}setModal(false)}
+  function del(id){setClients(clients.filter(c=>c.id!==id));if(panel?.id===id)setPanel(null);setDelId(null);setToast('Removed.')}
+  const sel=panel?clients.find(c=>c.id===panel.id):null;
+  return(
+    <div className="animate-in">
+      {toast&&<Toast msg={toast}onDone={()=>setToast('')}/>}
+      <div className="flex-between"style={{marginBottom:16,flexWrap:'wrap',gap:9}}>
+        <div className="filter-tabs"style={{marginBottom:0}}>{['All',...STATUSES].map(s=><button key={s}className={`filter-tab ${filter===s?'active':''}`}onClick={()=>setFilter(s)}>{s} <span style={{opacity:.55,fontSize:10}}>({counts[s]||0})</span></button>)}</div>
+        <button className="btn btn-gold"onClick={openAdd}><Ic.plus/>Add Lead</button>
+      </div>
+      {filtered.length===0?<div className="empty-state"><div className="empty-state-icon">👥</div><h3>{filter!=='All'?`No ${filter} Clients`:'No Clients Yet'}</h3><p>Build your pipeline by adding your first lead or contact.</p><button className="btn btn-gold"onClick={openAdd}><Ic.plus/>Add First Lead</button></div>
+      :<div className="table-wrap"><table><thead><tr><th>Name</th><th>Business</th><th>Email</th><th>Phone</th><th>Service</th><th>Budget</th><th>Status</th><th>Retainer</th><th>Follow-up</th><th></th></tr></thead><tbody>
+        {filtered.map(c=><tr key={c.id}className={sel?.id===c.id?'row-selected':''}onClick={()=>setPanel(sel?.id===c.id?null:c)}>
+          <td className="primary">{c.name}</td><td>{c.business||'—'}</td><td>{c.email||'—'}</td><td>{c.phone||'—'}</td><td>{c.service||'—'}</td><td>{c.budget?fmtCur(c.budget):'—'}</td><td><Badge status={c.status}/></td>
+          <td>{c.retainerStatus&&c.retainerStatus!=='None'?<span style={{display:'flex',flexDirection:'column',gap:2}}><span className={`badge ${c.retainerStatus==='Active'?'badge-active':'badge-lost'}`}>{c.retainerStatus}</span>{c.retainerAmount&&<span style={{fontSize:11,color:'var(--gold)'}}>{fmtCur(c.retainerAmount)}/mo</span>}</span>:<span style={{color:'var(--text-dim)',fontSize:12}}>—</span>}</td>
+          <td>{c.followUpDate?<span style={{display:'flex',alignItems:'center',gap:4,fontSize:12,color:'var(--text-dim)'}}><Ic.cal/>{fmtDate(c.followUpDate)}</span>:'—'}</td>
+          <td onClick={e=>e.stopPropagation()}><div className="flex gap-8"><button className="btn btn-ghost btn-icon"onClick={e=>openEdit(c,e)}><Ic.edit/></button><button className="btn btn-ghost btn-icon"style={{color:'var(--danger)'}}onClick={e=>{e.stopPropagation();setDelId(c.id)}}><Ic.trash/></button></div></td>
+        </tr>)}
+      </tbody></table></div>}
+      {sel&&<><div className="panel-overlay"onClick={()=>setPanel(null)}/><div className="detail-panel open animate-in">
+        <div className="flex-between"style={{marginBottom:18}}><div><div style={{fontFamily:'Playfair Display,serif',fontSize:18,color:'var(--text)',fontWeight:600}}>{sel.name}</div>{sel.business&&<div style={{fontSize:12,color:'var(--text-dim)',marginTop:2}}>{sel.business}</div>}</div><button className="btn btn-ghost btn-icon"onClick={()=>setPanel(null)}><Ic.x/></button></div>
+        <Badge status={sel.status}/><hr className="divider"/>
+        {[['Email',sel.email],['Phone',sel.phone],['Service',sel.service],['Budget',sel.budget?fmtCur(sel.budget):null],['Retainer',sel.retainerStatus&&sel.retainerStatus!=='None'?`${sel.retainerStatus}${sel.retainerAmount?' — '+fmtCur(sel.retainerAmount)+'/mo':''}`:null],['Follow-up',sel.followUpDate?fmtDate(sel.followUpDate):null]].filter(([,v])=>v).map(([l,v])=><div key={l}className="detail-field"><label>{l}</label><p>{v}</p></div>)}
+        {sel.notes&&<div className="detail-field"><label>Notes</label><p>{sel.notes}</p></div>}
+        <div className="flex gap-8 mt-20"><button className="btn btn-outline"style={{flex:1}}onClick={()=>{openEdit(sel,null);setPanel(null)}}><Ic.edit/>Edit</button><button className="btn btn-danger"onClick={()=>setDelId(sel.id)}><Ic.trash/>Delete</button></div>
+      </div></>}
+      <Modal open={modal}onClose={()=>setModal(false)}title={isEdit?'Edit Client':'Add New Lead'}large>
+        <div className="form-grid">
+          <div className="form-field"><label>Name *</label><input value={form.name}onChange={e=>setForm({...form,name:e.target.value})}placeholder="Full name"/></div>
+          <div className="form-field"><label>Business</label><input value={form.business}onChange={e=>setForm({...form,business:e.target.value})}placeholder="Company name"/></div>
+          <div className="form-field"><label>Email</label><input type="email"value={form.email}onChange={e=>setForm({...form,email:e.target.value})}placeholder="email@example.com"/></div>
+          <div className="form-field"><label>Phone</label><input value={form.phone}onChange={e=>setForm({...form,phone:e.target.value})}placeholder="(555) 000-0000"/></div>
+          <div className="form-field"><label>Service</label><input value={form.service}onChange={e=>setForm({...form,service:e.target.value})}placeholder="e.g. Website, Branding"/></div>
+          <div className="form-field"><label>Budget ($)</label><input type="number"value={form.budget}onChange={e=>setForm({...form,budget:e.target.value})}placeholder="0"/></div>
+          <div className="form-field"><label>Status</label><select value={form.status}onChange={e=>setForm({...form,status:e.target.value})}>{STATUSES.map(s=><option key={s}>{s}</option>)}</select></div>
+          <div className="form-field"><label>Follow-up Date</label><input type="date"value={form.followUpDate}onChange={e=>setForm({...form,followUpDate:e.target.value})}/></div>
+          <div className="form-field"><label>Retainer Status</label><select value={form.retainerStatus||'None'}onChange={e=>setForm({...form,retainerStatus:e.target.value})}><option>None</option><option>Active</option><option>Churned</option></select></div>
+          <div className="form-field"><label>Monthly Retainer ($)</label><input type="number"value={form.retainerAmount||''}onChange={e=>setForm({...form,retainerAmount:e.target.value})}placeholder="0"disabled={!form.retainerStatus||form.retainerStatus==='None'}style={{opacity:(!form.retainerStatus||form.retainerStatus==='None')?0.4:1}}/></div>
+          <div className="form-field full"><label>Notes</label><textarea value={form.notes}onChange={e=>setForm({...form,notes:e.target.value})}placeholder="Any relevant notes..."rows={3}/></div>
+        </div>
+        <div className="form-actions"><button className="btn btn-outline"onClick={()=>setModal(false)}>Cancel</button><button className="btn btn-gold"onClick={save}>{isEdit?'Save Changes':'Add Lead'}</button></div>
+      </Modal>
+      <Modal open={!!delId}onClose={()=>setDelId(null)}title="Remove Client"><p style={{color:'var(--text-muted)',lineHeight:1.75,marginBottom:6}}>Remove this client? This cannot be undone.</p><div className="form-actions"><button className="btn btn-outline"onClick={()=>setDelId(null)}>Cancel</button><button className="btn btn-danger"style={{padding:'9px 18px'}}onClick={()=>del(delId)}>Remove</button></div></Modal>
+    </div>
+  );
+}
+
+/* ── PROJECT MANAGER ── */
+const PS=['Unpaid','Deposit Paid','Paid in Full'];
+const EP={id:'',clientName:'',projectType:'',startDate:'',deadline:'',paymentStatus:'Unpaid',deliverables:[],notes:''};
+function ProjectManager({projects,setProjects,clients}){
+  const[modal,setModal]=useState(false);const[isEdit,setIsEdit]=useState(false);const[form,setForm]=useState(EP);const[di,setDi]=useState('');const[toast,setToast]=useState('');
+  function openAdd(){setForm({...EP,id:uid(),deliverables:[]});setIsEdit(false);setModal(true);setDi('')}
+  function openEdit(p){setForm({...p,deliverables:[...(p.deliverables||[])]});setIsEdit(true);setModal(true);setDi('')}
+  function save(){if(!form.clientName.trim())return;if(isEdit){setProjects(projects.map(p=>p.id===form.id?{...form}:p));setToast('Updated.')}else{setProjects([...projects,{...form}]);setToast('Project created.')}setModal(false)}
+  function toggle(pid,did){setProjects(projects.map(p=>p.id!==pid?p:{...p,deliverables:p.deliverables.map(d=>d.id===did?{...d,completed:!d.completed}:d)}))}
+  function addDel(e){if((e.key==='Enter'||e.type==='click')&&di.trim()){setForm({...form,deliverables:[...(form.deliverables||[]),{id:uid(),text:di.trim(),completed:false}]});setDi('')}}
+  return(
+    <div className="animate-in">
+      {toast&&<Toast msg={toast}onDone={()=>setToast('')}/>}
+      <div style={{display:'flex',justifyContent:'flex-end',marginBottom:20}}><button className="btn btn-gold"onClick={openAdd}><Ic.plus/>New Project</button></div>
+      {projects.length===0?<div className="empty-state"><div className="empty-state-icon">📁</div><h3>No Projects Yet</h3><p>Create your first project to track deliverables, deadlines, and payment status.</p><button className="btn btn-gold"onClick={openAdd}><Ic.plus/>Create First Project</button></div>
+      :<div className="projects-grid">{projects.map(p=>{
+        const dels=p.deliverables||[];const done=dels.filter(d=>d.completed).length;const pct=dels.length>0?(done/dels.length)*100:0;const ov=p.deadline&&p.deadline<todayStr();
+        return(<div key={p.id}className="project-card">
+          <div style={{display:'flex',alignItems:'flex-start',justifyContent:'space-between',marginBottom:12}}>
+            <div><div className="project-client">{p.clientName}</div><div className="project-type">{p.projectType||'Project'}</div></div>
+            <div className="flex gap-8"style={{alignItems:'center'}}><Badge status={p.paymentStatus||'Unpaid'}/><button className="btn btn-ghost btn-icon"onClick={()=>openEdit(p)}><Ic.edit/></button><button className="btn btn-ghost btn-icon"style={{color:'var(--danger)'}}onClick={()=>setProjects(projects.filter(x=>x.id!==p.id))}><Ic.trash/></button></div>
+          </div>
+          <div className="project-meta"><div className="project-meta-item"><label>Start</label><span>{p.startDate?fmtDate(p.startDate):'—'}</span></div><div className="project-meta-item"><label>Deadline</label><span style={{color:ov?'var(--danger)':'var(--text-muted)'}}>{p.deadline?fmtDate(p.deadline):'—'}{ov?' ⚠':''}</span></div></div>
+          {dels.length>0&&<div style={{marginBottom:p.notes?14:0}}><div style={{display:'flex',justifyContent:'space-between',alignItems:'center',marginBottom:6}}><div className="deliverables-title">Deliverables</div><div style={{fontSize:11,color:'var(--text-dim)'}}>{done}/{dels.length}</div></div><div className="progress-bar"style={{marginBottom:9}}><div className="progress-fill"style={{width:pct+'%'}}/></div>{dels.map(d=><div key={d.id}className={`deliverable-item ${d.completed?'done':''}`}onClick={()=>toggle(p.id,d.id)}><div className={`checkbox ${d.completed?'checked':''}`}>{d.completed&&<Ic.check/>}</div><span style={{fontSize:13}}>{d.text}</span></div>)}</div>}
+          {p.notes&&<div style={{background:'var(--bg3)',borderRadius:'var(--radius)',padding:'8px 11px',fontSize:12,color:'var(--text-dim)',lineHeight:1.65}}>{p.notes}</div>}
+        </div>);
+      })}</div>}
+      <Modal open={modal}onClose={()=>setModal(false)}title={isEdit?'Edit Project':'New Project'}large>
+        <div className="form-grid">
+          <div className="form-field"><label>Client *</label>{clients.length>0?<select value={form.clientName}onChange={e=>setForm({...form,clientName:e.target.value})}><option value="">Select...</option>{clients.map(c=><option key={c.id}value={c.name}>{c.name}</option>)}{form.clientName&&!clients.find(c=>c.name===form.clientName)&&<option value={form.clientName}>{form.clientName}</option>}</select>:<input value={form.clientName}onChange={e=>setForm({...form,clientName:e.target.value})}placeholder="Client name"/>}</div>
+          <div className="form-field"><label>Project Type</label><input value={form.projectType}onChange={e=>setForm({...form,projectType:e.target.value})}placeholder="Website, Branding…"/></div>
+          <div className="form-field"><label>Start Date</label><input type="date"value={form.startDate}onChange={e=>setForm({...form,startDate:e.target.value})}/></div>
+          <div className="form-field"><label>Deadline</label><input type="date"value={form.deadline}onChange={e=>setForm({...form,deadline:e.target.value})}/></div>
+          <div className="form-field full"><label>Payment Status</label><select value={form.paymentStatus}onChange={e=>setForm({...form,paymentStatus:e.target.value})}>{PS.map(s=><option key={s}>{s}</option>)}</select></div>
+          <div className="form-field full"><label>Deliverables</label>{(form.deliverables||[]).map(d=><div key={d.id}style={{display:'flex',alignItems:'center',gap:7,marginBottom:5}}><div style={{width:6,height:6,borderRadius:'50%',background:'var(--gold)',flexShrink:0}}/><span style={{flex:1,fontSize:13,color:'var(--text-muted)'}}>{d.text}</span><button type="button"onClick={()=>setForm({...form,deliverables:form.deliverables.filter(x=>x.id!==d.id)})}style={{background:'none',border:'none',cursor:'pointer',color:'var(--text-dim)',fontSize:15,padding:'0 3px',lineHeight:1}}>×</button></div>)}<div className="add-del"><input placeholder="Type and press Enter…"value={di}onChange={e=>setDi(e.target.value)}onKeyDown={addDel}/><button className="btn btn-outline btn-sm"onClick={addDel}>Add</button></div></div>
+          <div className="form-field full"><label>Notes</label><textarea value={form.notes}onChange={e=>setForm({...form,notes:e.target.value})}placeholder="Project notes…"rows={3}/></div>
+        </div>
+        <div className="form-actions"><button className="btn btn-outline"onClick={()=>setModal(false)}>Cancel</button><button className="btn btn-gold"onClick={save}>{isEdit?'Save':'Create Project'}</button></div>
+      </Modal>
+    </div>
+  );
+}
+
+/* ── PROPOSAL BUILDER ── */
+function ProposalBuilder({clients}){
+  const[form,setForm]=useState({clientName:'',serviceType:'',description:'',price:'',timeline:'',yourName:'Bryttani Patterson',yourBusiness:'Web Developer | Lexington, SC',terms:'A 50% deposit is required to begin. The remaining balance is due upon project completion. Revisions beyond the agreed scope will be billed separately.'});
+  const[toast,setToast]=useState('');
+  const now=new Date().toLocaleDateString('en-US',{month:'long',day:'numeric',year:'numeric'});
+  const has=form.clientName||form.serviceType||form.description||form.price;
+  function copyText(){const t=['PROJECT PROPOSAL','═'.repeat(52),'',`Prepared for: ${form.clientName||'[Client]'}`,`Date: ${now}`,`Service: ${form.serviceType||'[Service]'}`,'','PROJECT OVERVIEW',form.description||'[Description]','','INVESTMENT',`Total: ${form.price?fmtCur(form.price):'[Price]'}`,`Timeline: ${form.timeline||'[Timeline]'}`,'','TERMS',form.terms||'','','═'.repeat(52),`${form.yourName} · ${form.yourBusiness}`].join('\n');navigator.clipboard.writeText(t).then(()=>setToast('Copied!'))}
+  return(
+    <div className="animate-in">
+      {toast&&<Toast msg={toast}onDone={()=>setToast('')}/>}
+      <div className="proposal-layout">
+        <div className="proposal-form-col">
+          <div className="card"style={{marginBottom:14}}><div className="card-title">Your Details</div><div className="form-grid"><div className="form-field"><label>Your Name</label><input value={form.yourName}onChange={e=>setForm({...form,yourName:e.target.value})}/></div><div className="form-field"><label>Business / Title</label><input value={form.yourBusiness}onChange={e=>setForm({...form,yourBusiness:e.target.value})}/></div></div></div>
+          <div className="card"style={{marginBottom:16}}><div className="card-title">Project Details</div><div className="form-grid">
+            <div className="form-field"><label>Client *</label>{clients.length>0?<select value={form.clientName}onChange={e=>setForm({...form,clientName:e.target.value})}><option value="">Select…</option>{clients.map(c=><option key={c.id}value={c.name}>{c.name}</option>)}</select>:<input value={form.clientName}onChange={e=>setForm({...form,clientName:e.target.value})}placeholder="Client name"/>}</div>
+            <div className="form-field"><label>Service Type</label><input value={form.serviceType}onChange={e=>setForm({...form,serviceType:e.target.value})}placeholder="e.g. Shopify Store Build"/></div>
+            <div className="form-field"><label>Investment ($)</label><input type="number"value={form.price}onChange={e=>setForm({...form,price:e.target.value})}placeholder="0"/></div>
+            <div className="form-field"><label>Timeline</label><input value={form.timeline}onChange={e=>setForm({...form,timeline:e.target.value})}placeholder="e.g. 3–4 weeks"/></div>
+            <div className="form-field full"><label>Project Description</label><textarea value={form.description}onChange={e=>setForm({...form,description:e.target.value})}placeholder="Scope of work, deliverables, what the client receives…"rows={5}/></div>
+            <div className="form-field full"><label>Terms & Conditions</label><textarea value={form.terms}onChange={e=>setForm({...form,terms:e.target.value})}rows={3}/></div>
+          </div></div>
+          <div className="flex gap-8"><button className="btn btn-gold"onClick={copyText}disabled={!has}><Ic.copy/>Copy as Text</button><button className="btn btn-outline"onClick={()=>window.print()}><Ic.print/>Print / PDF</button></div>
+        </div>
+        <div>
+          <div className="proposal-preview">
+            <div className="proposal-header"><div style={{fontSize:10,color:'rgba(201,168,76,.55)',letterSpacing:'2px',textTransform:'uppercase',marginBottom:9}}>{form.yourBusiness||form.yourName}</div><h2>Project Proposal</h2><p>{now}</p></div>
+            <div className="proposal-body">
+              <div style={{marginBottom:16}}><div style={{fontSize:10,textTransform:'uppercase',letterSpacing:'1.4px',color:'var(--text-dim)',marginBottom:2}}>Prepared for</div><div style={{fontFamily:'Playfair Display,serif',fontSize:16,color:'var(--text)',fontWeight:600}}>{form.clientName||<span style={{color:'var(--text-dim)',fontStyle:'italic',fontWeight:400}}>Client Name</span>}</div></div>
+              <hr style={{border:'none',borderTop:'1px solid var(--gold-border)',marginBottom:16}}/>
+              <div className="proposal-sec"><h4>Service</h4><p>{form.serviceType||<span style={{color:'var(--text-dim)',fontStyle:'italic'}}>Service type…</span>}</p></div>
+              <div className="proposal-sec"><h4>Project Overview</h4><p style={{whiteSpace:'pre-wrap'}}>{form.description||<span style={{color:'var(--text-dim)',fontStyle:'italic'}}>Description will appear here…</span>}</p></div>
+              <div className="proposal-sec"><h4>Investment & Timeline</h4><div className="proposal-price-box"><div><div className="proposal-price-label">Total Investment</div>{form.timeline&&<div style={{fontSize:11,color:'var(--text-dim)',marginTop:2}}>Timeline: {form.timeline}</div>}</div><div className="proposal-price-value">{form.price?fmtCur(form.price):<span style={{fontSize:14,color:'var(--text-dim)'}}>TBD</span>}</div></div></div>
+              {form.terms&&<div className="proposal-sec"><h4>Terms</h4><p style={{fontSize:12,lineHeight:1.75}}>{form.terms}</p></div>}
+            </div>
+            <div className="proposal-footer">{form.yourName}{form.yourBusiness?' · '+form.yourBusiness:''}</div>
+          </div>
+          {!has&&<div style={{textAlign:'center',marginTop:11,fontSize:12,color:'var(--text-dim)'}}>Fill in the form to see a live preview</div>}
+        </div>
+      </div>
+    </div>
+  );
+}
+
+/* ── INCOME TRACKER ── */
+function IncomeTracker({payments,setPayments,settings,setSettings,clients}){
+  const[form,setForm]=useState({clientName:'',amount:'',date:todayStr(),project:'',notes:''});const[toast,setToast]=useState('');
+  const thisMonth=todayStr().slice(0,7);const goal=settings.monthlyGoal||5000;
+  const mMap=useMemo(()=>{const m={};payments.forEach(p=>{const k=monthKey(p.date);if(k)m[k]=(m[k]||0)+(Number(p.amount)||0)});return m},[payments]);
+  const chart=useMemo(()=>{const a=[];const n=new Date();for(let i=11;i>=0;i--){const d=new Date(n.getFullYear(),n.getMonth()-i,1);const k=d.toISOString().slice(0,7);a.push({key:k,label:d.toLocaleDateString('en-US',{month:'short'}),amount:mMap[k]||0})}return a},[mMap]);
+  const maxA=Math.max(...chart.map(m=>m.amount),1);const ann=payments.reduce((s,p)=>s+(Number(p.amount)||0),0);const mtotal=mMap[thisMonth]||0;const gpct=Math.min((mtotal/goal)*100,100);
+  function add(){if(!form.amount||!form.clientName)return;setPayments([...payments,{...form,id:uid()}]);setForm({clientName:'',amount:'',date:todayStr(),project:'',notes:''});setToast('Payment logged!')}
+  return(
+    <div className="animate-in">
+      {toast&&<Toast msg={toast}onDone={()=>setToast('')}/>}
+      <div className="income-layout">
+        <div>
+          <div className="income-stats"><div className="stat-card"><div className="stat-label">This Month</div><div className="stat-value gold">{fmtCur(mtotal)}</div><div className="stat-change">{Math.round(gpct)}% of goal</div></div><div className="stat-card"><div className="stat-label">Annual Total</div><div className="stat-value gold">{fmtCur(ann)}</div><div className="stat-change">{payments.length} payments</div></div></div>
+          <div className="card"style={{marginBottom:16}}><div className="flex-between"style={{marginBottom:8}}><div className="card-title"style={{marginBottom:0}}>Monthly Goal</div><span style={{fontFamily:'Playfair Display,serif',color:'var(--gold)',fontSize:14}}>{fmtCur(mtotal)} / {fmtCur(goal)}</span></div><div className="progress-bar"><div className="progress-fill"style={{width:gpct+'%'}}/></div><div style={{marginTop:7}}><GoalEditor settings={settings}setSettings={setSettings}/></div></div>
+          <div className="bar-chart-wrap"><div className="card-title">Income by Month</div><svg width="100%"viewBox={`0 0 ${chart.length*46} 170`}preserveAspectRatio="xMidYMid meet">{chart.map((m,i)=>{const bH=m.amount>0?Math.max((m.amount/maxA)*112,5):0;const x=i*46+8;const y=130-bH;const isCur=m.key===thisMonth;return(<g key={m.key}>{m.amount>0?<rect x={x}y={y}width={30}height={bH}rx="3"fill={isCur?'#C9A84C':'rgba(201,168,76,.32)'}/>:<rect x={x}y={127}width={30}height={3}rx="1.5"fill="rgba(255,255,255,.06)"/>}<text x={x+15}y={158}textAnchor="middle"fill="rgba(255,255,255,.28)"fontSize="9.5"fontFamily="Jost,sans-serif">{m.label}</text>{m.amount>0&&<text x={x+15}y={y-4}textAnchor="middle"fill="rgba(255,255,255,.38)"fontSize="8.5"fontFamily="Jost,sans-serif">{m.amount>=1000?`$${(m.amount/1000).toFixed(1)}k`:`$${m.amount}`}</text>}</g>)})}</svg></div>
+          <div className="card"><div className="card-title">Payment History</div>{[...payments].sort((a,b)=>(b.date||'').localeCompare(a.date||'')).map(p=><div key={p.id}className="payment-item"><div><div style={{fontWeight:500,color:'var(--text)',fontSize:13}}>{p.clientName}</div><div style={{fontSize:11,color:'var(--text-dim)',marginTop:2}}>{p.project&&`${p.project} · `}{fmtDate(p.date)}</div></div><div className="flex gap-8"><span style={{fontFamily:'Playfair Display,serif',color:'var(--gold)',fontSize:14}}>{fmtCur(p.amount)}</span><button className="btn btn-ghost btn-icon"style={{color:'var(--danger)'}}onClick={()=>setPayments(payments.filter(x=>x.id!==p.id))}><Ic.trash/></button></div></div>)}
+          {payments.length===0&&<div style={{color:'var(--text-dim)',fontSize:13,padding:'10px 0'}}>No payments logged yet.</div>}</div>
+        </div>
+        <div><div className="card card-gold"style={{position:'sticky',top:20}}><div className="card-title">Log a Payment</div><div style={{display:'flex',flexDirection:'column',gap:12}}>
+          <div className="form-field"><label>Client *</label>{clients.length>0?<select value={form.clientName}onChange={e=>setForm({...form,clientName:e.target.value})}><option value="">Select…</option>{clients.map(c=><option key={c.id}value={c.name}>{c.name}</option>)}</select>:<input value={form.clientName}onChange={e=>setForm({...form,clientName:e.target.value})}placeholder="Client name"/>}</div>
+          <div className="form-field"><label>Amount *</label><input type="number"value={form.amount}onChange={e=>setForm({...form,amount:e.target.value})}placeholder="0.00"/></div>
+          <div className="form-field"><label>Date</label><input type="date"value={form.date}onChange={e=>setForm({...form,date:e.target.value})}/></div>
+          <div className="form-field"><label>Project / Invoice</label><input value={form.project}onChange={e=>setForm({...form,project:e.target.value})}placeholder="Project or invoice #"/></div>
+          <div className="form-field"><label>Notes</label><input value={form.notes}onChange={e=>setForm({...form,notes:e.target.value})}placeholder="Optional"/></div>
+          <button className="btn btn-gold w-full"style={{justifyContent:'center',marginTop:3}}onClick={add}><Ic.plus/>Log Payment</button>
+        </div></div></div>
+      </div>
+    </div>
+  );
+}
+
+/* ── OUTREACH MANAGER ── */
+const OUT_STATUSES=['Not Contacted','Emailed','Followed Up','Call Scheduled','Converted','Not Interested'];
+const BIZ_TYPES=['Restaurant','Salon / Spa','Contractor','Retail Store','Real Estate Agent','Dentist / Medical','Fitness / Gym','Law Firm','Auto Shop','Local Service'];
+const EO={id:'',businessName:'',ownerName:'',email:'',website:'',serviceNeeded:'',status:'Not Contacted',lastContactDate:'',followUpDate:'',notes:''};
+
+function getEmailTemplate(bizType,bizName,ownerName){
+  const g=ownerName?`Hi ${ownerName},`:'Hi there,';
+  const b=bizName||'your business';
+  const sig=`Best,\nBryttani Patterson\nWeb Developer | Lexington, SC\nbryttanipatterson.com`;
+  const templates={
+    'Restaurant':`Subject: A quick idea for ${b}'s online presence\n\n${g}\n\nI came across ${b} and wanted to reach out — I'm Bryttani Patterson, a web developer based in Lexington, SC.\n\nI help local restaurants build websites that drive more reservations, make their menu easy to browse on mobile, and show up when people search for places to eat nearby.\n\nIf your site could use a refresh — or you don't have one yet — I'd love to share a few ideas. Totally no pressure, just a quick conversation.\n\nAre you open to a 15-minute call this week?\n\n${sig}`,
+    'Salon / Spa':`Subject: More bookings for ${b} — quick idea\n\n${g}\n\nI'm Bryttani Patterson, a web developer in Lexington, SC. I help salons and spas build beautiful websites with online booking, service menus, and photo galleries that turn visitors into clients.\n\nI noticed ${b} and thought there might be an opportunity to get you more bookings through your website. Even small improvements can make a big difference.\n\nWould you be open to a quick 15-minute chat?\n\n${sig}`,
+    'Contractor':`Subject: More leads for ${b} — I had an idea\n\n${g}\n\nI'm Bryttani Patterson, a local web developer based in Lexington, SC. I specialize in building lead-generating websites for contractors and home service businesses — the kind that rank well on Google and make it easy for homeowners to trust and contact you.\n\nI'd love to learn more about ${b} and share a few ideas that could help you get more calls. No commitment required.\n\nGot 15 minutes this week?\n\n${sig}`,
+    'Retail Store':`Subject: Growing ${b}'s online sales\n\n${g}\n\nHope you're having a great week! I'm Bryttani Patterson, a web developer in Lexington, SC. I help local retailers launch Shopify stores and improve their online presence so they can reach customers beyond foot traffic.\n\nI think ${b} could do really well online, and I'd love to explore that with you. I'm not here to pitch a huge project — just a quick conversation to see if there's a fit.\n\nInterested in a 15-minute call?\n\n${sig}`,
+    'Real Estate Agent':`Subject: Quick idea for your real estate website\n\n${g}\n\nI'm Bryttani, a web developer based in Lexington, SC. I work with agents to build sleek property websites, lead capture pages, and personal brand sites that help them stand out in a competitive market.\n\nI came across your profile and thought I might be able to help ${b} generate more qualified leads online. Would love to share a few ideas if you're open to it.\n\nAvailable for a quick call this week?\n\n${sig}`,
+    'Dentist / Medical':`Subject: A quick note about ${b}'s website\n\n${g}\n\nI'm Bryttani Patterson, a web developer based in Lexington, SC. I help medical and dental practices build clean, professional websites with online appointment booking, service pages, and strong local SEO.\n\nPatients increasingly choose their providers based on their online presence — and I'd love to help ${b} make a great first impression. Happy to share a few ideas at no cost.\n\nWould a quick 15-minute call work?\n\n${sig}`,
+    'Fitness / Gym':`Subject: Growing ${b}'s membership online\n\n${g}\n\nI'm Bryttani Patterson, a web developer in Lexington, SC. I help fitness studios and gyms build websites that showcase classes, enable online signups, and build community — all in one place.\n\nI think there's a real opportunity for ${b} to grow its membership through a stronger online presence. Would you be up for a quick call to explore that?\n\n${sig}`,
+    'Law Firm':`Subject: Helping ${b} stand out online\n\n${g}\n\nI'm Bryttani Patterson, a web developer based in Lexington, SC. I help law firms build authoritative websites that rank locally and convert visitors into consultations.\n\nA strong web presence is one of the best investments a firm can make, and I'd love to share a few thoughts on how ${b} could benefit. Happy to keep it brief.\n\nAre you available for a 15-minute call this week?\n\n${sig}`,
+    'Auto Shop':`Subject: Quick idea for ${b}'s online presence\n\n${g}\n\nI'm Bryttani Patterson, a local web developer in Lexington, SC. I build websites for auto shops and service centers that make it easy for customers to find you, see your services, and book appointments.\n\nI'd love to share a few ideas that could help ${b} get more walk-ins from Google searches. No commitment — just a quick chat.\n\nInterested?\n\n${sig}`,
+    'Local Service':`Subject: A quick idea for ${b}\n\n${g}\n\nI'm Bryttani Patterson, a web developer based in Lexington, SC. I help local businesses build websites that attract more customers and look as professional as the work they do.\n\nI came across ${b} and think there's a real opportunity to strengthen your online presence. I'd love to connect and share a few free ideas.\n\nCould we set up a quick 15-minute call?\n\n${sig}`,
+  };
+  return templates[bizType]||templates['Local Service'];
+}
+
+function OutreachManager({outreach,setOutreach}){
+  const[filter,setFilter]=useState('All');const[modal,setModal]=useState(false);const[isEdit,setIsEdit]=useState(false);const[form,setForm]=useState(EO);const[toast,setToast]=useState('');const[panel,setPanel]=useState(null);
+  const[bizType,setBizType]=useState('Restaurant');const[templateBiz,setTemplateBiz]=useState('');const[templateOwner,setTemplateOwner]=useState('');const[generatedEmail,setGeneratedEmail]=useState('');
+  const filtered=filter==='All'?outreach:outreach.filter(o=>o.status===filter);
+  const counts=useMemo(()=>{const o={All:outreach.length};OUT_STATUSES.forEach(s=>o[s]=outreach.filter(x=>x.status===s).length);return o},[outreach]);
+  const overdueCount=outreach.filter(o=>o.followUpDate&&o.followUpDate<=todayStr()&&o.status!=='Converted'&&o.status!=='Not Interested').length;
+  function openAdd(){setForm({...EO,id:uid()});setIsEdit(false);setModal(true)}
+  function openEdit(o,e){e&&e.stopPropagation();setForm({...o});setIsEdit(true);setModal(true)}
+  function save(){if(!form.businessName.trim())return;if(isEdit){setOutreach(outreach.map(o=>o.id===form.id?{...form}:o));setToast('Updated.')}else{setOutreach([...outreach,{...form,createdAt:new Date().toISOString()}]);setToast('Business added.')}setModal(false)}
+  function genEmail(){setGeneratedEmail(getEmailTemplate(bizType,templateBiz,templateOwner))}
+  function copyEmail(){if(generatedEmail)navigator.clipboard.writeText(generatedEmail).then(()=>setToast('Email copied!'))}
+  function isOverdue(o){return o.followUpDate&&o.followUpDate<=todayStr()&&o.status!=='Converted'&&o.status!=='Not Interested'}
+  const sel=panel?outreach.find(o=>o.id===panel.id):null;
+  return(
+    <div className="animate-in">
+      {toast&&<Toast msg={toast}onDone={()=>setToast('')}/>}
+      {overdueCount>0&&<div style={{background:'rgba(217,95,95,.08)',border:'1px solid rgba(217,95,95,.22)',borderRadius:'var(--radius)',padding:'11px 15px',marginBottom:18,fontSize:13,color:'var(--danger)',display:'flex',alignItems:'center',gap:9}}>⚠ <strong>{overdueCount}</strong> follow-up{overdueCount>1?'s':''} overdue</div>}
+      <div className="outreach-layout">
+        <div>
+          <div className="flex-between"style={{marginBottom:16,flexWrap:'wrap',gap:8}}>
+            <div className="filter-tabs"style={{marginBottom:0}}>{['All',...OUT_STATUSES].map(s=><button key={s}className={`filter-tab ${filter===s?'active':''}`}onClick={()=>setFilter(s)}>{s} <span style={{opacity:.55,fontSize:10}}>({counts[s]||0})</span></button>)}</div>
+            <button className="btn btn-gold"onClick={openAdd}><Ic.plus/>Add Business</button>
+          </div>
+          {filtered.length===0?<div className="empty-state"><div className="empty-state-icon">🏪</div><h3>{filter!=='All'?`No ${filter} Businesses`:'No Businesses Yet'}</h3><p>Start building your outreach list to land local clients in Lexington and beyond.</p><button className="btn btn-gold"onClick={openAdd}><Ic.plus/>Add First Business</button></div>
+          :<div className="table-wrap"><table><thead><tr><th>Business</th><th>Owner</th><th>Email</th><th>Service</th><th>Status</th><th>Last Contact</th><th>Follow-up</th><th></th></tr></thead><tbody>
+            {filtered.map(o=><tr key={o.id}className={sel?.id===o.id?'row-selected':''}onClick={()=>setPanel(sel?.id===o.id?null:o)}>
+              <td className="primary"><div style={{display:'flex',alignItems:'center',gap:7}}>{isOverdue(o)&&<span className="overdue-chip">Due</span>}{o.businessName}</div></td>
+              <td>{o.ownerName||'—'}</td><td>{o.email||'—'}</td><td>{o.serviceNeeded||'—'}</td><td><Badge status={o.status}/></td>
+              <td>{o.lastContactDate?fmtDate(o.lastContactDate):'—'}</td>
+              <td>{o.followUpDate?<span style={{display:'flex',alignItems:'center',gap:4,fontSize:12,color:isOverdue(o)?'var(--danger)':'var(--text-dim)'}}><Ic.cal/>{fmtDate(o.followUpDate)}</span>:'—'}</td>
+              <td onClick={e=>e.stopPropagation()}><div className="flex gap-8"><button className="btn btn-ghost btn-icon"onClick={e=>openEdit(o,e)}><Ic.edit/></button><button className="btn btn-ghost btn-icon"style={{color:'var(--danger)'}}onClick={e=>{e.stopPropagation();setOutreach(outreach.filter(x=>x.id!==o.id));setToast('Removed.')}}><Ic.trash/></button></div></td>
+            </tr>)}
+          </tbody></table></div>}
+        </div>
+        {/* Email Template Generator */}
+        <div>
+          <div className="card card-gold"style={{position:'sticky',top:20}}>
+            <div className="card-title">Email Template Generator</div>
+            <div style={{display:'flex',flexDirection:'column',gap:12}}>
+              <div className="form-field"><label>Business Type</label><select value={bizType}onChange={e=>setBizType(e.target.value)}>{BIZ_TYPES.map(t=><option key={t}>{t}</option>)}</select></div>
+              <div className="form-field"><label>Business Name</label><input value={templateBiz}onChange={e=>setTemplateBiz(e.target.value)}placeholder="e.g. Main St Kitchen"/></div>
+              <div className="form-field"><label>Owner Name (optional)</label><input value={templateOwner}onChange={e=>setTemplateOwner(e.target.value)}placeholder="e.g. Sarah"/></div>
+              <button className="btn btn-gold w-full"style={{justifyContent:'center'}}onClick={genEmail}><Ic.spark/>Generate Email</button>
+              {generatedEmail&&<>
+                <div className="template-box">{generatedEmail}</div>
+                <button className="btn btn-outline w-full"style={{justifyContent:'center'}}onClick={copyEmail}><Ic.copy/>Copy Email</button>
+              </>}
+            </div>
+          </div>
+        </div>
+      </div>
+      {sel&&<><div className="panel-overlay"onClick={()=>setPanel(null)}/><div className="detail-panel open animate-in">
+        <div className="flex-between"style={{marginBottom:16}}><div><div style={{fontFamily:'Playfair Display,serif',fontSize:17,color:'var(--text)',fontWeight:600}}>{sel.businessName}</div>{sel.ownerName&&<div style={{fontSize:12,color:'var(--text-dim)',marginTop:2}}>{sel.ownerName}</div>}</div><button className="btn btn-ghost btn-icon"onClick={()=>setPanel(null)}><Ic.x/></button></div>
+        <Badge status={sel.status}/>{isOverdue(sel)&&<span className="overdue-chip"style={{marginLeft:8}}>Follow-up Due</span>}
+        <hr className="divider"/>
+        {[['Email',sel.email],['Website',sel.website],['Service Needed',sel.serviceNeeded],['Last Contact',sel.lastContactDate?fmtDate(sel.lastContactDate):null],['Follow-up Date',sel.followUpDate?fmtDate(sel.followUpDate):null]].filter(([,v])=>v).map(([l,v])=><div key={l}className="detail-field"><label>{l}</label><p>{v}</p></div>)}
+        {sel.notes&&<div className="detail-field"><label>Notes</label><p>{sel.notes}</p></div>}
+        <div style={{marginTop:16}}><button className="btn btn-outline w-full"style={{justifyContent:'center'}}onClick={()=>{setBizType('Restaurant');setTemplateBiz(sel.businessName);setTemplateOwner(sel.ownerName||'');setPanel(null)}}><Ic.mail/>Generate Email for This Business</button></div>
+        <div className="flex gap-8 mt-16"><button className="btn btn-outline"style={{flex:1}}onClick={()=>{openEdit(sel,null);setPanel(null)}}><Ic.edit/>Edit</button></div>
+      </div></>}
+      <Modal open={modal}onClose={()=>setModal(false)}title={isEdit?'Edit Business':'Add Business'}large>
+        <div className="form-grid">
+          <div className="form-field"><label>Business Name *</label><input value={form.businessName}onChange={e=>setForm({...form,businessName:e.target.value})}placeholder="Business name"/></div>
+          <div className="form-field"><label>Owner Name</label><input value={form.ownerName}onChange={e=>setForm({...form,ownerName:e.target.value})}placeholder="Owner's first name"/></div>
+          <div className="form-field"><label>Email</label><input type="email"value={form.email}onChange={e=>setForm({...form,email:e.target.value})}placeholder="contact@business.com"/></div>
+          <div className="form-field"><label>Website</label><input value={form.website}onChange={e=>setForm({...form,website:e.target.value})}placeholder="business.com"/></div>
+          <div className="form-field"><label>Service Needed</label><input value={form.serviceNeeded}onChange={e=>setForm({...form,serviceNeeded:e.target.value})}placeholder="e.g. Website, Shopify store"/></div>
+          <div className="form-field"><label>Status</label><select value={form.status}onChange={e=>setForm({...form,status:e.target.value})}>{OUT_STATUSES.map(s=><option key={s}>{s}</option>)}</select></div>
+          <div className="form-field"><label>Last Contact Date</label><input type="date"value={form.lastContactDate}onChange={e=>setForm({...form,lastContactDate:e.target.value})}/></div>
+          <div className="form-field"><label>Follow-up Date</label><input type="date"value={form.followUpDate}onChange={e=>setForm({...form,followUpDate:e.target.value})}/></div>
+          <div className="form-field full"><label>Notes</label><textarea value={form.notes}onChange={e=>setForm({...form,notes:e.target.value})}placeholder="Notes on this lead…"rows={3}/></div>
+        </div>
+        <div className="form-actions"><button className="btn btn-outline"onClick={()=>setModal(false)}>Cancel</button><button className="btn btn-gold"onClick={save}>{isEdit?'Save':'Add Business'}</button></div>
+      </Modal>
+    </div>
+  );
+}
+
+/* ── LINKEDIN CONTENT PLANNER ── */
+const POST_TYPES=['Project Showcase','Value Post','Behind the Scenes','Social Proof','Opinion'];
+const POST_STATUS=['Draft','Scheduled','Published'];
+const POST_IDEAS={
+  'Web Development':[
+    {type:'Project Showcase',idea:'Share a before/after of a recent website redesign — show the old vs. the new with results.'},
+    {type:'Value Post',idea:'5 signs your website is costing you customers (and what to do about each one).'},
+    {type:'Behind the Scenes',idea:'Walk people through your process: what actually goes into building a website from scratch.'},
+    {type:'Social Proof',idea:'A client result post — their site launched, here\'s what changed for their business.'},
+    {type:'Opinion',idea:'Why most small business websites fail — and why it\'s not the owner\'s fault.'},
+  ],
+  'Shopify':[
+    {type:'Project Showcase',idea:'Show off a Shopify store you built — product page, checkout, the whole thing.'},
+    {type:'Value Post',idea:'Top 5 Shopify apps I recommend to every new store owner (and why).'},
+    {type:'Behind the Scenes',idea:'Day-in-the-life building a Shopify store — the real timeline from kickoff to launch.'},
+    {type:'Social Proof',idea:'My client went from $0 to their first online sale within 48 hours of launching.'},
+    {type:'Opinion',idea:'Shopify vs. Squarespace for a small business — here\'s what I actually recommend.'},
+  ],
+  'Email Marketing':[
+    {type:'Project Showcase',idea:'Share an email campaign you built — open rate, click rate, the sequence.'},
+    {type:'Value Post',idea:'Email marketing ROI is 36x. Here\'s why most small businesses still aren\'t using it.'},
+    {type:'Behind the Scenes',idea:'How I set up a 5-email welcome sequence for a local business in one afternoon.'},
+    {type:'Social Proof',idea:'A client added $X in revenue in 30 days just from an email list they already had.'},
+    {type:'Opinion',idea:'Stop sleeping on email. Social media can disappear overnight — your list is yours forever.'},
+  ],
+  'SEO':[
+    {type:'Project Showcase',idea:'Show a local business ranking on page 1 for a keyword that matters to them.'},
+    {type:'Value Post',idea:'3 free things every local business should do right now to rank higher on Google.'},
+    {type:'Behind the Scenes',idea:'How I do a local SEO audit in under an hour — the exact checklist I use.'},
+    {type:'Social Proof',idea:'This client went from page 4 to page 1 in 6 weeks. Here\'s exactly what we changed.'},
+    {type:'Opinion',idea:'Local SEO is the highest-ROI marketing a small business can invest in. Here\'s why.'},
+  ],
+  'Social Media':[
+    {type:'Project Showcase',idea:'Share a content strategy you built for a client — themes, posting cadence, results.'},
+    {type:'Value Post',idea:'The 3 types of posts every service business needs in their content mix.'},
+    {type:'Behind the Scenes',idea:'How I batch a full month of content in one afternoon for a client.'},
+    {type:'Social Proof',idea:'This restaurant grew their Instagram by 400 followers in 30 days with consistent posting.'},
+    {type:'Opinion',idea:'Posting every day doesn\'t matter if you\'re posting the wrong things. Quality > quantity.'},
+  ],
+};
+
+function calcStreak(posts){
+  const pub=posts.filter(p=>p.status==='Published'&&p.scheduledDate);
+  if(!pub.length)return{current:0,best:0};
+  function weekStart(d){const day=d.getDay();const diff=d.getDate()-(day===0?6:day-1);return new Date(d.getFullYear(),d.getMonth(),diff).toISOString().split('T')[0]}
+  const weeks=new Set(pub.map(p=>weekStart(new Date(p.scheduledDate+'T12:00:00'))));
+  const thisWk=weekStart(new Date());
+  let curr=0;let check=new Date(thisWk+'T12:00:00');
+  while(true){const k=weekStart(check);if(weeks.has(k)){curr++;check.setDate(check.getDate()-7)}else break}
+  const sorted=[...weeks].sort();let best=curr,run=1;
+  for(let i=1;i<sorted.length;i++){const prev=new Date(sorted[i-1]+'T12:00:00');const cur=new Date(sorted[i]+'T12:00:00');const diff=Math.round((cur-prev)/(1000*60*60*24*7));if(diff===1){run++;best=Math.max(best,run)}else run=1}
+  return{current:curr,best:Math.max(best,1)};
+}
+
+const EP2={id:'',title:'',type:'Project Showcase',content:'',status:'Draft',scheduledDate:'',publishedDate:''};
+
+function LinkedInPlanner({posts,setPosts}){
+  const[view,setView]=useState('calendar');const[weekOff,setWeekOff]=useState(0);const[modal,setModal]=useState(false);const[form,setForm]=useState(EP2);const[isEdit,setIsEdit]=useState(false);const[toast,setToast]=useState('');const[ideasSvc,setIdeasSvc]=useState('Web Development');const[filter,setFilter]=useState('All');
+  const today=todayStr();const streak=useMemo(()=>calcStreak(posts),[posts]);
+  const weekDays=useMemo(()=>getWeekDays(weekOff),[weekOff]);
+  const weekLabel=useMemo(()=>{const f=weekDays[0],l=weekDays[6];if(f.getMonth()===l.getMonth())return`${f.toLocaleDateString('en-US',{month:'long'})} ${f.getDate()}–${l.getDate()}, ${f.getFullYear()}`;return`${f.toLocaleDateString('en-US',{month:'short',day:'numeric'})} – ${l.toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'})}`},[weekDays]);
+  function openAdd(date){setForm({...EP2,id:uid(),scheduledDate:date||today,status:date?'Scheduled':'Draft'});setIsEdit(false);setModal(true)}
+  function openEdit(p){setForm({...p});setIsEdit(true);setModal(true)}
+  function save(){if(!form.title.trim())return;if(isEdit){setPosts(posts.map(p=>p.id===form.id?{...form}:p));setToast('Post saved.')}else{setPosts([...posts,{...form,createdAt:new Date().toISOString()}]);setToast('Post created.')}setModal(false)}
+  function markPublished(id){setPosts(posts.map(p=>p.id===id?{...p,status:'Published',publishedDate:today}:p));setToast('Marked as published!')}
+  function getTypeClass(t){const m={'Project Showcase':'badge-showcase','Value Post':'badge-value','Behind the Scenes':'badge-bts','Social Proof':'badge-social-proof','Opinion':'badge-opinion'};return m[t]||'badge-draft'}
+  const dayStr=d=>d.toISOString().split('T')[0];
+  const postsFiltered=filter==='All'?posts:posts.filter(p=>p.status===filter);
+  return(
+    <div className="animate-in">
+      {toast&&<Toast msg={toast}onDone={()=>setToast('')}/>}
+      {/* Streak + header */}
+      <div className="flex-between"style={{marginBottom:20,flexWrap:'wrap',gap:12}}>
+        <div className="flex gap-12">
+          <div className="streak-badge"><span style={{fontSize:20}}>🔥</span><div><div className="streak-number">{streak.current}</div><div style={{fontSize:10,color:'var(--text-dim)',letterSpacing:'1px',textTransform:'uppercase',marginTop:1}}>Week streak</div></div></div>
+          <div style={{display:'flex',alignItems:'center',gap:6,background:'var(--bg3)',border:'1px solid rgba(255,255,255,.07)',borderRadius:'var(--radius)',padding:'10px 14px'}}><div style={{fontSize:13,color:'var(--text-muted)'}}>Best: <span style={{color:'var(--gold)',fontFamily:'Playfair Display,serif',fontWeight:600}}>{streak.best}</span> weeks</div></div>
+        </div>
+        <div className="flex gap-8">
+          <button className={`btn ${view==='calendar'?'btn-gold':'btn-outline'}`}onClick={()=>setView('calendar')}><Ic.cal/>Calendar</button>
+          <button className={`btn ${view==='list'?'btn-gold':'btn-outline'}`}onClick={()=>setView('list')}><Ic.list/>List</button>
+          <button className="btn btn-gold"onClick={()=>openAdd()}><Ic.plus/>New Post</button>
+        </div>
+      </div>
+      {view==='calendar'&&(
+        <div>
+          <div className="flex-between"style={{marginBottom:12}}>
+            <button className="btn btn-outline btn-sm"onClick={()=>setWeekOff(w=>w-1)}><Ic.chevL/>Prev</button>
+            <div style={{fontFamily:'Playfair Display,serif',fontSize:14,color:'var(--text-muted)'}}>{weekLabel}</div>
+            <button className="btn btn-outline btn-sm"onClick={()=>setWeekOff(w=>w+1)}>Next<Ic.chevR/></button>
+          </div>
+          <div className="cal-grid">
+            {weekDays.map(d=>{
+              const ds=dayStr(d);const isToday=ds===today;
+              const dayPosts=posts.filter(p=>p.scheduledDate===ds);
+              return(
+                <div key={ds}className={`cal-day ${isToday?'today':''}`}onClick={()=>openAdd(ds)}>
+                  <div className="cal-day-label">{d.toLocaleDateString('en-US',{weekday:'short'})}</div>
+                  <div className="cal-day-date">{d.getDate()}</div>
+                  {dayPosts.map(p=><div key={p.id}className={`cal-post-chip ${p.status.toLowerCase()}`}onClick={e=>{e.stopPropagation();openEdit(p)}}>{p.title}</div>)}
+                  <div style={{fontSize:10,color:'rgba(201,168,76,.4)',marginTop:'auto',paddingTop:4}}>+ add</div>
+                </div>
+              );
+            })}
+          </div>
+        </div>
+      )}
+      {view==='list'&&(
+        <div>
+          <div className="filter-tabs">{['All',...POST_STATUS].map(s=><button key={s}className={`filter-tab ${filter===s?'active':''}`}onClick={()=>setFilter(s)}>{s} <span style={{opacity:.55,fontSize:10}}>({(s==='All'?posts:posts.filter(p=>p.status===s)).length})</span></button>)}</div>
+          {postsFiltered.length===0?<div className="empty-state"><div className="empty-state-icon">✍️</div><h3>No Posts Yet</h3><p>Create your first post draft and start building your LinkedIn presence.</p><button className="btn btn-gold"onClick={()=>openAdd()}><Ic.plus/>Write First Post</button></div>
+          :postsFiltered.map(p=>(
+            <div key={p.id}className="post-card">
+              <div className="flex-between"style={{marginBottom:10}}>
+                <div style={{flex:1,minWidth:0}}><div style={{fontWeight:600,color:'var(--text)',fontSize:14,overflow:'hidden',textOverflow:'ellipsis',whiteSpace:'nowrap',marginBottom:5}}>{p.title}</div><div className="flex gap-8"><Badge status={p.status}/><span className={`badge ${getTypeClass(p.type)}`}>{p.type}</span></div></div>
+                <div className="flex gap-8"style={{marginLeft:12,flexShrink:0}}>
+                  {p.status!=='Published'&&<button className="btn btn-sm btn-outline"onClick={()=>markPublished(p.id)}>✓ Published</button>}
+                  <button className="btn btn-ghost btn-icon"onClick={()=>openEdit(p)}><Ic.edit/></button>
+                  <button className="btn btn-ghost btn-icon"style={{color:'var(--danger)'}}onClick={()=>setPosts(posts.filter(x=>x.id!==p.id))}><Ic.trash/></button>
+                </div>
+              </div>
+              {p.content&&<div style={{fontSize:13,color:'var(--text-dim)',lineHeight:1.7,background:'var(--bg3)',borderRadius:'var(--radius)',padding:'10px 12px',whiteSpace:'pre-wrap',maxHeight:80,overflow:'hidden',position:'relative'}}>{p.content}</div>}
+              {(p.scheduledDate||p.publishedDate)&&<div style={{fontSize:11,color:'var(--text-dim)',marginTop:8,display:'flex',gap:14}}>{p.scheduledDate&&<span><Ic.cal/> {p.status==='Published'?'Published':'Scheduled'}: {fmtDate(p.scheduledDate)}</span>}</div>}
+            </div>
+          ))}
+        </div>
+      )}
+      {/* Post idea generator */}
+      <div className="card"style={{marginTop:24}}>
+        <div className="flex-between"style={{marginBottom:14}}>
+          <div className="card-title"style={{marginBottom:0}}><Ic.spark/> Post Idea Generator</div>
+          <select value={ideasSvc}onChange={e=>setIdeasSvc(e.target.value)}style={{width:'auto',padding:'6px 10px',fontSize:12}}>{Object.keys(POST_IDEAS).map(k=><option key={k}>{k}</option>)}</select>
+        </div>
+        {(POST_IDEAS[ideasSvc]||[]).map((idea,i)=>(
+          <div key={i}className="idea-card"onClick={()=>{setForm({...EP2,id:uid(),title:idea.idea.slice(0,60)+'…',type:idea.type,content:'',status:'Draft',scheduledDate:''});setIsEdit(false);setModal(true)}}>
+            <div className="flex"style={{gap:9,marginBottom:5}}><span className={`badge ${getTypeClass(idea.type)}`}>{idea.type}</span></div>
+            <div style={{fontSize:13,color:'var(--text-muted)',lineHeight:1.6}}>{idea.idea}</div>
+          </div>
+        ))}
+      </div>
+      <Modal open={modal}onClose={()=>setModal(false)}title={isEdit?'Edit Post':'New Post Draft'}large>
+        <div className="form-grid">
+          <div className="form-field"><label>Title *</label><input value={form.title}onChange={e=>setForm({...form,title:e.target.value})}placeholder="Post title or hook"/></div>
+          <div className="form-field"><label>Post Type</label><select value={form.type}onChange={e=>setForm({...form,type:e.target.value})}>{POST_TYPES.map(t=><option key={t}>{t}</option>)}</select></div>
+          <div className="form-field"><label>Status</label><select value={form.status}onChange={e=>setForm({...form,status:e.target.value})}>{POST_STATUS.map(s=><option key={s}>{s}</option>)}</select></div>
+          <div className="form-field"><label>Scheduled Date</label><input type="date"value={form.scheduledDate}onChange={e=>setForm({...form,scheduledDate:e.target.value})}/></div>
+          <div className="form-field full"><label>Post Content</label><textarea value={form.content}onChange={e=>setForm({...form,content:e.target.value})}placeholder="Write your LinkedIn post here…"rows={10}style={{minHeight:200}}/></div>
+        </div>
+        <div style={{display:'flex',alignItems:'center',justifyContent:'space-between',marginTop:16,paddingTop:14,borderTop:'1px solid rgba(255,255,255,.055)'}}>
+          <div style={{fontSize:12,color:'var(--text-dim)'}}>{form.content.length} chars · ~{Math.ceil(form.content.split(/\s+/).filter(Boolean).length/238)} min read</div>
+          <div className="flex gap-8"><button className="btn btn-outline"onClick={()=>setModal(false)}>Cancel</button><button className="btn btn-gold"onClick={save}>{isEdit?'Save':'Create Draft'}</button></div>
+        </div>
+      </Modal>
+    </div>
+  );
+}
+
+/* ── APP ── */
+const NAV=[
+  {id:'dashboard',label:'Dashboard',icon:'grid'},
+  {id:'clients',label:'Client & Lead Tracker',icon:'users'},
+  {id:'projects',label:'Project Manager',icon:'folder'},
+  {id:'proposals',label:'Proposal Builder',icon:'doc'},
+  {id:'income',label:'Income Tracker',icon:'dollar'},
+  {id:'outreach',label:'Outreach Manager',icon:'mail'},
+  {id:'linkedin',label:'LinkedIn Planner',icon:'linkedin'},
+];
+const META={
+  dashboard:{title:'Dashboard',sub:'At a glance'},
+  clients:{title:'Client & Lead Tracker',sub:'Manage your pipeline'},
+  projects:{title:'Project Manager',sub:'Deliverables & deadlines'},
+  proposals:{title:'Proposal Builder',sub:'Professional proposals'},
+  income:{title:'Income Tracker',sub:'Earnings & goals'},
+  outreach:{title:'Outreach Manager',sub:'Local business outreach'},
+  linkedin:{title:'LinkedIn Content Planner',sub:'Build your brand — Bryttani Patterson'},
+};
+function App(){
+  const[section,setSection]=useState('dashboard');
+  const[clients,setClients]=useLS('fcrm_clients',[]);
+  const[projects,setProjects]=useLS('fcrm_projects',[]);
+  const[payments,setPayments]=useLS('fcrm_payments',[]);
+  const[outreach,setOutreach]=useLS('fcrm_outreach',[]);
+  const[posts,setPosts]=useLS('fcrm_posts',[]);
+  const[settings,setSettings]=useLS('fcrm_settings',{monthlyGoal:5000});
+  const meta=META[section];
+  const overdueOut=outreach.filter(o=>o.followUpDate&&o.followUpDate<=todayStr()&&o.status!=='Converted'&&o.status!=='Not Interested').length;
+  return(
+    <div className="app">
+      <aside className="sidebar">
+        <div className="sidebar-logo"><h1>FreelancerOS</h1><p>Bryttani Patterson</p></div>
+        <nav className="sidebar-nav">{NAV.map(n=>{const I=Ic[n.icon];return(<div key={n.id}className={`nav-item ${section===n.id?'active':''}`}onClick={()=>setSection(n.id)}><I/><span style={{flex:1}}>{n.label}</span>{n.id==='outreach'&&overdueOut>0&&<span style={{background:'var(--danger)',color:'#fff',borderRadius:'100px',fontSize:10,fontWeight:700,padding:'1px 6px',minWidth:18,textAlign:'center'}}>{overdueOut}</span>}</div>)})}</nav>
+        <div className="sidebar-footer">© {new Date().getFullYear()} FreelancerOS</div>
+      </aside>
+      <main className="main">
+        <div className="page-header"><div><div className="page-title">{meta.title}</div><div className="page-subtitle">{meta.sub}</div></div></div>
+        <div className="page-content">
+          {section==='dashboard'&&<Dashboard clients={clients}projects={projects}payments={payments}outreach={outreach}settings={settings}setSettings={setSettings}/>}
+          {section==='clients'&&<ClientTracker clients={clients}setClients={setClients}/>}
+          {section==='projects'&&<ProjectManager projects={projects}setProjects={setProjects}clients={clients}/>}
+          {section==='proposals'&&<ProposalBuilder clients={clients}/>}
+          {section==='income'&&<IncomeTracker payments={payments}setPayments={setPayments}settings={settings}setSettings={setSettings}clients={clients}/>}
+          {section==='outreach'&&<OutreachManager outreach={outreach}setOutreach={setOutreach}/>}
+          {section==='linkedin'&&<LinkedInPlanner posts={posts}setPosts={setPosts}/>}
+        </div>
+      </main>
+    </div>
+  );
+}
+ReactDOM.createRoot(document.getElementById('root')).render(<App/>);
+</script>
+</body>
+</html>

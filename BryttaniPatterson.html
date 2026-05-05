@@ -1,0 +1,482 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Bloom Digital — Bespoke Web Development</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Jost:wght@200;300;400;500&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  :root {
+    --dark: #0A0908;
+    --dark2: #111009;
+    --dark3: #1A1814;
+    --gold: #C9A84C;
+    --gold-light: #E8C97A;
+    --gold-dim: #A88840;
+    --cream: #F5EDD8;
+    --cream-dim: #E8E4DC;
+    --white: #FFFFFF;
+    --border: rgba(201,168,76,0.18);
+    --border-dim: rgba(201,168,76,0.08);
+  }
+  html { scroll-behavior: smooth; }
+  body {
+    font-family: 'Jost', sans-serif;
+    background: var(--dark);
+    color: var(--cream);
+    font-size: 15px;
+    line-height: 1.7;
+    -webkit-font-smoothing: antialiased;
+    overflow-x: hidden;
+  }
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(24px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  @keyframes marquee { from { transform: translateX(0); } to { transform: translateX(-50%); } }
+  .fade { opacity: 0; animation: fadeUp 0.9s cubic-bezier(0.16,1,0.3,1) forwards; }
+  .fade-1 { animation-delay: 0.1s; }
+  .fade-2 { animation-delay: 0.2s; }
+  .fade-3 { animation-delay: 0.3s; }
+
+  /* NAV */
+  nav {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1.25rem 5%;
+    border-bottom: 1px solid var(--border);
+    position: sticky;
+    top: 0;
+    background: rgba(10,9,8,0.85);
+    backdrop-filter: blur(15px);
+    z-index: 1000;
+  }
+  .logo { font-family: 'Playfair Display', serif; font-size: 1.2rem; letter-spacing: 0.05em; }
+  .logo span { color: var(--gold); }
+  .nav-links { display: flex; gap: 2rem; list-style: none; align-items: center; }
+  .nav-links a {
+    text-decoration: none;
+    color: var(--cream-dim);
+    font-size: 11px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    transition: 0.3s;
+  }
+  .nav-links a:hover { color: var(--gold); }
+
+  /* BUTTONS */
+  .btn-gold {
+    display: inline-block;
+    text-decoration: none;
+    border: 1px solid var(--gold);
+    color: var(--gold);
+    padding: 0.75rem 1.5rem;
+    font-size: 10px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    transition: 0.3s;
+    background: transparent;
+    cursor: pointer;
+  }
+  .btn-gold:hover { background: var(--gold); color: var(--dark); }
+  .btn-gold-fill { background: var(--gold); color: var(--dark); }
+  .btn-gold-fill:hover { background: var(--gold-light); color: var(--dark); }
+
+  /* HERO */
+  .hero {
+    display: grid;
+    grid-template-columns: 1.2fr 0.8fr;
+    min-height: 85vh;
+    border-bottom: 1px solid var(--border);
+  }
+  .hero-left {
+    padding: 10% 5%;
+    border-right: 1px solid var(--border);
+  }
+  .eyebrow { color: var(--gold); text-transform: uppercase; font-size: 10px; letter-spacing: 0.3em; margin-bottom: 2rem; display: block; }
+  h1 { font-family: 'Playfair Display', serif; font-size: clamp(2.5rem, 6vw, 4.5rem); line-height: 1.1; margin-bottom: 2rem; font-weight: 400; }
+  h1 em { color: var(--gold-light); }
+  .hero-desc { max-width: 450px; margin-bottom: 3rem; color: var(--cream-dim); font-weight: 300; }
+  .hero-right { padding: 10% 5%; display: flex; flex-direction: column; justify-content: center; background: var(--dark2); }
+  .stat-row { padding: 1.5rem 0; border-bottom: 1px solid var(--border-dim); display: flex; justify-content: space-between; }
+  .stat-label { font-size: 10px; letter-spacing: 0.15em; text-transform: uppercase; color: var(--cream-dim); }
+  .stat-value { font-size: 13px; font-weight: 300; color: var(--cream); }
+
+  /* MARQUEE */
+  .marquee-wrap { background: var(--dark3); padding: 1rem 0; border-bottom: 1px solid var(--border); overflow: hidden; }
+  .marquee-track { display: flex; width: max-content; animation: marquee 30s linear infinite; }
+  .marquee-item { padding: 0 2rem; font-size: 10px; letter-spacing: 0.2em; color: var(--gold); text-transform: uppercase; white-space: nowrap; }
+
+  /* SECTIONS */
+  .section { padding: 80px 5%; border-bottom: 1px solid var(--border); }
+  .section-heading { font-family: 'Playfair Display', serif; font-size: 2.5rem; margin-bottom: 3rem; font-weight: 400; color: var(--cream); }
+
+  /* SERVICES */
+  .services-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1px; background: var(--border); border: 1px solid var(--border); }
+  .service-card { background: var(--dark); padding: 3rem 2rem; transition: 0.4s; }
+  .service-card:hover { background: var(--dark2); }
+  .service-num { font-size: 10px; letter-spacing: 0.18em; color: var(--cream-dim); margin-bottom: 1.5rem; }
+  .service-name { font-family: 'Playfair Display', serif; font-size: 1.4rem; margin-bottom: 1rem; color: var(--cream); font-weight: 400; }
+  .service-desc { font-weight: 300; font-size: 14px; color: var(--cream-dim); margin-bottom: 1.5rem; line-height: 1.8; }
+  .service-price { color: var(--gold); font-size: 11px; letter-spacing: 0.1em; text-transform: uppercase; }
+
+  /* ABOUT */
+  .about-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 5rem; align-items: start; }
+  .about-left h2 { font-family: 'Playfair Display', serif; font-size: clamp(1.8rem, 3vw, 2.5rem); font-weight: 400; color: var(--cream); margin-bottom: 1.5rem; line-height: 1.25; }
+  .about-left p { color: #ffffff; font-size: 14.5px; line-height: 1.9; font-weight: 300; margin-bottom: 1rem; }
+  .divider { width: 48px; height: 1px; background: var(--gold); opacity: 0.5; margin: 1.5rem 0; }
+  .tags { display: flex; flex-wrap: wrap; gap: 0.5rem; margin-top: 1.5rem; }
+  .tag { font-size: 10px; letter-spacing: 0.14em; text-transform: uppercase; padding: 0.4rem 1rem; border: 1px solid rgba(255,255,255,0.25); color: #ffffff; transition: 0.2s; cursor: default; }
+  .tag:hover { border-color: var(--gold); color: var(--gold); }
+  .process-step { display: flex; gap: 1.5rem; padding: 1.75rem 0; border-bottom: 1px solid var(--border); }
+  .process-step:first-child { border-top: 1px solid var(--border); }
+  .process-num { font-family: 'Playfair Display', serif; font-size: 1.3rem; color: var(--gold); opacity: 0.5; min-width: 2rem; line-height: 1.4; }
+  .process-text h4 { font-size: 11px; font-weight: 500; letter-spacing: 0.14em; color: #ffffff; margin-bottom: 0.4rem; text-transform: uppercase; }
+  .process-text p { font-size: 13.5px; color: #ffffff; line-height: 1.75; font-weight: 300; }
+
+  /* PRICING */
+  .pricing-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 2rem; margin-top: 3rem; }
+  .pricing-card { border: 1px solid var(--border); padding: 3rem 2rem; position: relative; background: var(--dark2); }
+  .pricing-card.featured { border-color: var(--gold); }
+  .pricing-card.featured::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 2px;
+    background: linear-gradient(90deg, transparent, var(--gold), transparent);
+  }
+  .pricing-tier { font-size: 10px; letter-spacing: 0.22em; text-transform: uppercase; color: var(--cream-dim); margin-bottom: 1rem; }
+  .pricing-price { font-family: 'Playfair Display', serif; font-size: 3rem; font-weight: 400; color: var(--cream); margin: 1rem 0 0.25rem; }
+  .pricing-from { font-size: 11px; color: var(--cream-dim); letter-spacing: 0.08em; margin-bottom: 2rem; }
+  .pricing-features { list-style: none; margin: 2rem 0; }
+  .pricing-features li { font-size: 13px; font-weight: 300; color: #ffffff; margin-bottom: 0.8rem; display: flex; align-items: center; gap: 0.6rem; }
+  .pricing-features li::before { content: '◆'; font-size: 5px; color: var(--gold); flex-shrink: 0; }
+
+  /* CTA */
+  .cta-section {
+    padding: 8rem 5%;
+    text-align: center;
+    border-bottom: 1px solid var(--border);
+    position: relative;
+    overflow: hidden;
+  }
+  .cta-section::before {
+    content: '';
+    position: absolute;
+    width: 500px; height: 500px; border-radius: 50%;
+    background: radial-gradient(circle, rgba(201,168,76,0.06) 0%, transparent 70%);
+    top: 50%; left: 50%; transform: translate(-50%,-50%);
+    pointer-events: none;
+  }
+  .cta-section h2 { font-family: 'Playfair Display', serif; font-size: clamp(2rem, 4vw, 3.5rem); font-weight: 400; color: var(--cream); margin-bottom: 1rem; line-height: 1.2; }
+  .cta-section p { color: var(--cream-dim); font-size: 15px; font-weight: 300; margin-bottom: 2.5rem; }
+  .cta-actions { display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap; }
+
+  /* INQUIRY FORM */
+  .inquiry-form { max-width: 640px; margin: 0 auto; }
+  .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 1px; background: var(--border); margin-bottom: 1px; }
+  .form-field { background: var(--dark); }
+  .form-field input,
+  .form-field select,
+  .form-field textarea {
+    width: 100%; background: var(--dark2); border: none;
+    outline: none; color: var(--cream);
+    padding: 1rem 1.25rem; font-family: 'Jost', sans-serif;
+    font-size: 13px; font-weight: 300;
+    transition: background 0.2s;
+  }
+  .form-field input:focus,
+  .form-field select:focus,
+  .form-field textarea:focus { background: var(--dark3); }
+  .form-field input::placeholder,
+  .form-field textarea::placeholder { color: rgba(245,237,216,0.3); }
+  .form-field select { appearance: none; cursor: pointer; color: rgba(245,237,216,0.5); }
+  .form-field select option { background: var(--dark2); color: var(--cream); }
+  .form-wrap { border: 1px solid var(--border); }
+
+  /* FOOTER */
+  footer { text-align: center; padding: 3rem 5%; border-top: 1px solid var(--border); }
+  footer p { font-size: 12px; letter-spacing: 0.1em; color: var(--cream-dim); }
+
+  @media (max-width: 800px) {
+    .hero { grid-template-columns: 1fr; }
+    .hero-right { display: none; }
+    nav { padding: 1rem 5%; }
+    .nav-links { display: none; }
+    .about-grid { grid-template-columns: 1fr; gap: 3rem; }
+    .section { padding: 60px 5%; }
+  }
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="logo">Bloom <span>Digital</span></div>
+  <ul class="nav-links">
+    <li><a href="#services">Services</a></li>
+    <li><a href="#about">About</a></li>
+    <li><a href="#method">Method</a></li>
+    <li><a href="#pricing">Pricing</a></li>
+    <li><a href="#contact" class="btn-gold">Work With Me</a></li>
+  </ul>
+</nav>
+
+<section class="hero">
+  <div class="hero-left">
+    <span class="eyebrow fade fade-1">Web Developer &amp; Digital Strategist · Lexington, SC</span>
+    <h1 class="fade fade-2">Bespoke Digital Solutions<br>for <em>Visionary Founders.</em></h1>
+    <p class="hero-desc fade fade-3">Premium websites, Shopify stores, and custom web apps built for founders who demand more than ordinary. High-end results, delivered asynchronously. Based in Lexington, SC.</p>
+    <div class="fade fade-3" style="display:flex; gap: 1rem; flex-wrap: wrap;">
+      <a href="#pricing" class="btn-gold btn-gold-fill">View Packages</a>
+      <a href="#contact" class="btn-gold">Get In Touch</a>
+    </div>
+  </div>
+  <div class="hero-right">
+    <div class="stat-row"><span class="stat-label">Platforms</span><span class="stat-value">WP · Shopify · Wix</span></div>
+    <div class="stat-row"><span class="stat-label">Turnaround</span><span class="stat-value">7–14 Days</span></div>
+    <div class="stat-row"><span class="stat-label">Location</span><span class="stat-value">Lexington, SC</span></div>
+    <div class="stat-row"><span class="stat-label">Status</span><span class="stat-value" style="color: #4CAF50;">● Available Now</span></div>
+  </div>
+</section>
+
+<div class="marquee-wrap">
+  <div class="marquee-track">
+    <span class="marquee-item">WordPress</span><span class="marquee-item">◆</span>
+    <span class="marquee-item">Shopify</span><span class="marquee-item">◆</span>
+    <span class="marquee-item">Wix</span><span class="marquee-item">◆</span>
+    <span class="marquee-item">Squarespace</span><span class="marquee-item">◆</span>
+    <span class="marquee-item">Web Apps</span><span class="marquee-item">◆</span>
+    <span class="marquee-item">Digital Products</span><span class="marquee-item">◆</span>
+    <span class="marquee-item">Email Marketing</span><span class="marquee-item">◆</span>
+    <span class="marquee-item">Landing Pages</span><span class="marquee-item">◆</span>
+    <span class="marquee-item">eCommerce</span><span class="marquee-item">◆</span>
+    <span class="marquee-item">WordPress</span><span class="marquee-item">◆</span>
+    <span class="marquee-item">Shopify</span><span class="marquee-item">◆</span>
+    <span class="marquee-item">Wix</span><span class="marquee-item">◆</span>
+    <span class="marquee-item">Squarespace</span><span class="marquee-item">◆</span>
+    <span class="marquee-item">Web Apps</span><span class="marquee-item">◆</span>
+    <span class="marquee-item">Digital Products</span><span class="marquee-item">◆</span>
+    <span class="marquee-item">Email Marketing</span><span class="marquee-item">◆</span>
+    <span class="marquee-item">Landing Pages</span><span class="marquee-item">◆</span>
+    <span class="marquee-item">eCommerce</span><span class="marquee-item">◆</span>
+  </div>
+</div>
+
+<section class="section" id="services">
+  <h2 class="section-heading">Services</h2>
+  <div class="services-grid">
+    <div class="service-card">
+      <div class="service-num">01</div>
+      <h3 class="service-name">Websites &amp; Landing Pages</h3>
+      <p class="service-desc">Stunning, responsive websites built on WordPress, Wix, Squarespace, or custom code. Designed to impress and convert visitors into paying clients.</p>
+      <div class="service-price">From $500</div>
+    </div>
+    <div class="service-card">
+      <div class="service-num">02</div>
+      <h3 class="service-name">Shopify &amp; eCommerce</h3>
+      <p class="service-desc">Full Shopify store builds — product pages, collections, checkout, and brand design. Your store will look premium and sell even better.</p>
+      <div class="service-price">From $800</div>
+    </div>
+    <div class="service-card">
+      <div class="service-num">03</div>
+      <h3 class="service-name">Web Apps &amp; Digital Products</h3>
+      <p class="service-desc">Custom web applications, client portals, dashboards, and digital products built to solve real problems and scale with your business.</p>
+      <div class="service-price">From $1,200</div>
+    </div>
+    <div class="service-card">
+      <div class="service-num">04</div>
+      <h3 class="service-name">Email Marketing Setup</h3>
+      <p class="service-desc">Branded templates, welcome sequences, and automations using Mailchimp or Klaviyo. Turn your list into your most powerful sales channel.</p>
+      <div class="service-price">From $300</div>
+    </div>
+  </div>
+</section>
+
+<section class="section" id="about">
+  <h2 class="section-heading">About Me</h2>
+  <div class="about-grid">
+    <div class="about-left">
+      <h2>Client-obsessed. Built to deliver.</h2>
+      <div class="divider"></div>
+      <p>I'm Bryttani Patterson — a web developer based in Lexington, SC.</p>
+      <p>I work with small businesses, entrepreneurs, and creatives who want a digital presence that commands attention — something that looks premium, works flawlessly, and actually drives results.</p>
+      <p>Every project gets my full attention. No templates thrown together overnight. No cutting corners. Just clean, intentional work delivered on time.</p>
+      <div class="tags">
+        <span class="tag">WordPress</span>
+        <span class="tag">Shopify</span>
+        <span class="tag">Wix</span>
+        <span class="tag">Squarespace</span>
+        <span class="tag">HTML / CSS</span>
+        <span class="tag">JavaScript</span>
+        <span class="tag">eCommerce</span>
+        <span class="tag">Web Apps</span>
+        <span class="tag">Digital Products</span>
+        <span class="tag">Email Marketing</span>
+        <span class="tag">Responsive Design</span>
+      </div>
+    </div>
+    <div class="about-right">
+      <div class="process-step">
+        <div class="process-num">01</div>
+        <div class="process-text">
+          <h4>Discovery</h4>
+          <p>We start with a conversation about your goals, your brand, and what success looks like for your project.</p>
+        </div>
+      </div>
+      <div class="process-step">
+        <div class="process-num">02</div>
+        <div class="process-text">
+          <h4>Proposal &amp; Timeline</h4>
+          <p>You receive a clear scope, investment total, and delivery schedule — no surprises, ever.</p>
+        </div>
+      </div>
+      <div class="process-step">
+        <div class="process-num">03</div>
+        <div class="process-text">
+          <h4>Build &amp; Refine</h4>
+          <p>I build your project and share it for review. We refine together until it's exactly right.</p>
+        </div>
+      </div>
+      <div class="process-step">
+        <div class="process-num">04</div>
+        <div class="process-text">
+          <h4>Launch</h4>
+          <p>We go live. I handle all the technical details so your launch feels completely effortless.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section" id="method">
+  <h2 class="section-heading">The Bloom Method</h2>
+  <div style="max-width: 680px; margin-bottom: 3.5rem;">
+    <p style="font-size: 16px; color: var(--cream-dim); font-weight: 300; line-height: 1.9;">
+      High-end results, zero meeting fatigue. I work asynchronously via Slack and Loom updates so you can focus on your business while I build your tech. No phone calls, just progress.
+    </p>
+  </div>
+  <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 1px; background: var(--border); border: 1px solid var(--border);">
+    <div style="background: var(--dark2); padding: 2.5rem 2rem;">
+      <div style="color: var(--gold); font-size: 10px; letter-spacing: 0.22em; text-transform: uppercase; margin-bottom: 1.25rem;">Step 01</div>
+      <h3 style="font-family: 'Playfair Display', serif; font-size: 1.2rem; font-weight: 400; color: var(--cream); margin-bottom: 0.75rem;">You Fill Out the Form</h3>
+      <p style="font-size: 13.5px; font-weight: 300; color: #ffffff; line-height: 1.8;">Tell me about your project, your budget, and your timeline. No call needed — just the details that matter.</p>
+    </div>
+    <div style="background: var(--dark2); padding: 2.5rem 2rem;">
+      <div style="color: var(--gold); font-size: 10px; letter-spacing: 0.22em; text-transform: uppercase; margin-bottom: 1.25rem;">Step 02</div>
+      <h3 style="font-family: 'Playfair Display', serif; font-size: 1.2rem; font-weight: 400; color: var(--cream); margin-bottom: 0.75rem;">I Send a Loom Proposal</h3>
+      <p style="font-size: 13.5px; font-weight: 300; color: #ffffff; line-height: 1.8;">You receive a short recorded walkthrough of my plan, timeline, and investment — reviewed on your schedule.</p>
+    </div>
+    <div style="background: var(--dark2); padding: 2.5rem 2rem;">
+      <div style="color: var(--gold); font-size: 10px; letter-spacing: 0.22em; text-transform: uppercase; margin-bottom: 1.25rem;">Step 03</div>
+      <h3 style="font-family: 'Playfair Display', serif; font-size: 1.2rem; font-weight: 400; color: var(--cream); margin-bottom: 0.75rem;">We Build via Slack</h3>
+      <p style="font-size: 13.5px; font-weight: 300; color: #ffffff; line-height: 1.8;">All updates, feedback, and decisions happen in a shared Slack channel. No chasing emails, no missed calls.</p>
+    </div>
+    <div style="background: var(--dark2); padding: 2.5rem 2rem;">
+      <div style="color: var(--gold); font-size: 10px; letter-spacing: 0.22em; text-transform: uppercase; margin-bottom: 1.25rem;">Step 04</div>
+      <h3 style="font-family: 'Playfair Display', serif; font-size: 1.2rem; font-weight: 400; color: var(--cream); margin-bottom: 0.75rem;">You Launch. Effortlessly.</h3>
+      <p style="font-size: 13.5px; font-weight: 300; color: #ffffff; line-height: 1.8;">I handle every technical detail at launch. You just hit publish and show up for your audience.</p>
+    </div>
+  </div>
+</section>
+
+<section class="section" id="pricing">
+  <h2 class="section-heading">Investment</h2>
+  <div class="pricing-grid">
+    <div class="pricing-card">
+      <div class="pricing-tier">Starter</div>
+      <div class="pricing-price">$500</div>
+      <div class="pricing-from">one-time investment</div>
+      <ul class="pricing-features">
+        <li>1–3 page website or landing page</li>
+        <li>Mobile responsive design</li>
+        <li>Contact form integration</li>
+        <li>Basic SEO setup</li>
+        <li>7-day delivery</li>
+        <li>1 round of revisions</li>
+      </ul>
+      <a href="#contact" class="btn-gold">Get Started</a>
+    </div>
+    <div class="pricing-card featured">
+      <div class="pricing-tier">Signature — Most Popular</div>
+      <div class="pricing-price">$1,500</div>
+      <div class="pricing-from">one-time investment</div>
+      <ul class="pricing-features">
+        <li>Full website up to 8 pages</li>
+        <li>WordPress or Shopify build</li>
+        <li>Custom premium design</li>
+        <li>Full SEO optimization</li>
+        <li>10–14 day delivery</li>
+        <li>3 rounds of revisions</li>
+      </ul>
+      <a href="#contact" class="btn-gold btn-gold-fill">Get Started</a>
+    </div>
+    <div class="pricing-card">
+      <div class="pricing-tier">Custom</div>
+      <div class="pricing-price">Let's Talk</div>
+      <div class="pricing-from">project-based</div>
+      <ul class="pricing-features">
+        <li>Web apps &amp; custom builds</li>
+        <li>Full eCommerce stores</li>
+        <li>Digital product setup</li>
+        <li>Email marketing systems</li>
+        <li>Timeline by scope</li>
+        <li>Dedicated support</li>
+      </ul>
+      <a href="#contact" class="btn-gold">Let's Talk</a>
+    </div>
+  </div>
+</section>
+
+<section class="section" id="inquiry" style="background: var(--dark2);">
+  <h2 class="section-heading">Book a Project</h2>
+  <p style="color: var(--cream-dim); font-weight: 300; font-size: 14px; max-width: 500px; margin-bottom: 3rem; line-height: 1.85;">
+    No calls required. Fill out the form below and I'll respond within 24 hours with a Loom walkthrough of your proposal.
+  </p>
+  <div class="form-wrap">
+    <form action="mailto:hello@ohbloom.com" method="post" enctype="text/plain">
+      <div class="form-row">
+        <div class="form-field"><input type="text" name="name" placeholder="Your Name" required></div>
+        <div class="form-field"><input type="email" name="email" placeholder="Email Address" required></div>
+      </div>
+      <div class="form-row" style="grid-template-columns: 1fr;">
+        <div class="form-field"><input type="text" name="business" placeholder="Business Name (optional)"></div>
+      </div>
+      <div class="form-row" style="grid-template-columns: 1fr;">
+        <div class="form-field">
+          <select name="service" required>
+            <option value="" disabled selected>Service You're Interested In</option>
+            <option>Website or Landing Page</option>
+            <option>Shopify Store</option>
+            <option>Custom Web App</option>
+            <option>Email Marketing Setup</option>
+            <option>Not Sure Yet</option>
+          </select>
+        </div>
+      </div>
+      <div class="form-row" style="grid-template-columns: 1fr;">
+        <div class="form-field"><textarea name="message" rows="5" placeholder="Tell me about your project, vision, and any timeline you have in mind..." style="resize: vertical;"></textarea></div>
+      </div>
+      <div style="padding: 1.5rem; background: var(--dark2); border-top: 1px solid var(--border); display: flex; justify-content: flex-end;">
+        <button type="submit" class="btn-gold btn-gold-fill">Submit Inquiry &nbsp;→</button>
+      </div>
+    </form>
+  </div>
+</section>
+
+<section class="cta-section" id="contact">
+  <h2>Ready to build<br><em style="color: var(--gold-light);">something extraordinary?</em></h2>
+  <p>Let's talk about your project. I respond within 24 hours.</p>
+  <div class="cta-actions">
+    <a href="mailto:hello@ohbloom.com" class="btn-gold btn-gold-fill">Email Me Directly</a>
+    <a href="#inquiry" class="btn-gold">Book a Project</a>
+  </div>
+</section>
+
+<footer>
+  <p>© 2026 Bloom &nbsp;·&nbsp; A division of Bloom Property Solutions LLC &nbsp;·&nbsp; Based in Lexington, SC</p>
+</footer>
+
+</body>
+</html>
