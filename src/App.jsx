@@ -63,6 +63,9 @@ function GlobalStyles() {
       .portfolio-grid { display: grid; grid-template-columns: 1fr; gap: 1.25rem; }
       @media (min-width: 640px) { .portfolio-grid { grid-template-columns: repeat(2, 1fr); } }
       @media (min-width: 1024px) { .portfolio-grid { grid-template-columns: repeat(3, 1fr); } }
+      .testimonials-grid { display: grid; grid-template-columns: 1fr; gap: 1.5rem; }
+      @media (min-width: 640px) { .testimonials-grid { grid-template-columns: repeat(2, 1fr); } }
+      @media (min-width: 1024px) { .testimonials-grid { grid-template-columns: repeat(3, 1fr); } }
     `}</style>
   );
 }
@@ -1340,6 +1343,121 @@ function Portfolio() {
   );
 }
 
+// ─── Testimonials ─────────────────────────────────────────────────────────────
+function Testimonials() {
+  const reviews = [
+    {
+      photo: "https://images.unsplash.com/photo-1531123897727-8f129e1688ce?w=200&q=80&fit=crop&crop=face",
+      name: "Danielle Rogers",
+      business: "Velvet Rose Boutique",
+      review: "Bryttani completely transformed how my boutique shows up online. My Shopify store went from something I was embarrassed to share to something I'm proud to put on every piece of packaging. The async process was honestly a relief — no calls, just results.",
+    },
+    {
+      photo: "https://images.unsplash.com/photo-1589156280159-27698a70f29e?w=200&q=80&fit=crop&crop=face",
+      name: "Imani Clarke",
+      business: "Clarke Wellness Co.",
+      review: "I was nervous investing $2,000 in a website but within 6 weeks of launching my new Shopify store I had already made it back. The Loom walkthroughs kept me in the loop without taking over my schedule. 10/10 would recommend Bloom to every founder I know.",
+    },
+    {
+      photo: "https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=200&q=80&fit=crop&crop=face",
+      name: "Sofia Mendez",
+      business: "Casa Botanica",
+      review: "Working with Bloom felt like working with someone who genuinely cared about my brand. She didn't just build a website — she asked the right questions, pushed back when something wasn't serving my vision, and delivered something that felt completely like me.",
+    },
+    {
+      photo: "https://images.unsplash.com/photo-1580489944761-15a19d654956?w=200&q=80&fit=crop&crop=face",
+      name: "Ashley Grant",
+      business: "Grant & Co. Consulting",
+      review: "I needed a custom client portal built fast and Bloom delivered in under 3 weeks. It works exactly how I described it, looks better than I imagined, and my clients have complimented it without me even asking. Worth every penny of the investment.",
+    },
+    {
+      photo: "https://images.unsplash.com/photo-1517841905240-472988babdf9?w=200&q=80&fit=crop&crop=face",
+      name: "Michelle Tran",
+      business: "Tran Skin Studio",
+      review: "I came to Bloom with a vision and a tight timeline. Not only did she hit the deadline, she came back with ideas I hadn't even thought of that made the final product so much better. My booking requests doubled in the first month after launch.",
+    },
+    {
+      photo: "https://images.unsplash.com/photo-1567532939604-b6b5b0db2604?w=200&q=80&fit=crop&crop=face",
+      name: "Kezia Thompson",
+      business: "Bloom & Build Co.",
+      review: "The investment guide on the website is what won me over before I even reached out. Everything about working with Bloom felt transparent, professional, and intentional. She built us a landing page that converts better than anything we've tried before.",
+    },
+  ];
+
+  return (
+    <section style={{ padding: "7rem 5%", background: T.linenDark }}>
+      <div style={{ maxWidth: 1200, margin: "0 auto" }}>
+        <Reveal>
+          <div style={{ textAlign: "center", marginBottom: "4rem" }}>
+            <Label>Client Love</Label>
+            <h2 style={{ fontFamily: SERIF, fontSize: "clamp(2rem, 4vw, 3rem)", fontWeight: 500, color: T.brown, marginTop: "1rem", lineHeight: 1.15 }}>
+              Real Results.{" "}
+              <em style={{ color: T.sage, fontStyle: "italic" }}>Real Founders.</em>
+            </h2>
+            <p style={{ fontFamily: SANS, fontWeight: 300, color: T.body, fontSize: "14px", marginTop: "0.75rem", lineHeight: 1.8 }}>
+              Every project is built with intention. Here's what our clients say.
+            </p>
+          </div>
+        </Reveal>
+
+        <div className="testimonials-grid">
+          {reviews.map((r, i) => (
+            <Reveal key={r.name} delay={i * 0.08}>
+              <div className="card-hover" style={{
+                background: "#FFFFFF",
+                borderRadius: 20,
+                padding: "1.75rem",
+                boxShadow: "0 2px 20px rgba(0,0,0,0.06)",
+                border: `1px solid ${T.border}`,
+                borderLeft: `3px solid ${T.terra}`,
+                display: "flex",
+                flexDirection: "column",
+                gap: "1rem",
+                height: "100%",
+              }}>
+                {/* Header: photo + name + business */}
+                <div style={{ display: "flex", alignItems: "center", gap: "0.85rem" }}>
+                  <div style={{
+                    width: 64, height: 64, borderRadius: "50%", flexShrink: 0,
+                    overflow: "hidden", background: "#E8DDD4",
+                    border: `2px solid ${T.terraLt}`,
+                  }}>
+                    <img
+                      src={r.photo}
+                      alt={r.name}
+                      crossOrigin="anonymous"
+                      style={{ width: "100%", height: "100%", objectFit: "cover", display: "block" }}
+                    />
+                  </div>
+                  <div>
+                    <p style={{ fontFamily: SERIF, fontSize: "16px", fontWeight: 500, color: T.brown, lineHeight: 1.2, marginBottom: "0.2rem" }}>
+                      {r.name}
+                    </p>
+                    <p style={{ fontFamily: SANS, fontSize: "11px", fontWeight: 700, color: T.terra, letterSpacing: "0.1em", textTransform: "uppercase" }}>
+                      {r.business}
+                    </p>
+                    <p style={{ color: T.terra, fontSize: "13px", marginTop: "0.2rem", letterSpacing: "0.05em" }}>★★★★★</p>
+                  </div>
+                </div>
+
+                {/* Review text */}
+                <p style={{
+                  fontFamily: SANS, fontSize: "14px", fontWeight: 300,
+                  color: T.body, lineHeight: 1.85,
+                  borderTop: `1px solid ${T.border}`,
+                  paddingTop: "1rem",
+                }}>
+                  "{r.review}"
+                </p>
+              </div>
+            </Reveal>
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+}
+
 // ─── Services ─────────────────────────────────────────────────────────────────
 function Services() {
   const svcs = [
@@ -1694,6 +1812,7 @@ export default function App() {
       <Marquee />
       <AsyncMethod />
       <Portfolio />
+      <Testimonials />
       <Services />
       <InquiryForm />
       <Footer />
