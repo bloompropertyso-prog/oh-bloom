@@ -3,11 +3,21 @@
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import {
-  Bot, Monitor, Layers, Mail, Linkedin,
+  Bot, Monitor, Layers, Mail,
   Menu, X, Check, Zap, Target, Code2,
   ArrowRight, Users, MessageCircle, Globe,
   TrendingUp, UserCheck
 } from 'lucide-react';
+
+function LinkedinIcon({ size = 18 }) {
+  return (
+    <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.75" strokeLinecap="round" strokeLinejoin="round">
+      <path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"/>
+      <rect x="2" y="9" width="4" height="12"/>
+      <circle cx="4" cy="4" r="2"/>
+    </svg>
+  );
+}
 
 // ─── CSS Injection ─────────────────────────────────────────────────────────────
 function GlobalStyles() {
@@ -1076,13 +1086,15 @@ function Contact() {
   const [submitted, setSubmitted] = useState(false);
   const [sending, setSending] = useState(false);
 
+  const formspreeId = import.meta.env.VITE_FORMSPREE_ID || 'xjglrwzr';
+
   async function handleSubmit(e) {
     e.preventDefault();
     setSending(true);
     const form = e.target;
     const data = new FormData(form);
     try {
-      const res = await fetch('https://formspree.io/f/xjglrwzr', {
+      const res = await fetch(`https://formspree.io/f/${formspreeId}`, {
         method: 'POST',
         body: data,
         headers: { Accept: 'application/json' },
@@ -1123,6 +1135,7 @@ function Contact() {
                 <form onSubmit={handleSubmit}>
                   <input type="hidden" name="_subject" value="New Inquiry — ohbloom.com" />
 
+                  {/* Name + Email */}
                   <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '0 22px' }}>
                     <div className="fgroup">
                       <label className="flabel">Your Name *</label>
@@ -1139,43 +1152,72 @@ function Contact() {
                     <input className="finput" type="text" name="business" placeholder="Your business or brand name" />
                   </div>
 
-                  <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '0 22px' }}>
-                    <div className="fgroup">
-                      <label className="flabel">What Type of Business Do You Run?</label>
-                      <div className="fsel-wrap">
-                        <select className="fselect" name="industry">
-                          <option value="">Select one</option>
-                          {['Beauty & Wellness', 'Coaching & Consulting', 'Food & Beverage', 'Health & Fitness', 'Real Estate', 'Professional Services', 'E-Commerce', 'Other'].map(o => <option key={o}>{o}</option>)}
-                        </select>
-                        <span className="fsel-arrow">▾</span>
-                      </div>
-                    </div>
-                    <div className="fgroup">
-                      <label className="flabel">What Are You Most Interested In? *</label>
-                      <div className="fsel-wrap">
-                        <select className="fselect" name="service" required>
-                          <option value="">Select one</option>
-                          {['AI Chatbot Setup', 'Website + AI Chatbot', 'Lead Capture Automation', 'Client Onboarding Automation', 'Custom Web App', 'Full Website or Redesign', "Not sure — let's talk"].map(o => <option key={o}>{o}</option>)}
-                        </select>
-                        <span className="fsel-arrow">▾</span>
-                      </div>
-                    </div>
-                  </div>
+                  {/* ── The three key fields ── */}
 
+                  {/* 1. Industry */}
                   <div className="fgroup">
-                    <label className="flabel">What's Your Biggest Challenge Right Now? *</label>
-                    <textarea className="ftarea" name="challenge" required placeholder="Tell me what's taking up too much of your time, where leads are falling through, or what you wish your website was doing for you..." />
-                  </div>
-
-                  <div className="fgroup">
-                    <label className="flabel">What's Your Budget Range?</label>
+                    <label className="flabel">Industry *</label>
                     <div className="fsel-wrap">
-                      <select className="fselect" name="budget">
-                        <option value="">Select one</option>
-                        {['Under $500', '$500–$1,500', '$1,500–$3,000', '$3,000–$6,000', '$6,000+', 'Not sure yet'].map(o => <option key={o}>{o}</option>)}
+                      <select className="fselect" name="industry" required>
+                        <option value="">Select your industry</option>
+                        {[
+                          'Beauty & Wellness',
+                          'Coaching & Consulting',
+                          'Food & Beverage',
+                          'Health & Fitness',
+                          'Real Estate',
+                          'Professional Services',
+                          'E-Commerce',
+                          'Other',
+                        ].map(o => <option key={o}>{o}</option>)}
                       </select>
                       <span className="fsel-arrow">▾</span>
                     </div>
+                  </div>
+
+                  {/* 2. Project Goal */}
+                  <div className="fgroup">
+                    <label className="flabel">Project Goal *</label>
+                    <div className="fsel-wrap">
+                      <select className="fselect" name="project_goal" required>
+                        <option value="">What do you need help with?</option>
+                        {[
+                          'AI Chatbot Setup',
+                          'Website + AI Chatbot',
+                          'Lead Capture Automation',
+                          'Client Onboarding Automation',
+                          'Custom Web App',
+                          'Full Website or Redesign',
+                          "Not sure — let's talk",
+                        ].map(o => <option key={o}>{o}</option>)}
+                      </select>
+                      <span className="fsel-arrow">▾</span>
+                    </div>
+                  </div>
+
+                  {/* 3. Budget */}
+                  <div className="fgroup">
+                    <label className="flabel">Budget *</label>
+                    <div className="fsel-wrap">
+                      <select className="fselect" name="budget" required>
+                        <option value="">Select a budget range</option>
+                        {[
+                          'Under $500',
+                          '$500–$1,500',
+                          '$1,500–$3,000',
+                          '$3,000–$6,000',
+                          '$6,000+',
+                          'Not sure yet',
+                        ].map(o => <option key={o}>{o}</option>)}
+                      </select>
+                      <span className="fsel-arrow">▾</span>
+                    </div>
+                  </div>
+
+                  {/* Open-ended challenge */}
+                  <div className="fgroup">
+                    <label className="flabel">Anything else I should know?</label>
+                    <textarea className="ftarea" name="message" placeholder="Tell me what's taking up too much of your time, where leads are falling through, or what you wish your website was doing for you..." />
                   </div>
 
                   <button
@@ -1212,7 +1254,7 @@ function Footer() {
           </span>
           <div className="footer-icons" style={{ display: 'flex', gap: 14, alignItems: 'center' }}>
             <a href="https://linkedin.com" target="_blank" rel="noopener noreferrer" style={{ color: '#9ABBBE', transition: 'color 0.2s' }} onMouseEnter={e => e.currentTarget.style.color = '#1A6B72'} onMouseLeave={e => e.currentTarget.style.color = '#9ABBBE'} aria-label="LinkedIn">
-              <Linkedin size={18} strokeWidth={1.75} />
+              <LinkedinIcon size={18} />
             </a>
             <a href="mailto:hello@ohbloom.com" style={{ color: '#9ABBBE', transition: 'color 0.2s' }} onMouseEnter={e => e.currentTarget.style.color = '#1A6B72'} onMouseLeave={e => e.currentTarget.style.color = '#9ABBBE'} aria-label="Email">
               <Mail size={18} strokeWidth={1.75} />
