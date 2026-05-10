@@ -1500,7 +1500,6 @@ export default function FreelanceLanding() {
         <Portfolio />
         <About />
         <Process />
-        <CTASection />
         <Contact />
       </main>
       <Footer />
