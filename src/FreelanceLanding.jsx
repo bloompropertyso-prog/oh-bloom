@@ -1171,74 +1171,106 @@ function About() {
   );
 }
 
-// ─── Smart Move ───────────────────────────────────────────────────────────────
-const POINTS = [
+// ─── Process ──────────────────────────────────────────────────────────────────
+const STEPS = [
   {
-    num: '1',
-    title: 'Build Demos First',
-    body: "Instead of waiting for clients to take a chance on you, build 3–5 demonstration projects for real business types. A chatbot for a salon. An intake system for a coach. A FAQ assistant for a restaurant. Show people what's possible.",
+    num: '01',
+    title: 'We Talk About Your Business',
+    body: 'You fill out a short form or we connect async. I learn what's taking up your time, where leads are slipping, and what you actually need.',
   },
   {
-    num: '2',
-    title: 'Record Short Walkthroughs',
-    body: 'A 60-second screen recording of a demo doing something useful is worth more than any pitch deck. Post it on LinkedIn. Share it with local businesses. Let the work speak.',
+    num: '02',
+    title: 'I Map Out the Solution',
+    body: 'Within 48 hours you'll receive a clear proposal — what I'll build, how long it takes, and exactly what it costs. No surprises.',
   },
   {
-    num: '3',
-    title: 'Lead With the Problem, Not the Tech',
-    body: "Don't say 'I build AI chatbots.' Say 'I help salons stop losing leads after hours.' Speak to the business problem, not the technical solution.",
+    num: '03',
+    title: 'I Get to Work',
+    body: 'Once you're in, I handle the build. You don't need to manage me or follow up — I'll keep you updated at every milestone.',
+  },
+  {
+    num: '04',
+    title: 'You Review & We Refine',
+    body: 'Before anything goes live, you see it first. We make adjustments until it's exactly right.',
+  },
+  {
+    num: '05',
+    title: 'You Launch With Confidence',
+    body: 'Your new system or website goes live. I walk you through everything so you feel in control — not dependent.',
   },
 ];
 
-function SmartMove() {
+function Process() {
   return (
     <section className="sec" style={{ background: 'var(--bg)' }}>
       <div className="wrap">
+        {/* Header */}
         <RevealSection>
           <div style={{ textAlign: 'center', marginBottom: 64 }}>
-            <span className="eyebrow">The Strategy</span>
-            <h2 className="sec-h" style={{ fontSize: '2.2rem', fontWeight: 700, letterSpacing: '-0.02em', marginBottom: 14 }}>
-              The Smartest Thing a New AI Business Can Do.
+            <span className="eyebrow">The Process</span>
+            <h2 className="sec-h" style={{ fontSize: '2.2rem', fontWeight: 700, letterSpacing: '-0.02em', marginBottom: 16 }}>
+              Simple. Clear. No Tech Headaches.
             </h2>
-            <p style={{ fontFamily: 'var(--font-b)', fontSize: 17, color: '#6A6A6A', maxWidth: 540, margin: '0 auto', lineHeight: 1.7 }}>
-              Not 'I'm open for work.' But: 'Here's how I automated this business process.'
+            <p style={{ fontFamily: 'var(--font-b)', fontSize: 17, color: '#6A6A6A', maxWidth: 580, margin: '0 auto', lineHeight: 1.75 }}>
+              You don't need to understand how it works under the hood. You just need to know it'll get done — on time, in plain English, and exactly the way we discussed.
             </p>
           </div>
         </RevealSection>
 
+        {/* 5-step flow */}
         <RevealSection>
-          <div className="sm-row" style={{ display: 'flex', gap: 64, alignItems: 'flex-start' }}>
-            {/* Left — pull quote */}
-            <div style={{ flex: '0 0 38%', maxWidth: '38%' }}>
-              <div style={{ borderLeft: '3px solid var(--teal)', paddingLeft: 28 }}>
-                <div style={{ fontFamily: 'var(--font-h)', fontSize: '2rem', fontWeight: 800, lineHeight: 1.2, color: 'var(--text-h)', letterSpacing: '-0.03em', marginBottom: 16 }}>
-                  "Stop announcing.<br />Start demonstrating."
-                </div>
-                <p style={{ fontFamily: 'var(--font-b)', fontSize: 15, color: '#888', lineHeight: 1.65 }}>
-                  The demo-first approach is the fastest path from zero to paying clients in the AI automation space.
-                </p>
-              </div>
-            </div>
-            {/* Right — 3 points */}
-            <div style={{ flex: 1, display: 'flex', flexDirection: 'column', gap: 32 }}>
-              {POINTS.map(({ num, title, body }) => (
-                <div key={num} style={{ display: 'flex', gap: 20, alignItems: 'flex-start' }}>
-                  <div style={{ width: 36, height: 36, borderRadius: '50%', background: 'var(--teal-light)', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
-                    <span style={{ fontFamily: 'var(--font-h)', fontSize: 15, fontWeight: 700, color: 'var(--teal)' }}>{num}</span>
+          {/* Desktop: horizontal row */}
+          <div style={{ position: 'relative' }}>
+            {/* Connector line behind the steps */}
+            <div className="hide-mob" style={{
+              position: 'absolute',
+              top: 28,
+              left: '10%',
+              right: '10%',
+              height: 2,
+              background: 'linear-gradient(90deg, var(--teal-light), var(--teal), var(--teal-light))',
+              opacity: 0.4,
+              zIndex: 0,
+            }} />
+
+            <motion.div
+              variants={containerV}
+              initial="hidden"
+              whileInView="visible"
+              viewport={{ once: true, margin: '0px 0px -80px 0px' }}
+              style={{ display: 'grid', gridTemplateColumns: 'repeat(5, 1fr)', gap: 16, position: 'relative', zIndex: 1 }}
+              className="process-grid"
+            >
+              {STEPS.map(({ num, title, body }) => (
+                <FadeItem key={num}>
+                  <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', textAlign: 'center', padding: '0 8px' }}>
+                    {/* Number circle */}
+                    <div style={{
+                      width: 56, height: 56, borderRadius: '50%',
+                      background: 'var(--white)',
+                      border: '2px solid var(--teal)',
+                      display: 'flex', alignItems: 'center', justifyContent: 'center',
+                      marginBottom: 18,
+                      boxShadow: '0 0 0 6px var(--teal-light)',
+                    }}>
+                      <span style={{ fontFamily: 'var(--font-h)', fontSize: 15, fontWeight: 800, color: 'var(--teal)', letterSpacing: '-0.01em' }}>{num}</span>
+                    </div>
+                    <h4 style={{ fontFamily: 'var(--font-h)', fontSize: '0.95rem', fontWeight: 700, marginBottom: 10, letterSpacing: '-0.01em', color: 'var(--text-h)', lineHeight: 1.3 }}>{title}</h4>
+                    <p style={{ fontFamily: 'var(--font-b)', fontSize: 13.5, color: 'var(--text-b)', lineHeight: 1.7 }}>{body}</p>
                   </div>
-                  <div>
-                    <h4 style={{ fontFamily: 'var(--font-h)', fontSize: '1.05rem', fontWeight: 700, marginBottom: 8, letterSpacing: '-0.01em' }}>{title}</h4>
-                    <p style={{ fontFamily: 'var(--font-b)', fontSize: 15, color: 'var(--text-b)', lineHeight: 1.75 }}>{body}</p>
-                  </div>
-                </div>
+                </FadeItem>
               ))}
-              {/* Callout box */}
-              <div style={{ border: '1.5px solid var(--teal)', borderRadius: 10, padding: '20px 24px', background: 'rgba(26,107,114,0.03)', marginTop: 8 }}>
-                <p style={{ fontFamily: 'var(--font-b)', fontSize: 15, color: 'var(--text-b)', lineHeight: 1.75, fontStyle: 'italic' }}>
-                  "Your real edge isn't being the best engineer in the world. It's becoming the person who makes AI feel useful and understandable for small businesses. That is a massive, underserved market."
-                </p>
-              </div>
-            </div>
+            </motion.div>
+          </div>
+
+          {/* Callout + CTA */}
+          <div style={{ textAlign: 'center', marginTop: 56 }}>
+            <p style={{ fontFamily: 'var(--font-b)', fontSize: 15, color: '#9A9690', fontStyle: 'italic', marginBottom: 24 }}>
+              Every project is handled personally by Bryttani. No agencies, no handoffs, no disappearing acts.
+            </p>
+            <a href="#contact" className="btn-p">
+              Start the Conversation <ArrowRight size={16} />
+            </a>
           </div>
         </RevealSection>
       </div>
@@ -1467,7 +1499,7 @@ export default function FreelanceLanding() {
         <Offers />
         <Portfolio />
         <About />
-        <SmartMove />
+        <Process />
         <CTASection />
         <Contact />
       </main>
