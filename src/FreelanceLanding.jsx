@@ -318,83 +318,177 @@ function BChrome({ url }) {
 }
 
 // ─── Portfolio Mockups ─────────────────────────────────────────────────────────
+
+/* shared msg helper */
+const Msg = ({ from, text, time, rose, terra }) => {
+  const isUser = from === 'user';
+  const userBg  = rose ? '#F9ECE8' : terra ? '#F5EDE2' : '#F0F4FF';
+  const userClr = rose ? '#2D1A1F' : terra ? '#2A1408' : '#1B2B4B';
+  return (
+    <div style={{ marginBottom: 5, textAlign: isUser ? 'right' : 'left' }}>
+      <div style={{
+        display: 'inline-block', maxWidth: '88%',
+        background: isUser ? userBg : '#F4F4F4',
+        borderRadius: isUser ? '9px 9px 2px 9px' : '2px 9px 9px 9px',
+        padding: '4px 7px', fontSize: 7.5, lineHeight: 1.5,
+        color: isUser ? userClr : '#2A2A2A',
+        textAlign: 'left',
+      }}>
+        {text}
+      </div>
+      <div style={{ fontSize: 6.5, color: '#C0C0C0', marginTop: 2 }}>{time}</div>
+    </div>
+  );
+};
+
 function SalonMockup() {
   return (
     <div className="b-frame">
       <BChrome url="glowstudio.com" />
-      <div className="b-body" style={{ background: '#FDF9F7' }}>
-        <div style={{ background: '#FDF0EE', padding: '7px 12px', display: 'flex', justifyContent: 'space-between', alignItems: 'center', borderBottom: '1px solid #F5E2DC' }}>
-          <span style={{ fontFamily: 'var(--font-h)', fontWeight: 700, fontSize: 11, color: '#7A3848' }}>Glow Studio</span>
-          <div style={{ display: 'flex', gap: 10 }}>
+      <div className="b-body" style={{ height: 268, background: '#FBF5F3', display: 'flex', flexDirection: 'column', position: 'relative' }}>
+
+        {/* ── Nav ── */}
+        <div style={{ background: '#B5546A', padding: '5px 10px', display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexShrink: 0 }}>
+          <span style={{ fontFamily: 'var(--font-h)', fontWeight: 800, fontSize: 10.5, color: 'white', letterSpacing: '0.01em' }}>✦ Glow Studio</span>
+          <div style={{ display: 'flex', gap: 9, alignItems: 'center' }}>
             {['Services', 'Gallery', 'Book Now'].map(t => (
-              <span key={t} style={{ fontSize: 8, color: '#9A5060' }}>{t}</span>
+              <span key={t} style={{ fontSize: 7.5, color: 'rgba(255,255,255,0.88)' }}>{t}</span>
             ))}
+            <div style={{ background: 'white', borderRadius: 3, padding: '2px 7px', fontSize: 7, color: '#B5546A', fontWeight: 700 }}>Book Now</div>
           </div>
         </div>
-        <div style={{ padding: '10px 12px', position: 'relative', height: '100%' }}>
-          <div style={{ fontFamily: 'var(--font-h)', fontWeight: 700, fontSize: 13, color: '#4A2535', marginBottom: 3 }}>
-            Your Hair,<br />Your Style
-          </div>
-          <div style={{ fontSize: 9, color: '#B08090' }}>Lexington's premier salon</div>
-          {/* Chat widget */}
-          <div style={{ position: 'absolute', bottom: 10, right: 10, width: 138, background: 'white', borderRadius: 9, boxShadow: '0 4px 18px rgba(0,0,0,0.13)', overflow: 'hidden', border: '1px solid #F0E6E8' }}>
-            <div style={{ background: '#1A6B72', padding: '5px 9px', color: 'white', fontSize: 8.5, fontWeight: 600, display: 'flex', alignItems: 'center', gap: 4 }}>
-              <span style={{ fontSize: 9 }}>✦</span> Glow Assistant
+
+        {/* ── Hero ── */}
+        <div style={{ background: '#F9ECE8', padding: '8px 10px 7px', borderBottom: '1px solid #EDD9D4', flexShrink: 0 }}>
+          <div style={{ fontFamily: 'var(--font-h)', fontSize: 14, fontWeight: 800, color: '#1F0D13', letterSpacing: '-0.025em', lineHeight: 1.15, marginBottom: 3 }}>Your Hair, Your Style.</div>
+          <div style={{ fontSize: 7.5, color: '#9A6070', marginBottom: 6 }}>Lexington's premier salon — walk-ins welcome</div>
+          <div style={{ display: 'inline-block', background: '#B5546A', borderRadius: 3, padding: '3px 10px', fontSize: 7.5, color: 'white', fontWeight: 600 }}>Book Appointment →</div>
+        </div>
+
+        {/* ── 3 service cards ── */}
+        <div style={{ display: 'flex', gap: 5, padding: '6px 10px', background: 'white', borderBottom: '1px solid #EEE8E6', flexShrink: 0 }}>
+          {[
+            { name: 'Cut & Style',        price: '$65',  icon: '✂️' },
+            { name: 'Color & Highlights', price: '$120', icon: '🎨' },
+            { name: 'Blowout',            price: '$45',  icon: '💅' },
+          ].map(s => (
+            <div key={s.name} style={{ flex: 1, background: '#FBF5F3', borderRadius: 5, padding: '5px 5px', border: '1px solid #EDD9D4', textAlign: 'center' }}>
+              <div style={{ fontSize: 11, marginBottom: 2 }}>{s.icon}</div>
+              <div style={{ fontSize: 7, fontWeight: 600, color: '#1F0D13', lineHeight: 1.3 }}>{s.name}</div>
+              <div style={{ fontSize: 8.5, color: '#B5546A', fontWeight: 700, marginTop: 1 }}>{s.price}</div>
             </div>
-            <div style={{ padding: '7px 8px' }}>
-              <div style={{ background: '#F6F6F6', borderRadius: '0 8px 8px 8px', padding: '4px 7px', fontSize: 8, color: '#333', lineHeight: 1.5, marginBottom: 5 }}>
-                Hi! I'm Glow's assistant. Want to see our services or book an appointment?
-              </div>
-              <div style={{ display: 'flex', gap: 4 }}>
-                <div style={{ background: '#E8F4F5', color: '#1A6B72', borderRadius: 4, padding: '3px 6px', fontSize: 7.5, fontWeight: 600 }}>Services</div>
-                <div style={{ background: '#E8F4F5', color: '#1A6B72', borderRadius: 4, padding: '3px 6px', fontSize: 7.5, fontWeight: 600 }}>Book Now</div>
-              </div>
+          ))}
+        </div>
+
+        {/* ── Page body backdrop ── */}
+        <div style={{ flex: 1, background: '#FBF5F3', padding: '8px 10px' }}>
+          <div style={{ fontSize: 7.5, color: '#B08090' }}>⭐⭐⭐⭐⭐ &nbsp;"Best salon in Lexington!" — Sarah M.</div>
+        </div>
+
+        {/* ── AI Chat widget (floating) ── */}
+        <div style={{ position: 'absolute', bottom: 8, right: 8, width: 162, background: 'white', borderRadius: 11, boxShadow: '0 8px 28px rgba(181,84,106,0.22)', overflow: 'hidden', border: '1px solid #EDD9D4' }}>
+          <div style={{ background: '#B5546A', padding: '6px 9px', display: 'flex', alignItems: 'center', gap: 5 }}>
+            <div style={{ width: 6, height: 6, borderRadius: '50%', background: 'rgba(255,255,255,0.55)' }} />
+            <span style={{ color: 'white', fontSize: 8, fontWeight: 700, letterSpacing: '0.01em' }}>✦ Glow Assistant</span>
+            <div style={{ marginLeft: 'auto', width: 5, height: 5, borderRadius: '50%', background: '#4ADEAE' }} />
+          </div>
+          <div style={{ padding: '7px 8px 6px' }}>
+            <Msg from="user" text="Do you have availability this weekend?" time="10:14 AM" rose />
+            <Msg from="bot"  text="Yes! We have openings Saturday at 11am and 2pm. Which service are you interested in?" time="10:14 AM" rose />
+            <Msg from="user" text="Color and highlights" time="10:15 AM" rose />
+            <Msg from="bot"  text="Perfect — that's about 2 hrs with Maya. Want me to hold the 11am slot?" time="10:15 AM" rose />
+            <div style={{ display: 'flex', gap: 4, marginTop: 5 }}>
+              <div style={{ background: '#B5546A', color: 'white', borderRadius: 4, padding: '3px 7px', fontSize: 7, fontWeight: 700, whiteSpace: 'nowrap' }}>Yes, book it!</div>
+              <div style={{ background: 'white', color: '#B5546A', borderRadius: 4, padding: '3px 7px', fontSize: 7, fontWeight: 600, border: '1px solid #B5546A', whiteSpace: 'nowrap' }}>See other times</div>
             </div>
           </div>
         </div>
+
       </div>
     </div>
   );
 }
 
 function CoachMockup() {
-  const steps = ['Client Signs Up', 'Welcome Email Sent', 'Intake Form Triggered', 'Calendar Link Sent', 'Contract Delivered'];
+  const steps = [
+    { label: 'Client Signs Up',          time: '9:42 AM' },
+    { label: 'Welcome Email Sent',        time: '9:42 AM' },
+    { label: 'Intake Form Triggered',     time: '9:43 AM' },
+    { label: 'Calendar Link Sent',        time: '9:43 AM' },
+    { label: 'Contract Delivered',        time: '9:44 AM' },
+    { label: 'Slack Notification Fired',  time: '9:44 AM' },
+  ];
   return (
     <div className="b-frame">
       <BChrome url="app.elevatecoaching.com/intake" />
-      <div className="b-body" style={{ background: '#F8FAFB', display: 'flex', flexDirection: 'column' }}>
-        <div style={{ background: '#1A6B72', padding: '5px 12px', color: 'white', fontSize: 9, fontWeight: 600, display: 'flex', alignItems: 'center', gap: 6 }}>
-          <span style={{ width: 7, height: 7, borderRadius: '50%', background: '#4ADEAE', display: 'inline-block' }} />
-          Automated Intake Flow — Active
+      <div className="b-body" style={{ height: 268, background: '#F8FAFB', display: 'flex', flexDirection: 'column' }}>
+
+        {/* ── Dashboard header ── */}
+        <div style={{ background: '#1A6B72', padding: '5px 10px', display: 'flex', alignItems: 'center', gap: 6, flexShrink: 0 }}>
+          <div style={{ width: 6, height: 6, borderRadius: '50%', background: '#4ADEAE' }} />
+          <span style={{ fontSize: 8.5, fontWeight: 700, color: 'white' }}>Automated Intake Flow — Active</span>
+          <div style={{ marginLeft: 'auto', background: 'rgba(255,255,255,0.15)', borderRadius: 3, padding: '1px 7px', fontSize: 7, color: 'white', fontWeight: 600 }}>Live</div>
         </div>
+
+        {/* ── Split body ── */}
         <div style={{ display: 'flex', flex: 1, overflow: 'hidden' }}>
-          {/* Workflow timeline */}
-          <div style={{ flex: 1, padding: '10px 12px', borderRight: '1px solid #E8EFF0', overflowY: 'auto' }}>
-            {steps.map((step, i) => (
-              <div key={i} style={{ display: 'flex', alignItems: 'flex-start', gap: 7, marginBottom: 9 }}>
-                <div style={{ width: 15, height: 15, borderRadius: '50%', background: '#E8F5E9', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0, marginTop: 1 }}>
-                  <span style={{ color: '#2E7D32', fontSize: 8, fontWeight: 700 }}>✓</span>
+
+          {/* Left: timeline + stats */}
+          <div style={{ flex: '0 0 54%', padding: '8px 10px', borderRight: '1px solid #DDE8EA', display: 'flex', flexDirection: 'column' }}>
+            <div style={{ flex: 1 }}>
+              {steps.map((s, i) => (
+                <div key={i} style={{ display: 'flex', alignItems: 'flex-start', gap: 6, marginBottom: 7, position: 'relative' }}>
+                  {i < steps.length - 1 && (
+                    <div style={{ position: 'absolute', left: 7, top: 15, width: 1, height: '100%', background: '#C3E0E3', zIndex: 0 }} />
+                  )}
+                  <div style={{ width: 15, height: 15, borderRadius: '50%', background: '#E6F4EA', border: '1.5px solid #66BB6A', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0, zIndex: 1 }}>
+                    <span style={{ color: '#2E7D32', fontSize: 8, fontWeight: 900 }}>✓</span>
+                  </div>
+                  <div>
+                    <div style={{ fontSize: 8, fontWeight: 600, color: '#1C1C1E', lineHeight: 1.3 }}>{s.label}</div>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: 4, marginTop: 1 }}>
+                      <span style={{ fontSize: 6.5, color: '#999' }}>{s.time}</span>
+                      <span style={{ background: '#E8F4F5', color: '#1A6B72', borderRadius: 3, padding: '0 4px', fontSize: 6.5, fontWeight: 700 }}>Auto</span>
+                    </div>
+                  </div>
                 </div>
-                <div>
-                  <div style={{ fontSize: 8.5, fontWeight: 600, color: '#1C1C1E', lineHeight: 1.3 }}>{step}</div>
-                  <div style={{ fontSize: 7.5, color: '#999' }}>9:42 AM · Auto</div>
+              ))}
+            </div>
+            {/* Stats row */}
+            <div style={{ borderTop: '1px solid #DDE8EA', paddingTop: 6, display: 'flex', gap: 0 }}>
+              {[
+                { val: '12', label: 'clients this month' },
+                { val: '4 min', label: 'avg. completion' },
+                { val: '0', label: 'manual steps' },
+              ].map((st, i) => (
+                <div key={i} style={{ flex: 1, textAlign: 'center', borderRight: i < 2 ? '1px solid #DDE8EA' : 'none' }}>
+                  <div style={{ fontSize: 10, fontWeight: 800, color: '#1A6B72' }}>{st.val}</div>
+                  <div style={{ fontSize: 6.5, color: '#888', lineHeight: 1.3 }}>{st.label}</div>
                 </div>
-              </div>
-            ))}
+              ))}
+            </div>
           </div>
-          {/* Email preview */}
-          <div style={{ width: 104, padding: '8px 8px', flexShrink: 0 }}>
-            <div style={{ background: 'white', borderRadius: 5, border: '1px solid #E0EAEC', overflow: 'hidden', height: '100%' }}>
-              <div style={{ background: '#1A6B72', padding: '4px 7px', color: 'white', fontSize: 7.5, fontWeight: 700, letterSpacing: '0.02em' }}>
-                Elevate Coaching
+
+          {/* Right: email preview */}
+          <div style={{ flex: 1, padding: '7px 7px', overflow: 'hidden' }}>
+            <div style={{ background: 'white', borderRadius: 6, border: '1px solid #DDE8EA', overflow: 'hidden', height: '100%', display: 'flex', flexDirection: 'column' }}>
+              <div style={{ background: '#1A6B72', padding: '5px 8px', flexShrink: 0 }}>
+                <div style={{ color: 'white', fontSize: 8, fontWeight: 800, letterSpacing: '0.06em' }}>ELEVATE COACHING</div>
               </div>
-              <div style={{ padding: '7px 7px' }}>
-                <div style={{ fontSize: 8, fontWeight: 700, color: '#1C1C1E', marginBottom: 4 }}>Welcome, Sarah! 🎉</div>
-                <div style={{ fontSize: 7, color: '#555', lineHeight: 1.5, marginBottom: 6 }}>
-                  So excited to start this journey together. Here's everything you need to get started...
+              <div style={{ padding: '5px 8px', borderBottom: '1px solid #EEF3F4', flexShrink: 0 }}>
+                <div style={{ fontSize: 7, color: '#666', marginBottom: 1 }}>To: sarah@email.com</div>
+                <div style={{ fontSize: 7.5, fontWeight: 700, color: '#1C1C1E', lineHeight: 1.4 }}>Welcome, Sarah — here's everything you need to get started 🎉</div>
+              </div>
+              <div style={{ padding: '6px 8px', flex: 1, display: 'flex', flexDirection: 'column' }}>
+                <div style={{ fontSize: 7.5, color: '#444', lineHeight: 1.65, marginBottom: 7 }}>
+                  Hi Sarah, I'm so excited to work together. Below you'll find your intake form, contract, and a link to schedule our first session. Everything is ready — just click below.
                 </div>
-                <div style={{ background: '#1A6B72', borderRadius: 3, padding: '3px 7px', fontSize: 7, color: 'white', textAlign: 'center', fontWeight: 600 }}>
-                  Complete Intake →
+                <div style={{ display: 'flex', flexDirection: 'column', gap: 4, marginBottom: 6 }}>
+                  <div style={{ background: '#1A6B72', borderRadius: 4, padding: '4px 8px', fontSize: 7.5, color: 'white', fontWeight: 700, textAlign: 'center' }}>Complete Intake Form →</div>
+                  <div style={{ border: '1.5px solid #1A6B72', borderRadius: 4, padding: '3px 8px', fontSize: 7.5, color: '#1A6B72', fontWeight: 600, textAlign: 'center' }}>Schedule Your First Session →</div>
+                </div>
+                <div style={{ marginTop: 'auto', borderTop: '1px solid #EEE', paddingTop: 4 }}>
+                  <div style={{ fontSize: 6.5, color: '#aaa', textAlign: 'center' }}>Elevate Coaching · Lexington, SC · Unsubscribe</div>
                 </div>
               </div>
             </div>
@@ -409,92 +503,187 @@ function RestaurantMockup() {
   return (
     <div className="b-frame">
       <BChrome url="mesakitchen.com" />
-      <div className="b-body" style={{ background: '#FDFAF7' }}>
-        <div style={{ background: '#B5673A', padding: '7px 12px', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-          <span style={{ fontFamily: 'var(--font-h)', fontWeight: 700, fontSize: 11, color: 'white' }}>Mesa Kitchen</span>
-          <div style={{ display: 'flex', gap: 10 }}>
-            {['Menu', 'Reservations', 'About'].map(t => (
-              <span key={t} style={{ fontSize: 8, color: 'rgba(255,255,255,0.85)' }}>{t}</span>
+      <div className="b-body" style={{ height: 268, background: '#FBF6EF', display: 'flex', flexDirection: 'column', position: 'relative' }}>
+
+        {/* ── Nav ── */}
+        <div style={{ background: '#C1622F', padding: '5px 10px', display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexShrink: 0 }}>
+          <span style={{ fontFamily: 'var(--font-h)', fontWeight: 800, fontSize: 10.5, color: 'white' }}>Mesa Kitchen</span>
+          <div style={{ display: 'flex', gap: 8, alignItems: 'center' }}>
+            {['Menu', 'Reservations', 'About', 'Order Online'].map(t => (
+              <span key={t} style={{ fontSize: 7, color: 'rgba(255,255,255,0.88)' }}>{t}</span>
             ))}
+            <div style={{ background: 'white', borderRadius: 3, padding: '2px 6px', fontSize: 7, color: '#C1622F', fontWeight: 700 }}>Reserve a Table</div>
           </div>
         </div>
-        <div style={{ padding: '10px 12px', position: 'relative', height: '100%' }}>
-          <div style={{ fontFamily: 'var(--font-h)', fontWeight: 700, fontSize: 13, color: '#4A2810', lineHeight: 1.3, marginBottom: 3 }}>
-            Authentic Flavors,<br />Every Gathering
+
+        {/* ── Hero ── */}
+        <div style={{ background: '#F5EDE2', padding: '8px 10px 7px', borderBottom: '1px solid #E5D3C0', flexShrink: 0 }}>
+          <div style={{ fontFamily: 'var(--font-h)', fontSize: 13, fontWeight: 800, color: '#2A1408', letterSpacing: '-0.02em', lineHeight: 1.15, marginBottom: 3 }}>Authentic Flavors,<br />Every Gathering.</div>
+          <div style={{ fontSize: 7.5, color: '#7A5040', marginBottom: 6 }}>Open Tue–Sun · 11am–10pm · Lexington, SC</div>
+          <div style={{ display: 'flex', gap: 5 }}>
+            <div style={{ background: '#C1622F', borderRadius: 3, padding: '3px 9px', fontSize: 7.5, color: 'white', fontWeight: 600 }}>View Menu</div>
+            <div style={{ border: '1px solid #C1622F', borderRadius: 3, padding: '2px 9px', fontSize: 7.5, color: '#C1622F', fontWeight: 600 }}>Make a Reservation</div>
           </div>
-          <div style={{ fontSize: 9, color: '#9A6A50' }}>Open Tue–Sun 11am–10pm</div>
-          {/* Chat widget */}
-          <div style={{ position: 'absolute', bottom: 10, right: 10, width: 146, background: 'white', borderRadius: 9, boxShadow: '0 4px 18px rgba(0,0,0,0.13)', overflow: 'hidden', border: '1px solid #F0E8DC' }}>
-            <div style={{ background: '#B5673A', padding: '5px 9px', color: 'white', fontSize: 8.5, fontWeight: 600 }}>
-              Mesa Assistant
+        </div>
+
+        {/* ── 3 info blocks ── */}
+        <div style={{ display: 'flex', background: 'white', borderBottom: '1px solid #EEE5D8', flexShrink: 0 }}>
+          {[
+            { icon: '⭐', text: '4.9 on Google · 800+ reviews' },
+            { icon: '📍', text: 'Lexington, SC · Free parking' },
+            { icon: '🕐', text: 'Open Today until 10pm' },
+          ].map((b, i) => (
+            <div key={i} style={{ flex: 1, padding: '5px 6px', borderRight: i < 2 ? '1px solid #EEE5D8' : 'none', textAlign: 'center' }}>
+              <div style={{ fontSize: 9, marginBottom: 1 }}>{b.icon}</div>
+              <div style={{ fontSize: 6.5, color: '#6A4A38', fontWeight: 500, lineHeight: 1.3 }}>{b.text}</div>
             </div>
-            <div style={{ padding: '6px 8px' }}>
-              <div style={{ textAlign: 'right', marginBottom: 4 }}>
-                <span style={{ background: '#1A6B72', color: 'white', borderRadius: '8px 8px 0 8px', padding: '3px 7px', fontSize: 7.5, display: 'inline-block', lineHeight: 1.4 }}>
-                  Do you have gluten-free options?
-                </span>
-              </div>
-              <div style={{ background: '#F5F5F5', borderRadius: '0 8px 8px 8px', padding: '4px 6px', fontSize: 8, color: '#333', marginBottom: 5, lineHeight: 1.5 }}>
-                Yes! Several dishes are gluten-free. Want to see the menu or make a reservation?
-              </div>
-              <div style={{ display: 'flex', gap: 4 }}>
-                <div style={{ background: '#E8F4F5', color: '#1A6B72', borderRadius: 4, padding: '2px 6px', fontSize: 7.5, fontWeight: 600 }}>Menu</div>
-                <div style={{ background: '#E8F4F5', color: '#1A6B72', borderRadius: 4, padding: '2px 6px', fontSize: 7.5, fontWeight: 600 }}>Reserve</div>
-              </div>
+          ))}
+        </div>
+
+        {/* ── Page body ── */}
+        <div style={{ flex: 1, background: '#FBF6EF', padding: '8px 10px' }}>
+          <div style={{ fontSize: 7.5, color: '#B08060' }}>🍽️ &nbsp;Today's special: Slow-roasted lamb chops with saffron rice</div>
+        </div>
+
+        {/* ── AI Chat widget (floating) ── */}
+        <div style={{ position: 'absolute', bottom: 8, right: 8, width: 164, background: 'white', borderRadius: 11, boxShadow: '0 8px 28px rgba(193,98,47,0.20)', overflow: 'hidden', border: '1px solid #E5D3C0' }}>
+          <div style={{ background: '#C1622F', padding: '6px 9px', display: 'flex', alignItems: 'center', gap: 5 }}>
+            <div style={{ width: 6, height: 6, borderRadius: '50%', background: 'rgba(255,255,255,0.55)' }} />
+            <span style={{ color: 'white', fontSize: 8, fontWeight: 700 }}>Mesa Assistant</span>
+            <div style={{ marginLeft: 'auto', width: 5, height: 5, borderRadius: '50%', background: '#4ADEAE' }} />
+          </div>
+          <div style={{ padding: '7px 8px 6px' }}>
+            <Msg from="user" text="Do you have gluten-free options?" time="12:32 PM" terra />
+            <Msg from="bot"  text="Yes! Our grilled salmon, roasted veg plate & most tacos are GF. Want to see the full menu?" time="12:32 PM" terra />
+            <Msg from="user" text="Yes please" time="12:33 PM" terra />
+            <Msg from="bot"  text={<>Here's our menu 👉 <span style={{ color: '#C1622F', fontWeight: 600, textDecoration: 'underline' }}>[View Menu]</span> — I can help with reservations too!</>} time="12:33 PM" terra />
+            <div style={{ display: 'flex', gap: 4, marginTop: 5 }}>
+              <div style={{ background: '#C1622F', color: 'white', borderRadius: 4, padding: '3px 6px', fontSize: 6.5, fontWeight: 700, whiteSpace: 'nowrap' }}>Make a Reservation</div>
+              <div style={{ background: 'white', color: '#C1622F', borderRadius: 4, padding: '3px 6px', fontSize: 6.5, fontWeight: 600, border: '1px solid #C1622F', whiteSpace: 'nowrap' }}>Today's Specials</div>
             </div>
           </div>
         </div>
+
       </div>
     </div>
   );
 }
 
 function ConsultantMockup() {
-  const opts = ['Revenue Growth', 'Team & Process', 'Lead Generation', 'Client Retention'];
+  const opts = [
+    { label: 'Revenue Growth',  selected: true },
+    { label: 'Team & Process',  selected: false },
+    { label: 'Lead Generation', selected: false },
+    { label: 'Client Retention',selected: false },
+  ];
+  const profile = [
+    { key: 'Industry',  val: 'Professional Services', done: true },
+    { key: 'Challenge', val: 'Revenue Growth',         done: true },
+    { key: 'Budget',    val: 'TBD',                    done: false },
+    { key: 'Timeline',  val: 'TBD',                    done: false },
+  ];
   return (
     <div className="b-frame">
       <BChrome url="meridian-consulting.com/qualify" />
-      <div className="b-body" style={{ background: 'white', padding: '10px 12px' }}>
-        {/* Progress */}
-        <div style={{ marginBottom: 10 }}>
-          <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: 4 }}>
-            <span style={{ fontSize: 8, color: '#888' }}>Step 1 of 3</span>
-            <span style={{ fontSize: 8, color: '#1A6B72', fontWeight: 600 }}>33% Complete</span>
-          </div>
-          <div style={{ height: 4, background: '#F0F0F0', borderRadius: 2 }}>
-            <div style={{ width: '33%', height: '100%', background: '#1A6B72', borderRadius: 2 }} />
-          </div>
+      <div className="b-body" style={{ height: 268, background: '#F8F9FB', display: 'flex', flexDirection: 'column' }}>
+
+        {/* ── Header bar ── */}
+        <div style={{ background: '#1B2B4B', padding: '4px 10px', display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexShrink: 0 }}>
+          <span style={{ color: 'white', fontSize: 8, fontWeight: 800, letterSpacing: '0.05em' }}>MERIDIAN CONSULTING</span>
+          <span style={{ color: 'rgba(255,255,255,0.55)', fontSize: 7 }}>Free Assessment · No Commitment</span>
         </div>
-        <div style={{ fontSize: 9, fontWeight: 700, color: '#1C1C1E', marginBottom: 9 }}>
-          What's your biggest challenge right now?
-        </div>
-        <div style={{ display: 'flex', gap: 10, alignItems: 'flex-start' }}>
-          {/* Options grid */}
-          <div style={{ flex: 1, display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 5 }}>
-            {opts.map((opt, i) => (
-              <div key={i} style={{
-                border: i === 0 ? '1.5px solid #1A6B72' : '1px solid #E8E8E8',
-                borderRadius: 6, padding: '5px 7px',
-                fontSize: 8, textAlign: 'center',
-                color: i === 0 ? '#1A6B72' : '#555',
-                background: i === 0 ? '#E8F4F5' : 'white',
-                fontWeight: i === 0 ? 600 : 400,
-                lineHeight: 1.3,
-              }}>
-                {opt}
+
+        {/* ── Main content ── */}
+        <div style={{ display: 'flex', flex: 1, overflow: 'hidden' }}>
+
+          {/* Left: form */}
+          <div style={{ flex: '0 0 61%', padding: '8px 10px', borderRight: '1px solid #E0E6EF', display: 'flex', flexDirection: 'column' }}>
+
+            {/* Progress */}
+            <div style={{ marginBottom: 7 }}>
+              <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: 3 }}>
+                <span style={{ fontSize: 7.5, color: '#667', fontWeight: 500 }}>Step 2 of 3</span>
+                <span style={{ fontSize: 7.5, color: '#1A6B72', fontWeight: 700 }}>67% Complete</span>
               </div>
-            ))}
+              <div style={{ height: 4, background: '#E0E6EF', borderRadius: 2 }}>
+                <div style={{ width: '67%', height: '100%', background: '#1A6B72', borderRadius: 2 }} />
+              </div>
+            </div>
+
+            {/* Question */}
+            <div style={{ fontSize: 9.5, fontWeight: 700, color: '#1B2B4B', marginBottom: 7, lineHeight: 1.3 }}>
+              What's your biggest challenge right now?
+            </div>
+
+            {/* 2×2 options */}
+            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 5, marginBottom: 7 }}>
+              {opts.map((o) => (
+                <div key={o.label} style={{
+                  border: o.selected ? '2px solid #1A6B72' : '1.5px solid #E0E6EF',
+                  borderRadius: 6, padding: '5px 7px',
+                  background: o.selected ? '#E8F4F5' : 'white',
+                  color: o.selected ? '#1A6B72' : '#445',
+                  fontSize: 8, fontWeight: o.selected ? 700 : 500,
+                  lineHeight: 1.3, display: 'flex', alignItems: 'center', gap: 4,
+                }}>
+                  {o.selected && <span style={{ width: 7, height: 7, borderRadius: '50%', background: '#1A6B72', flexShrink: 0, display: 'inline-block' }} />}
+                  {o.label}
+                </div>
+              ))}
+            </div>
+
+            {/* Next button */}
+            <div style={{ background: '#1B2B4B', borderRadius: 5, padding: '5px 10px', fontSize: 8.5, color: 'white', fontWeight: 700, textAlign: 'center', marginBottom: 5 }}>
+              Next →
+            </div>
+
+            {/* Reassurance */}
+            <div style={{ fontSize: 7, color: '#90A', textAlign: 'center', color: '#999', lineHeight: 1.4 }}>
+              Takes 2 minutes · No commitment · Helps us prepare for your call
+            </div>
           </div>
-          {/* Score panel */}
-          <div style={{ width: 62, background: '#F8FAFA', borderRadius: 7, padding: '8px 6px', border: '1px solid #D8EDEE', textAlign: 'center', flexShrink: 0 }}>
-            <div style={{ fontSize: 7, color: '#888', marginBottom: 2, fontWeight: 500 }}>Lead Score</div>
-            <div style={{ fontSize: 20, fontWeight: 800, color: '#1A6B72', lineHeight: 1.1 }}>87</div>
-            <div style={{ fontSize: 7, color: '#aaa', marginBottom: 5 }}>/100</div>
-            <div style={{ background: '#1A6B72', borderRadius: 4, padding: '2px 4px', fontSize: 7, color: 'white', fontWeight: 700, lineHeight: 1.4 }}>
-              Strong Fit ✓
+
+          {/* Right: lead profile */}
+          <div style={{ flex: 1, padding: '8px 8px', display: 'flex', flexDirection: 'column', gap: 5 }}>
+            <div style={{ fontSize: 8, fontWeight: 700, color: '#1B2B4B', letterSpacing: '0.01em' }}>Your Lead Profile</div>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: 4 }}>
+              {profile.map(p => (
+                <div key={p.key} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '3px 5px', background: p.done ? '#F0F8F8' : '#F9F9F9', borderRadius: 4 }}>
+                  <span style={{ fontSize: 7, color: '#778' }}>{p.key}</span>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: 3 }}>
+                    <span style={{ fontSize: 7, fontWeight: 600, color: p.done ? '#1B2B4B' : '#CCC' }}>{p.val}</span>
+                    {p.done && <span style={{ color: '#1A6B72', fontSize: 8, fontWeight: 900 }}>✓</span>}
+                  </div>
+                </div>
+              ))}
+            </div>
+            {/* Score */}
+            <div style={{ background: 'white', border: '1.5px solid #D0E8EA', borderRadius: 8, padding: '7px 6px', textAlign: 'center', marginTop: 2 }}>
+              <div style={{ fontSize: 7, color: '#888', marginBottom: 1, fontWeight: 500, letterSpacing: '0.04em', textTransform: 'uppercase' }}>Lead Score</div>
+              <div style={{ fontSize: 26, fontWeight: 900, color: '#1A6B72', lineHeight: 1, letterSpacing: '-0.03em' }}>87</div>
+              <div style={{ fontSize: 7, color: '#bbb', marginBottom: 5 }}>/100</div>
+              <div style={{ background: '#E6F4EA', borderRadius: 4, padding: '2px 7px', fontSize: 7.5, color: '#2E7D32', fontWeight: 700 }}>Strong Fit ✓</div>
+              <div style={{ fontSize: 6.5, color: '#bbb', marginTop: 4, lineHeight: 1.4 }}>Based on your answers so far</div>
             </div>
           </div>
         </div>
+
+        {/* ── What happens next strip ── */}
+        <div style={{ borderTop: '1px solid #E0E6EF', background: '#EEF2F8', padding: '5px 10px', flexShrink: 0 }}>
+          <div style={{ fontSize: 7, color: '#1B2B4B', fontWeight: 700, marginBottom: 4, textTransform: 'uppercase', letterSpacing: '0.06em' }}>What happens next</div>
+          <div style={{ display: 'flex', alignItems: 'center', gap: 5 }}>
+            {['Submit', 'We Review', 'Personalized Response in 24hrs'].map((step, i) => (
+              <React.Fragment key={step}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: 4 }}>
+                  <div style={{ width: 14, height: 14, borderRadius: '50%', background: '#1B2B4B', color: 'white', fontSize: 7, fontWeight: 700, display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>{i + 1}</div>
+                  <span style={{ fontSize: 7, color: '#445', fontWeight: 500, lineHeight: 1.3 }}>{step}</span>
+                </div>
+                {i < 2 && <div style={{ width: 10, height: 1, background: '#B0BCCC', flexShrink: 0 }} />}
+              </React.Fragment>
+            ))}
+          </div>
+        </div>
+
       </div>
     </div>
   );
