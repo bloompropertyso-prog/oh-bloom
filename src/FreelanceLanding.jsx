@@ -1176,22 +1176,22 @@ const STEPS = [
   {
     num: '01',
     title: 'We Talk About Your Business',
-    body: 'You fill out a short form or we connect async. I learn what's taking up your time, where leads are slipping, and what you actually need.',
+    body: "You fill out a short form or we connect async. I learn what's taking up your time, where leads are slipping, and what you actually need.",
   },
   {
     num: '02',
     title: 'I Map Out the Solution',
-    body: 'Within 48 hours you'll receive a clear proposal — what I'll build, how long it takes, and exactly what it costs. No surprises.',
+    body: "Within 48 hours you'll receive a clear proposal — what I'll build, how long it takes, and exactly what it costs. No surprises.",
   },
   {
     num: '03',
     title: 'I Get to Work',
-    body: 'Once you're in, I handle the build. You don't need to manage me or follow up — I'll keep you updated at every milestone.',
+    body: "Once you're in, I handle the build. You don't need to manage me or follow up — I'll keep you updated at every milestone.",
   },
   {
     num: '04',
     title: 'You Review & We Refine',
-    body: 'Before anything goes live, you see it first. We make adjustments until it's exactly right.',
+    body: "Before anything goes live, you see it first. We make adjustments until it's exactly right.",
   },
   {
     num: '05',
