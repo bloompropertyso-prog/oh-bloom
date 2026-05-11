@@ -241,6 +241,20 @@ function GlobalStyles() {
         .hero-h1 { font-size: 2rem !important; }
         .sec-h { font-size: 1.7rem !important; }
       }
+
+      /* Demo section */
+      @keyframes demo-pulse {
+        0%   { transform: scale(1);   opacity: 0.6; }
+        70%  { transform: scale(1.5); opacity: 0; }
+        100% { transform: scale(1.5); opacity: 0; }
+      }
+      .demo-pulse {
+        animation: demo-pulse 2s ease-out infinite;
+      }
+      @media (max-width: 768px) {
+        .demo-pills { flex-direction: column !important; align-items: center; }
+        .demo-btn   { width: 100%; justify-content: center; }
+      }
     `}</style>
   );
 }
@@ -713,7 +727,7 @@ function Nav() {
       <nav style={{ maxWidth: 1140, margin: '0 auto', padding: '0 28px', height: 68, display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
         {/* Brand */}
         <a href="#" style={{ fontFamily: 'var(--font-h)', fontWeight: 500, fontSize: 17, color: '#1C1C1E', textDecoration: 'none', letterSpacing: '-0.01em' }}>
-          Bryttani Patterson
+          Bloom Digital
         </a>
         {/* Desktop nav */}
         <div className="hide-mob" style={{ display: 'flex', alignItems: 'center', gap: 32 }}>
@@ -1124,6 +1138,153 @@ function Portfolio() {
   );
 }
 
+// ─── Demo Section ─────────────────────────────────────────────────────────────
+const DEMO_URL = 'https://ohbloom.com/#glow';
+
+function DemoSection() {
+  return (
+    <section id="demo" className="sec" style={{ background: '#F5F3EE' }}>
+      <div className="wrap">
+        <RevealSection>
+          <div style={{ textAlign: 'center', marginBottom: 48 }}>
+            <span className="eyebrow">LIVE DEMO</span>
+            <h2 style={{ fontFamily: 'var(--font-h)', fontSize: 'clamp(32px,5vw,48px)', fontWeight: 700, color: 'var(--text-h)', lineHeight: 1.1, margin: '16px 0 20px' }}>
+              See It Before You Buy It.
+            </h2>
+            <p style={{ fontFamily: 'var(--font-b)', fontSize: 17, color: 'var(--text-b)', lineHeight: 1.72, maxWidth: 580, margin: '0 auto' }}>
+              I built a fully working AI assistant for a fake salon called Glow Studio. Try it yourself — ask it about services, pricing, or book an appointment. This is exactly what I build for real businesses.
+            </p>
+          </div>
+        </RevealSection>
+
+        <RevealSection delay={0.1}>
+          {/* Demo card */}
+          <a
+            href={DEMO_URL}
+            target="_blank"
+            rel="noopener noreferrer"
+            style={{
+              display: 'block', maxWidth: 780, margin: '0 auto 40px',
+              background: '#fff', borderRadius: 16,
+              border: '1px solid var(--teal)',
+              boxShadow: '0 4px 24px rgba(0,0,0,0.08)',
+              overflow: 'hidden', cursor: 'pointer', textDecoration: 'none',
+              transition: 'transform 0.22s, box-shadow 0.22s',
+            }}
+            onMouseEnter={e => { e.currentTarget.style.transform = 'translateY(-5px)'; e.currentTarget.style.boxShadow = '0 16px 48px rgba(26,107,114,0.16)'; }}
+            onMouseLeave={e => { e.currentTarget.style.transform = 'none'; e.currentTarget.style.boxShadow = '0 4px 24px rgba(0,0,0,0.08)'; }}
+          >
+            {/* Browser chrome */}
+            <div style={{ background: '#F2F2F0', borderBottom: '1px solid #E2E2DE', padding: '10px 16px', display: 'flex', alignItems: 'center', gap: 12 }}>
+              <div style={{ display: 'flex', gap: 6 }}>
+                <div style={{ width: 12, height: 12, borderRadius: '50%', background: '#FF5F57' }} />
+                <div style={{ width: 12, height: 12, borderRadius: '50%', background: '#FFBD2E' }} />
+                <div style={{ width: 12, height: 12, borderRadius: '50%', background: '#28C840' }} />
+              </div>
+              <div style={{ flex: 1, background: '#EAEAE8', borderRadius: 6, padding: '5px 14px', fontFamily: 'var(--font-b)', fontSize: 12, color: '#6B6B68', textAlign: 'center' }}>
+                ohbloom.com/demo/glow-studio
+              </div>
+            </div>
+
+            {/* Salon preview */}
+            <div style={{ position: 'relative', background: 'linear-gradient(140deg,#F9ECE8 0%,#FDF5F2 60%,#FEFEFE 100%)', minHeight: 340, overflow: 'hidden' }}>
+              {/* Faux salon content */}
+              <div style={{ padding: '36px 44px', display: 'flex', alignItems: 'center', gap: 32 }}>
+                <div style={{ flex: 1, minWidth: 0 }}>
+                  <div style={{ fontFamily: 'var(--font-b)', fontSize: 9, fontWeight: 700, letterSpacing: '0.14em', color: '#B5546A', textTransform: 'uppercase', marginBottom: 10 }}>
+                    LEXINGTON'S PREMIER SALON
+                  </div>
+                  <div style={{ fontFamily: 'Georgia, serif', fontSize: 30, fontWeight: 800, color: '#1C1C1E', lineHeight: 1.15, marginBottom: 10 }}>
+                    Your Hair,<br />Your Style.<br />
+                    <span style={{ color: '#B5546A' }}>Your Confidence.</span>
+                  </div>
+                  <div style={{ fontFamily: 'var(--font-b)', fontSize: 12, color: '#6B6B68', lineHeight: 1.6, marginBottom: 18, maxWidth: 240 }}>
+                    Lexington's premier salon — walk-ins welcome, appointments preferred.
+                  </div>
+                  <div style={{ display: 'inline-block', background: '#B5546A', color: '#fff', fontFamily: 'var(--font-b)', fontSize: 12, fontWeight: 600, padding: '9px 20px', borderRadius: 24 }}>
+                    Book an Appointment →
+                  </div>
+                </div>
+                <div style={{ width: 180, height: 200, borderRadius: 14, flexShrink: 0, background: 'linear-gradient(135deg,#E8C9C0,#D4A5A0)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 52 }}>
+                  💇
+                </div>
+              </div>
+
+              {/* Faux chat widget */}
+              <div style={{
+                position: 'absolute', bottom: 14, right: 14,
+                width: 220, background: '#fff', borderRadius: 12,
+                boxShadow: '0 8px 32px rgba(0,0,0,0.18)', overflow: 'hidden',
+              }}>
+                <div style={{ background: '#B5546A', padding: '9px 12px', display: 'flex', alignItems: 'center', gap: 7 }}>
+                  <div style={{ width: 22, height: 22, borderRadius: '50%', background: 'rgba(255,255,255,0.22)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 11 }}>🤖</div>
+                  <div>
+                    <div style={{ fontFamily: 'Georgia,serif', fontSize: 11, fontWeight: 700, color: '#fff' }}>Glow Studio AI</div>
+                    <div style={{ fontFamily: 'var(--font-b)', fontSize: 9, color: 'rgba(255,255,255,0.8)' }}>● Always on</div>
+                  </div>
+                </div>
+                <div style={{ padding: '10px 9px 8px' }}>
+                  <div style={{ display: 'flex', gap: 6, alignItems: 'flex-end', marginBottom: 8 }}>
+                    <div style={{ width: 18, height: 18, borderRadius: '50%', background: '#B5546A', flexShrink: 0, display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 9 }}>🤖</div>
+                    <div style={{ background: '#F9ECE8', borderRadius: '8px 8px 8px 2px', padding: '6px 9px', fontFamily: 'var(--font-b)', fontSize: 10.5, color: '#1C1C1E', lineHeight: 1.4 }}>
+                      Hi! Welcome to Glow Studio 💅 How can I help you today?
+                    </div>
+                  </div>
+                  <div style={{ display: 'flex', gap: 5, borderTop: '1px solid #F0EAE7', paddingTop: 7, alignItems: 'center' }}>
+                    <div style={{ flex: 1, background: '#FAF7F5', borderRadius: 14, padding: '4px 9px', fontFamily: 'var(--font-b)', fontSize: 9.5, color: '#AAA' }}>Type a message…</div>
+                    <div style={{ width: 22, height: 22, background: '#B5546A', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#fff', fontSize: 11 }}>→</div>
+                  </div>
+                </div>
+              </div>
+
+              {/* Play overlay */}
+              <div style={{ position: 'absolute', inset: 0, background: 'rgba(250,250,248,0.42)', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: 14 }}>
+                <div style={{ position: 'relative', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                  <div className="demo-pulse" style={{ position: 'absolute', width: 80, height: 80, borderRadius: '50%', border: '2px solid rgba(26,107,114,0.45)' }} />
+                  <div style={{ width: 60, height: 60, borderRadius: '50%', background: 'var(--teal)', display: 'flex', alignItems: 'center', justifyContent: 'center', boxShadow: '0 4px 20px rgba(26,107,114,0.38)' }}>
+                    <svg width="22" height="22" viewBox="0 0 24 24" fill="#fff"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+                  </div>
+                </div>
+                <span style={{ fontFamily: 'var(--font-b)', fontSize: 14, fontWeight: 600, color: 'var(--text-h)', background: 'rgba(255,255,255,0.85)', padding: '4px 14px', borderRadius: 20 }}>Try the live demo</span>
+              </div>
+            </div>
+          </a>
+        </RevealSection>
+
+        <RevealSection delay={0.2}>
+          {/* Stat pills */}
+          <div className="demo-pills" style={{ display: 'flex', justifyContent: 'center', gap: 12, marginBottom: 28, flexWrap: 'wrap' }}>
+            {['✓ Fully working AI', '✓ No login required', '✓ Try it in 30 seconds'].map(p => (
+              <div key={p} style={{ fontFamily: 'var(--font-b)', fontSize: 13, fontWeight: 600, color: 'var(--teal)', background: 'rgba(26,107,114,0.08)', borderRadius: 40, padding: '8px 18px', border: '1px solid rgba(26,107,114,0.2)' }}>
+                {p}
+              </div>
+            ))}
+          </div>
+
+          {/* CTA button */}
+          <div style={{ textAlign: 'center', marginBottom: 16 }}>
+            <a href={DEMO_URL} target="_blank" rel="noopener noreferrer" className="btn-p demo-btn">
+              Launch the Demo →
+            </a>
+          </div>
+
+          {/* Fine print */}
+          <p style={{ textAlign: 'center', fontFamily: 'var(--font-b)', fontSize: 13, color: '#9A9690', fontStyle: 'italic' }}>
+            This is a demonstration project. Want one for your business? Start at{' '}
+            <a
+              href="#offers"
+              style={{ color: 'var(--teal)', fontStyle: 'normal', fontWeight: 600, textDecoration: 'none' }}
+              onClick={e => { e.preventDefault(); document.getElementById('offers')?.scrollIntoView({ behavior: 'smooth' }); }}
+            >
+              $300
+            </a>.
+          </p>
+        </RevealSection>
+      </div>
+    </section>
+  );
+}
+
 // ─── About ────────────────────────────────────────────────────────────────────
 const STATS = [
   { Icon: UserCheck, label: 'Every project handled personally', desc: 'No agencies, no outsourcing, no disappearing acts.' },
@@ -1468,7 +1629,7 @@ function Footer() {
       <div className="wrap">
         <div className="footer-row" style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
           <span style={{ fontFamily: 'var(--font-h)', fontSize: 15, fontWeight: 500, color: '#1C1C1E' }}>
-            Bryttani Patterson
+            Bloom Digital
           </span>
           <span style={{ fontFamily: 'var(--font-b)', fontSize: 13, color: '#9A9690', textAlign: 'center' }}>
             © 2026 · ohbloom.com · Lexington, SC · A division of Bloom Property Solutions LLC
@@ -1498,6 +1659,7 @@ export default function FreelanceLanding() {
         <Services />
         <Offers />
         <Portfolio />
+        <DemoSection />
         <About />
         <Process />
         <Contact />
