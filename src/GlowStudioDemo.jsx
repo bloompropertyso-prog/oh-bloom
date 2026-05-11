@@ -21,10 +21,44 @@ const C = {
 const fH = "'Playfair Display', Georgia, serif";
 const fB = "'Jost', system-ui, sans-serif";
 
-// ─── Voiceflow config ─────────────────────────────────────────────────────────
-// Replace YOUR_PROJECT_ID_HERE with your Voiceflow project ID once you create the agent
-// Your share URL was: https://creator.voiceflow.com/share/6a020ba28cfd71e9980ebd01/...
-const VOICEFLOW_PROJECT_ID = '6a020ba28cfd71e9980ebd01';
+// ─── In-browser chatbot ───────────────────────────────────────────────────────
+function classify(raw) {
+  const t = raw.toLowerCase();
+  if (/\b(hi|hello|hey|yo|sup|howdy)\b/.test(t)) return 'greeting';
+  if (/\b(hour|open|close|when|what time)\b/.test(t)) return 'hours';
+  if (/\b(service|offer|what do you|menu|do you do)\b/.test(t)) return 'services';
+  if (/\b(color|highlight|balayage|dye|tint|ombre)\b/.test(t)) return 'color';
+  if (/\b(blowout|blow.?dry|blow out)\b/.test(t)) return 'blowout';
+  if (/\b(cut|trim|haircut|chop|snip)\b/.test(t)) return 'haircut';
+  if (/\b(treat|condition|repair|damage|deep)\b/.test(t)) return 'treatment';
+  if (/\b(price|cost|how much|rate|charge|fee)\b/.test(t)) return 'pricing';
+  if (/\b(book|appoint|schedul|reserv|availab|opening|slot|spot|set me up|sign me up)\b/.test(t)) return 'book';
+  if (/\b(yes|sure|yeah|ok|okay|please|yep|yup|alright|absolutely|definitely|sounds good)\b/.test(t)) return 'affirm';
+  if (/\b(no|nope|nah|not|never mind|cancel)\b/.test(t)) return 'decline';
+  if (/\b(thank|thanks|thx|ty|appreciate)\b/.test(t)) return 'thanks';
+  if (/\b(locat|where|address|find you|direction)\b/.test(t)) return 'location';
+  return 'fallback';
+}
+
+const RESPONSES = {
+  greeting:   () => ["Hey! 👋 Welcome to Glow Studio. Are you looking to book an appointment, or do you have a question about our services?"],
+  hours:      () => ["We're open **Tuesday through Saturday, 9am–7pm**. Walk-ins are welcome, but appointments are preferred so we can get you in on time! Want to book?"],
+  services:   () => ["Here's what we offer:\n\n💇 Cut & Style — $65\n🎨 Color & Highlights — $120+\n💨 Blowout — $45\n✨ Treatment — $55\n\nWould you like to book any of these?"],
+  color:      () => ["We do full color, balayage, highlights, and ombré starting at **$120** depending on length and technique. Want to book a color consultation?"],
+  blowout:    () => ["Our blowout service is **$45** and leaves you with a smooth, voluminous finish. Want to set up an appointment?"],
+  haircut:    () => ["A cut & style with us is **$65**. We'll do a quick consultation first to make sure we nail exactly the look you want. Ready to book?"],
+  treatment:  () => ["Our deep conditioning treatment is **$55** — great for restoring dry or damaged hair. Want to add it on or book a standalone appointment?"],
+  pricing:    () => ["Here's our pricing:\n\n💇 Cut & Style — $65\n🎨 Color & Highlights — from $120\n💨 Blowout — $45\n✨ Treatment — $55\n\nAnything catch your eye?"],
+  location:   () => ["We're located in **Lexington, SC**! Drop us your email after booking and we'll send you the full address and parking info. 📍"],
+  thanks:     () => ["Of course! 🌸 Is there anything else I can help you with?"],
+  decline:    () => ["No worries at all! Feel free to come back any time. We're here Tuesday–Saturday. 😊"],
+  book:       () => ["I'd love to get you booked! We have openings **this Tuesday and Thursday**. Can I grab your name to hold a spot?"],
+  affirm:     (ctx) => ctx === 'post_services' ? ["Great! We have openings this Tuesday and Thursday. Can I grab your name?"] : ["Perfect! What's your name so I can get you set up?"],
+  fallback:   () => ["Hmm, I want to make sure I answer that right! For anything specific, feel free to call us or — if you're ready — I can get you booked in just a minute. Want to do that?"],
+  ask_name:   () => ["Can I get your name to hold a spot?"],
+  ask_email:  (name) => [`Got it, ${name}! 🌸 What's your email so we can send a confirmation?`],
+  confirmed:  (name, email) => [`You're all set, ${name}! ✅ I've got you down for **Thursday at 2pm**. A confirmation will go to **${email}**. See you soon! ✨`],
+};
 
 // ─── Demo conversation script ─────────────────────────────────────────────────
 const SCRIPT = [
@@ -306,83 +340,117 @@ function ChatMsg({ from, text }) {
   );
 }
 
+// ─── Render message text (supports **bold** and \n newlines) ─────────────────
+function MsgText({ text }) {
+  const lines = text.split('\n');
+  return (
+    <span>
+      {lines.map((line, li) => {
+        const parts = line.split(/\*\*(.+?)\*\*/g);
+        return (
+          <span key={li}>
+            {parts.map((p, pi) => pi % 2 === 1 ? <strong key={pi}>{p}</strong> : p)}
+            {li < lines.length - 1 && <br />}
+          </span>
+        );
+      })}
+    </span>
+  );
+}
+
 // ─── Chat widget ──────────────────────────────────────────────────────────────
 function ChatWidget() {
   const [open, setOpen]             = useState(false);
   const [messages, setMessages]     = useState([]);
   const [showTyping, setShowTyping] = useState(false);
-  const [showCTA, setShowCTA]       = useState(false);
-  const [started, setStarted]       = useState(false);
   const [inputVal, setInputVal]     = useState('');
+  const [botState, setBotState]     = useState('idle'); // idle | ask_name | ask_email | done
+  const [userName, setUserName]     = useState('');
+  const [demoRunning, setDemoRunning] = useState(false);
   const scrollRef = useRef(null);
   const timers    = useRef([]);
+  const inputRef  = useRef(null);
 
-  // Preload Voiceflow script in background so handoff is instant
+  // Auto-open after 2s and run scripted demo
   useEffect(() => {
-    if (document.querySelector('script[src*="voiceflow"]')) return;
-    const s = document.createElement('script');
-    s.type = 'text/javascript';
-    s.src = 'https://cdn.voiceflow.com/widget/bundle.mjs';
-    document.body.appendChild(s);
+    const t = setTimeout(() => {
+      setOpen(true);
+      setDemoRunning(true);
+      SCRIPT.forEach(({ at, from, text }) => {
+        const t2 = setTimeout(() => {
+          if (from === 'typing') {
+            setShowTyping(true);
+          } else if (from === 'cta') {
+            setShowTyping(false);
+            // demo done — replace with live prompt
+            setMessages(prev => [
+              ...prev,
+              { from: 'bot', text: "That's what AI can do for your business — 24/7, on autopilot. 🌸\n\nNow **try it yourself** — ask me anything or type \"book\" to get started!" },
+            ]);
+            setDemoRunning(false);
+          } else {
+            setShowTyping(false);
+            setMessages(prev => [...prev, { from, text }]);
+          }
+        }, at);
+        timers.current.push(t2);
+      });
+    }, 2000);
+    return () => { clearTimeout(t); timers.current.forEach(clearTimeout); };
   }, []);
 
-  // Auto-open after 2s
-  useEffect(() => {
-    const t = setTimeout(() => setOpen(true), 2000);
-    return () => clearTimeout(t);
-  }, []);
-
-  // Run scripted demo when widget first opens
-  useEffect(() => {
-    if (!open || started) return;
-    setStarted(true);
-
-    SCRIPT.forEach(({ at, from, text }) => {
-      const t = setTimeout(() => {
-        if (from === 'typing') {
-          setShowTyping(true);
-        } else if (from === 'cta') {
-          setShowTyping(false);
-          setShowCTA(true);
-        } else {
-          setShowTyping(false);
-          setMessages(prev => [...prev, { from, text }]);
-        }
-      }, at);
-      timers.current.push(t);
-    });
-
-    return () => timers.current.forEach(clearTimeout);
-  }, [open, started]);
-
-  // Keep scroll pinned to bottom
+  // Scroll to bottom on new messages
   useEffect(() => {
     if (scrollRef.current) scrollRef.current.scrollTop = scrollRef.current.scrollHeight;
-  }, [messages, showTyping, showCTA]);
+  }, [messages, showTyping]);
 
-  // Hand off to live Voiceflow widget
-  function launchLive() {
-    timers.current.forEach(clearTimeout);
-    setOpen(false);
-
-    const load = () => {
-      if (window.voiceflow?.chat) {
-        window.voiceflow.chat.load({
-          verify: { projectID: VOICEFLOW_PROJECT_ID },
-          url: 'https://general-runtime.voiceflow.com',
-          versionID: 'production',
-        });
-        setTimeout(() => window.voiceflow?.chat?.open?.(), 400);
-      } else {
-        setTimeout(load, 250);
-      }
-    };
-    load();
+  function botReply(text, delay = 1000) {
+    setShowTyping(true);
+    const t = setTimeout(() => {
+      setShowTyping(false);
+      setMessages(prev => [...prev, { from: 'bot', text }]);
+    }, delay);
+    timers.current.push(t);
   }
 
   function handleSend() {
-    if (!inputVal.trim()) return;
-    launchLive();
+    const msg = inputVal.trim();
+    if (!msg) return;
+    setInputVal('');
+
+    // Stop demo if still running
+    if (demoRunning) {
+      timers.current.forEach(clearTimeout);
+      timers.current = [];
+      setShowTyping(false);
+      setDemoRunning(false);
+    }
+
+    // Add user message
+    setMessages(prev => [...prev, { from: 'user', text: msg }]);
+
+    // Booking state machine
+    if (botState === 'ask_name') {
+      const name = msg.split(' ')[0];
+      setUserName(name);
+      setBotState('ask_email');
+      botReply(RESPONSES.ask_email(name)[0]);
+      return;
+    }
+    if (botState === 'ask_email') {
+      setBotState('done');
+      botReply(RESPONSES.confirmed(userName, msg)[0], 1200);
+      return;
+    }
+
+    const intent = classify(msg);
+    if (intent === 'book' || (intent === 'affirm' && botState === 'idle')) {
+      setBotState('ask_name');
+      botReply(RESPONSES.book()[0]);
+      return;
+    }
+    const replies = RESPONSES[intent] ? RESPONSES[intent]() : RESPONSES.fallback();
+    botReply(replies[0]);
   }
 
   const panelStyle = {
@@ -399,14 +467,9 @@ function ChatWidget() {
 
   return (
     <>
-      {/* Floating toggle button (shown when closed) */}
       <AnimatePresence>
         {!open && (
-          <motion.div
-            key="toggle"
-            initial={{ scale: 0, opacity: 0 }}
-            animate={{ scale: 1, opacity: 1 }}
-            exit={{ scale: 0, opacity: 0 }}
+          <motion.div key="toggle" initial={{ scale: 0, opacity: 0 }} animate={{ scale: 1, opacity: 1 }} exit={{ scale: 0, opacity: 0 }}
             style={{ position: 'fixed', bottom: 24, right: 24, zIndex: 1000 }}>
             <div style={{ position: 'relative' }}>
               <div style={{
@@ -428,17 +491,15 @@ function ChatWidget() {
         )}
       </AnimatePresence>
 
-      {/* Chat panel */}
       <AnimatePresence>
         {open && (
-          <motion.div
-            key="panel"
+          <motion.div key="panel"
             initial={{ opacity: 0, y: 24, scale: 0.95 }}
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: 24, scale: 0.95 }}
             transition={{ duration: 0.3, ease: [0.16, 1, 0.3, 1] }}
             style={panelStyle}>
-            {/* Header */}
+
             <div style={headerStyle}>
               <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
                 <div style={{ width: 34, height: 34, borderRadius: '50%', background: 'rgba(255,255,255,0.2)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
@@ -457,36 +518,24 @@ function ChatWidget() {
               </button>
             </div>
 
-            {/* Message feed */}
-            <div ref={scrollRef} className="glow-msg-scroll" style={{ flex: 1, overflowY: 'auto', padding: '16px 14px', minHeight: 320, maxHeight: 380, display: 'flex', flexDirection: 'column' }}>
-              {messages.map((m, i) => <ChatMsg key={i} from={m.from} text={m.text} />)}
-              <AnimatePresence>{showTyping && <motion.div key="typing" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}><TypingDots /></motion.div>}</AnimatePresence>
-
-              {showCTA && (
-                <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} style={{ textAlign: 'center', marginTop: 16, paddingTop: 12, borderTop: `1px solid ${C.border}` }}>
-                  <p style={{ fontFamily: fB, fontSize: 12, color: C.muted, marginBottom: 12 }}>
-                    That's what AI can do for your business — 24/7, automatically.
-                  </p>
-                  <button onClick={launchLive} style={{
-                    fontFamily: fB, fontSize: 13, fontWeight: 700,
-                    background: C.rose, color: '#fff',
-                    border: 'none', borderRadius: 22, padding: '10px 22px',
-                    cursor: 'pointer', boxShadow: '0 3px 14px rgba(181,84,106,0.35)',
-                    transition: 'background 0.2s',
-                  }}
-                  onMouseEnter={e => e.currentTarget.style.background = C.roseDark}
-                  onMouseLeave={e => e.currentTarget.style.background = C.rose}>
-                    Try it yourself →
-                  </button>
-                  <div style={{ fontFamily: fB, fontSize: 11, color: C.muted, marginTop: 10 }}>Powered by AI · Built by Bloom Digital</div>
-                </motion.div>
-              )}
+            <div ref={scrollRef} className="glow-msg-scroll"
+              style={{ flex: 1, overflowY: 'auto', padding: '16px 14px', minHeight: 320, maxHeight: 400, display: 'flex', flexDirection: 'column' }}>
+              {messages.map((m, i) => (
+                <ChatMsg key={i} from={m.from} text={<MsgText text={m.text} />} />
+              ))}
+              <AnimatePresence>
+                {showTyping && (
+                  <motion.div key="typing" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}>
+                    <TypingDots />
+                  </motion.div>
+                )}
+              </AnimatePresence>
             </div>
 
-            {/* Live input — type anything to hand off to the real bot */}
             <div style={{ padding: '10px 12px', borderTop: `1px solid ${C.border}`, display: 'flex', gap: 8, alignItems: 'center', flexShrink: 0 }}>
               <input
-                placeholder="Type a message to chat live…"
+                ref={inputRef}
+                placeholder={demoRunning ? 'Type to skip demo and chat…' : 'Type a message…'}
                 value={inputVal}
                 onChange={e => setInputVal(e.target.value)}
                 onKeyDown={e => e.key === 'Enter' && handleSend()}
@@ -494,14 +543,17 @@ function ChatWidget() {
                   flex: 1, border: `1px solid ${C.border}`, borderRadius: 22,
                   padding: '8px 14px', fontSize: 13, fontFamily: fB,
                   background: '#FAF7F5', outline: 'none', color: C.text,
+                  cursor: 'text',
                 }}
               />
-              <button
-                onClick={handleSend}
-                style={{ width: 34, height: 34, borderRadius: '50%', background: C.rose, border: 'none', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+              <button onClick={handleSend} style={{
+                width: 34, height: 34, borderRadius: '50%', background: C.rose,
+                border: 'none', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center',
+              }}>
                 <Send size={14} color="#fff" />
               </button>
             </div>
+
           </motion.div>
         )}
       </AnimatePresence>
