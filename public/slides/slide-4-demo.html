@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=1080"/>
+<title>Slide 4 — Demo Hook | ohbloom.com</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Inter:wght@400;500;600&display=swap"/>
+<style>
+  *{margin:0;padding:0;box-sizing:border-box}
+  body{width:1080px;height:1080px;overflow:hidden;background:#FAFAF8}
+  .save-btn{position:fixed;top:16px;right:16px;z-index:999;background:#1A6B72;color:#fff;border:none;border-radius:40px;padding:10px 22px;font-family:'Plus Jakarta Sans',sans-serif;font-size:14px;font-weight:700;cursor:pointer;box-shadow:0 4px 16px rgba(26,107,114,.3)}
+  @media print{.save-btn{display:none}}
+</style>
+</head>
+<body>
+<button class="save-btn" onclick="window.print()">↓ Save as PDF</button>
+<div style="width:1080px;height:1080px;background:#FAFAF8;display:flex;flex-direction:column;overflow:hidden">
+  <!-- Top bar -->
+  <div style="display:flex;align-items:center;gap:10px;padding:44px 64px 0">
+    <svg width="32" height="32" viewBox="0 0 32 32"><rect width="32" height="32" rx="5.76" fill="#1A6B72"/><g transform="translate(16,16)"><ellipse cx="0" cy="-8" rx="3" ry="6" fill="white" opacity=".95" transform="rotate(0)"/><ellipse cx="0" cy="-8" rx="3" ry="6" fill="white" opacity=".75" transform="rotate(72)"/><ellipse cx="0" cy="-8" rx="3" ry="6" fill="white" opacity=".58" transform="rotate(144)"/><ellipse cx="0" cy="-8" rx="3" ry="6" fill="white" opacity=".68" transform="rotate(216)"/><ellipse cx="0" cy="-8" rx="3" ry="6" fill="white" opacity=".85" transform="rotate(288)"/></g><circle cx="16" cy="16" r="3.5" fill="#E8913A"/></svg>
+    <span style="font-family:'Plus Jakarta Sans',sans-serif;font-size:15px;font-weight:600;color:#1A6B72;letter-spacing:.5px">ohbloom.com</span>
+    <span style="margin-left:auto;font-family:'Inter',sans-serif;font-size:14px;color:#4A4A4A">4 / 5</span>
+  </div>
+
+  <!-- Main -->
+  <div style="flex:1;display:flex;padding:40px 64px 0">
+    <!-- Left 52% -->
+    <div style="width:52%;padding-right:48px;display:flex;flex-direction:column;justify-content:center">
+      <p style="font-family:'Inter',sans-serif;font-size:13px;font-weight:600;color:#E8913A;letter-spacing:2px;text-transform:uppercase;margin-bottom:20px">LIVE DEMO</p>
+      <h2 style="font-family:'Plus Jakarta Sans',sans-serif;font-size:52px;font-weight:800;color:#1C1C1E;line-height:1.1;margin:0 0 28px">
+        Watch Bloom AI book an appointment <span style="color:#1A6B72">in 60 seconds.</span>
+      </h2>
+      <p style="font-family:'Inter',sans-serif;font-size:18px;color:#4A4A4A;line-height:1.6;margin:0 0 36px">This is a real chatbot built for Glow Studio, a fictional nail salon. No human involvement. No missed leads.</p>
+      <div style="display:inline-flex;align-items:center;gap:12px;background:#1A6B72;border-radius:40px;padding:14px 24px;align-self:flex-start">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="#fff"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+        <span style="font-family:'Plus Jakarta Sans',sans-serif;font-size:15px;font-weight:700;color:#fff">Try the demo at ohbloom.com/#glow</span>
+      </div>
+    </div>
+
+    <!-- Right 48% — chat -->
+    <div style="width:48%;display:flex;align-items:center;justify-content:center">
+      <div style="width:360px;background:#fff;border-radius:20px;box-shadow:0 8px 48px rgba(26,107,114,.13);overflow:hidden;border:1px solid #E2E2DE">
+        <!-- Header -->
+        <div style="background:#1A6B72;padding:16px 20px;display:flex;align-items:center;gap:12px">
+          <div style="width:36px;height:36px;background:rgba(255,255,255,.2);border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:'Plus Jakarta Sans',sans-serif;color:#fff;font-weight:700;font-size:14px">GS</div>
+          <div>
+            <div style="font-family:'Plus Jakarta Sans',sans-serif;color:#fff;font-weight:700;font-size:15px">Glow Studio</div>
+            <div style="font-family:'Inter',sans-serif;color:rgba(255,255,255,.75);font-size:12px">● Powered by Bloom AI</div>
+          </div>
+        </div>
+        <!-- Messages -->
+        <div style="padding:16px 14px 8px">
+          <!-- bot -->
+          <div style="display:flex;justify-content:flex-start;margin-bottom:10px">
+            <div style="width:22px;height:22px;background:#1A6B72;border-radius:50%;display:flex;align-items:center;justify-content:center;margin-right:8px;margin-top:2px;flex-shrink:0;font-family:'Plus Jakarta Sans',sans-serif;color:#fff;font-weight:700;font-size:9px">GS</div>
+            <div style="max-width:78%;background:#1A6B72;color:#fff;border-radius:4px 14px 14px 14px;padding:10px 14px;font-family:'Inter',sans-serif;font-size:13px;line-height:1.45">Hi! Welcome to Glow Studio 💅 How can I help you today?</div>
+          </div>
+          <!-- user -->
+          <div style="display:flex;justify-content:flex-end;margin-bottom:10px">
+            <div style="max-width:78%;background:#E8F4F5;color:#1C1C1E;border-radius:14px 4px 14px 14px;padding:10px 14px;font-family:'Inter',sans-serif;font-size:13px;line-height:1.45">What's your availability for a full set this Friday?</div>
+          </div>
+          <!-- bot -->
+          <div style="display:flex;justify-content:flex-start;margin-bottom:10px">
+            <div style="width:22px;height:22px;background:#1A6B72;border-radius:50%;display:flex;align-items:center;justify-content:center;margin-right:8px;margin-top:2px;flex-shrink:0;font-family:'Plus Jakarta Sans',sans-serif;color:#fff;font-weight:700;font-size:9px">GS</div>
+            <div style="max-width:78%;background:#1A6B72;color:#fff;border-radius:4px 14px 14px 14px;padding:10px 14px;font-family:'Inter',sans-serif;font-size:13px;line-height:1.45">We have 11am and 2pm open on Friday! Which works better for you?</div>
+          </div>
+          <!-- user -->
+          <div style="display:flex;justify-content:flex-end;margin-bottom:10px">
+            <div style="max-width:78%;background:#E8F4F5;color:#1C1C1E;border-radius:14px 4px 14px 14px;padding:10px 14px;font-family:'Inter',sans-serif;font-size:13px;line-height:1.45">2pm works!</div>
+          </div>
+          <!-- bot -->
+          <div style="display:flex;justify-content:flex-start;margin-bottom:4px">
+            <div style="width:22px;height:22px;background:#1A6B72;border-radius:50%;display:flex;align-items:center;justify-content:center;margin-right:8px;margin-top:2px;flex-shrink:0;font-family:'Plus Jakarta Sans',sans-serif;color:#fff;font-weight:700;font-size:9px">GS</div>
+            <div style="max-width:78%;background:#1A6B72;color:#fff;border-radius:4px 14px 14px 14px;padding:10px 14px;font-family:'Inter',sans-serif;font-size:13px;line-height:1.45">Booked! ✅ You'll get a confirmation text shortly. See you then!</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Bottom strip -->
+  <div style="background:#1A6B72;padding:18px 80px;display:flex;align-items:center;justify-content:space-between;margin-top:32px">
+    <span style="font-family:'Inter',sans-serif;color:rgba(255,255,255,.8);font-size:15px">Built in under 2 weeks. Yours for $500.</span>
+    <span style="font-family:'Plus Jakarta Sans',sans-serif;color:#fff;font-weight:700;font-size:18px">→ Final slide</span>
+  </div>
+</div>
+</body>
+</html>
