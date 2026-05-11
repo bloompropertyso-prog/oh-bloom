@@ -566,10 +566,12 @@ function Thumb({ slide, active, onClick }) {
       outline: active ? `2px solid ${T.teal}` : '2px solid transparent',
       borderRadius: 8, overflow: 'hidden',
       width: 96, height: 96, flexShrink: 0,
+      position: 'relative',
       boxShadow: active ? `0 0 0 2px ${T.teal}` : '0 2px 8px rgba(0,0,0,0.1)',
       transition: 'box-shadow 0.2s',
     }}>
       <div style={{
+        position: 'absolute', top: 0, left: 0,
         width: 1080, height: 1080,
         transform: `scale(${scale})`,
         transformOrigin: 'top left',
@@ -581,11 +583,11 @@ function Thumb({ slide, active, onClick }) {
   );
 }
 
-// ─── Slide variants ───────────────────────────────────────────────────────────
+// ─── Slide variants — use % so they work at any scaled width ─────────────────
 const variants = {
-  enter: (dir) => ({ x: dir > 0 ? 600 : -600, opacity: 0 }),
+  enter: (dir) => ({ x: dir > 0 ? '100%' : '-100%', opacity: 0 }),
   center: { x: 0, opacity: 1 },
-  exit: (dir) => ({ x: dir > 0 ? -600 : 600, opacity: 0 }),
+  exit: (dir) => ({ x: dir > 0 ? '-100%' : '100%', opacity: 0 }),
 };
 
 // ─── Main viewer ──────────────────────────────────────────────────────────────
@@ -657,7 +659,15 @@ export default function LinkedInSlides() {
         display: 'flex', flexDirection: 'column', alignItems: 'center',
         gap: 24,
       }}>
-        <div style={{ position: 'relative', width: 1080 * viewScale, height: 1080 * viewScale }}>
+        {/* Outer clip — sized to visual dimensions so nothing bleeds out */}
+        <div style={{
+          position: 'relative',
+          width: 1080 * viewScale,
+          height: 1080 * viewScale,
+          overflow: 'hidden',
+          borderRadius: 8,
+          boxShadow: '0 16px 64px rgba(0,0,0,0.18)',
+        }}>
           <AnimatePresence custom={dir} initial={false} mode="popLayout">
             <motion.div
               key={idx}
@@ -669,15 +679,19 @@ export default function LinkedInSlides() {
               transition={{ type: 'spring', stiffness: 340, damping: 36 }}
               style={{
                 position: 'absolute', top: 0, left: 0,
+                width: 1080 * viewScale,
+                height: 1080 * viewScale,
+              }}
+            >
+              {/* Scale wrapper — separate from motion so transforms don't conflict */}
+              <div style={{
                 width: 1080, height: 1080,
                 transform: `scale(${viewScale})`,
                 transformOrigin: 'top left',
-                borderRadius: 8,
-                overflow: 'hidden',
-                boxShadow: '0 16px 64px rgba(0,0,0,0.18)',
-              }}
-            >
-              <Comp />
+                pointerEvents: 'none',
+              }}>
+                <Comp />
+              </div>
             </motion.div>
           </AnimatePresence>
         </div>
