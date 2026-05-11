@@ -308,14 +308,23 @@ function ChatMsg({ from, text }) {
 
 // ─── Chat widget ──────────────────────────────────────────────────────────────
 function ChatWidget() {
-  const [open, setOpen]           = useState(false);
-  const [phase, setPhase]         = useState('demo'); // 'demo' | 'live'
-  const [messages, setMessages]   = useState([]);
+  const [open, setOpen]             = useState(false);
+  const [messages, setMessages]     = useState([]);
   const [showTyping, setShowTyping] = useState(false);
-  const [showCTA, setShowCTA]     = useState(false);
-  const [started, setStarted]     = useState(false);
+  const [showCTA, setShowCTA]       = useState(false);
+  const [started, setStarted]       = useState(false);
+  const [inputVal, setInputVal]     = useState('');
   const scrollRef = useRef(null);
   const timers    = useRef([]);
+
+  // Preload Voiceflow script in background so handoff is instant
+  useEffect(() => {
+    if (document.querySelector('script[src*="voiceflow"]')) return;
+    const s = document.createElement('script');
+    s.type = 'text/javascript';
+    s.src = 'https://cdn.voiceflow.com/widget/bundle.mjs';
+    document.body.appendChild(s);
+  }, []);
 
   // Auto-open after 2s
   useEffect(() => {
@@ -323,9 +332,9 @@ function ChatWidget() {
     return () => clearTimeout(t);
   }, []);
 
-  // Run demo when widget first opens
+  // Run scripted demo when widget first opens
   useEffect(() => {
-    if (!open || started || phase !== 'demo') return;
+    if (!open || started) return;
     setStarted(true);
 
     SCRIPT.forEach(({ at, from, text }) => {
@@ -344,38 +353,36 @@ function ChatWidget() {
     });
 
     return () => timers.current.forEach(clearTimeout);
-  }, [open, started, phase]);
+  }, [open, started]);
 
   // Keep scroll pinned to bottom
   useEffect(() => {
     if (scrollRef.current) scrollRef.current.scrollTop = scrollRef.current.scrollHeight;
   }, [messages, showTyping, showCTA]);
 
+  // Hand off to live Voiceflow widget
   function launchLive() {
-    setPhase('live');
-
-    // If no real project ID, keep widget open to show placeholder
-    if (!VOICEFLOW_PROJECT_ID || VOICEFLOW_PROJECT_ID === 'YOUR_PROJECT_ID_HERE') return;
-
-    // Close our widget — Voiceflow will render its own
+    timers.current.forEach(clearTimeout);
     setOpen(false);
 
-    if (window.voiceflow?.chat) {
-      window.voiceflow.chat.open();
-      return;
-    }
-    const s = document.createElement('script');
-    s.type = 'text/javascript';
-    s.src = 'https://cdn.voiceflow.com/widget/bundle.mjs';
-    s.onload = () => {
-      window.voiceflow?.chat?.load({
-        verify: { projectID: VOICEFLOW_PROJECT_ID },
-        url: 'https://general-runtime.voiceflow.com',
-        versionID: 'production',
-      });
-      setTimeout(() => window.voiceflow?.chat?.open?.(), 500);
+    const load = () => {
+      if (window.voiceflow?.chat) {
+        window.voiceflow.chat.load({
+          verify: { projectID: VOICEFLOW_PROJECT_ID },
+          url: 'https://general-runtime.voiceflow.com',
+          versionID: 'production',
+        });
+        setTimeout(() => window.voiceflow?.chat?.open?.(), 400);
+      } else {
+        setTimeout(load, 250);
+      }
     };
-    document.body.appendChild(s);
+    load();
+  }
+
+  function handleSend() {
+    if (!inputVal.trim()) return;
+    launchLive();
   }
 
   const panelStyle = {
@@ -421,11 +428,11 @@ function ChatWidget() {
         )}
       </AnimatePresence>
 
-      {/* Demo chat panel */}
+      {/* Chat panel */}
       <AnimatePresence>
-        {open && phase === 'demo' && (
+        {open && (
           <motion.div
-            key="demo-panel"
+            key="panel"
             initial={{ opacity: 0, y: 24, scale: 0.95 }}
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: 24, scale: 0.95 }}
@@ -451,7 +458,7 @@ function ChatWidget() {
             </div>
 
             {/* Message feed */}
-            <div ref={scrollRef} className="glow-msg-scroll" style={{ flex: 1, overflowY: 'auto', padding: '16px 14px', minHeight: 360, maxHeight: 400, display: 'flex', flexDirection: 'column', justifyContent: 'flex-start' }}>
+            <div ref={scrollRef} className="glow-msg-scroll" style={{ flex: 1, overflowY: 'auto', padding: '16px 14px', minHeight: 320, maxHeight: 380, display: 'flex', flexDirection: 'column' }}>
               {messages.map((m, i) => <ChatMsg key={i} from={m.from} text={m.text} />)}
               <AnimatePresence>{showTyping && <motion.div key="typing" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}><TypingDots /></motion.div>}</AnimatePresence>
 
@@ -476,50 +483,23 @@ function ChatWidget() {
               )}
             </div>
 
-            {/* Decorative input bar */}
+            {/* Live input — type anything to hand off to the real bot */}
             <div style={{ padding: '10px 12px', borderTop: `1px solid ${C.border}`, display: 'flex', gap: 8, alignItems: 'center', flexShrink: 0 }}>
-              <input readOnly placeholder="Type a message..." value="" onChange={() => {}} style={{
-                flex: 1, border: `1px solid ${C.border}`, borderRadius: 22,
-                padding: '8px 14px', fontSize: 13, fontFamily: fB,
-                background: '#FAF7F5', outline: 'none', color: C.muted,
-              }} />
-              <button style={{ width: 34, height: 34, borderRadius: '50%', background: C.rose, border: 'none', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+              <input
+                placeholder="Type a message to chat live…"
+                value={inputVal}
+                onChange={e => setInputVal(e.target.value)}
+                onKeyDown={e => e.key === 'Enter' && handleSend()}
+                style={{
+                  flex: 1, border: `1px solid ${C.border}`, borderRadius: 22,
+                  padding: '8px 14px', fontSize: 13, fontFamily: fB,
+                  background: '#FAF7F5', outline: 'none', color: C.text,
+                }}
+              />
+              <button
+                onClick={handleSend}
+                style={{ width: 34, height: 34, borderRadius: '50%', background: C.rose, border: 'none', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
                 <Send size={14} color="#fff" />
-              </button>
-            </div>
-          </motion.div>
-        )}
-
-        {/* Live placeholder — shown only when Voiceflow ID is not configured */}
-        {open && phase === 'live' && (
-          <motion.div
-            key="live-panel"
-            initial={{ opacity: 0, y: 16 }}
-            animate={{ opacity: 1, y: 0 }}
-            style={{ ...panelStyle, padding: 0 }}>
-            <div style={headerStyle}>
-              <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
-                <div style={{ width: 34, height: 34, borderRadius: '50%', background: 'rgba(255,255,255,0.2)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                  <Bot size={17} color="#fff" />
-                </div>
-                <div style={{ fontFamily: fH, fontSize: 14, fontWeight: 700, color: '#fff' }}>Glow Studio AI</div>
-              </div>
-              <button onClick={() => setOpen(false)} style={{ background: 'rgba(255,255,255,0.15)', border: 'none', cursor: 'pointer', width: 28, height: 28, borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                <X size={14} color="#fff" />
-              </button>
-            </div>
-            <div style={{ padding: 32, textAlign: 'center' }}>
-              <div style={{ fontSize: 40, marginBottom: 16 }}>🌸</div>
-              <div style={{ fontFamily: fH, fontSize: 18, fontWeight: 700, color: C.text, marginBottom: 10 }}>
-                Live AI assistant coming soon
-              </div>
-              <div style={{ fontFamily: fB, fontSize: 14, color: C.muted, lineHeight: 1.7, marginBottom: 24 }}>
-                Visit{' '}
-                <a href="https://ohbloom.com" target="_blank" rel="noopener noreferrer" style={{ color: C.rose, fontWeight: 600 }}>ohbloom.com</a>
-                {' '}to learn more about adding a real AI assistant to your business.
-              </div>
-              <button onClick={() => setOpen(false)} style={{ fontFamily: fB, fontSize: 13, color: C.muted, background: 'none', border: `1px solid ${C.border}`, borderRadius: 22, padding: '8px 20px', cursor: 'pointer' }}>
-                Close
               </button>
             </div>
           </motion.div>
