@@ -360,16 +360,16 @@ function Slide4() {
             This is a real chatbot built for Glow Studio, a fictional nail salon.
             No human involvement. No missed leads.
           </p>
-          <div style={{
+          <a href="#glow" style={{
             display: 'inline-flex', alignItems: 'center', gap: 12,
             background: T.teal, borderRadius: 40, padding: '14px 24px',
-            alignSelf: 'flex-start',
+            alignSelf: 'flex-start', textDecoration: 'none', cursor: 'pointer',
           }}>
             <svg width="18" height="18" viewBox="0 0 24 24" fill="#fff">
               <polygon points="5 3 19 12 5 21 5 3"/>
             </svg>
             <span style={{ ...heading, fontSize: 15, fontWeight: 700, color: '#fff' }}>Try the demo at ohbloom.com/#glow</span>
-          </div>
+          </a>
         </div>
 
         {/* Right 48% — chat */}
@@ -688,7 +688,6 @@ export default function LinkedInSlides() {
                 width: 1080, height: 1080,
                 transform: `scale(${viewScale})`,
                 transformOrigin: 'top left',
-                pointerEvents: 'none',
               }}>
                 <Comp />
               </div>
