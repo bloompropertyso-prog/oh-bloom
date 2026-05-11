@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<title>Bloom Logo — Warm Background</title>
+<style>
+  *{margin:0;padding:0;box-sizing:border-box}
+  body{background:#E8E6E1;min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:24px;font-family:system-ui,sans-serif}
+  .label{font-size:13px;font-weight:600;color:#888;letter-spacing:1.5px;text-transform:uppercase}
+  .card{background:#F5F0E8;border-radius:20px;box-shadow:0 8px 40px rgba(0,0,0,.12);overflow:hidden;width:600px;height:600px}
+  .btn{background:#1A6B72;color:#fff;border:none;border-radius:40px;padding:12px 32px;font-size:14px;font-weight:700;cursor:pointer;letter-spacing:.5px}
+  .btn:hover{background:#155a60}
+</style>
+</head>
+<body>
+<div class="label">Warm Background · Both Leaves</div>
+<div class="card">
+  <svg id="logo" width="600" height="600" viewBox="0 0 600 600" xmlns="http://www.w3.org/2000/svg">
+    <rect width="600" height="600" fill="#F5F0E8"/>
+    <g transform="translate(300, 258) scale(6)">
+      <ellipse cx="0" cy="-22" rx="7" ry="14" fill="#1A6B72" opacity="1" transform="rotate(0)"/>
+      <ellipse cx="0" cy="-22" rx="7" ry="14" fill="#1A6B72" opacity="0.8" transform="rotate(72)"/>
+      <ellipse cx="0" cy="-22" rx="7" ry="14" fill="#1A6B72" opacity="0.62" transform="rotate(144)"/>
+      <ellipse cx="0" cy="-22" rx="7" ry="14" fill="#1A6B72" opacity="0.72" transform="rotate(216)"/>
+      <ellipse cx="0" cy="-22" rx="7" ry="14" fill="#1A6B72" opacity="0.88" transform="rotate(288)"/>
+      <circle cx="0" cy="0" r="7" fill="#E8913A" opacity="0.2"/>
+      <circle cx="0" cy="0" r="5" fill="#E8913A"/>
+      <line x1="0" y1="6" x2="0" y2="18" stroke="#1A6B72" stroke-width="1.8" stroke-linecap="round"/>
+      <path d="M0,14 C-9,8 -11,2 -6,1 C-2,0 0,6 0,14 Z" fill="#1A6B72" opacity="0.6"/>
+      <path d="M0,12 C9,6 11,1 6,0 C2,-1 0,6 0,12 Z" fill="#1A6B72" opacity="0.45"/>
+    </g>
+  </svg>
+</div>
+<button class="btn" onclick="downloadJpeg()">↓ Download JPEG</button>
+
+<script>
+function downloadJpeg() {
+  const svg = document.getElementById('logo');
+  const xml = new XMLSerializer().serializeToString(svg);
+  const blob = new Blob([xml], {type: 'image/svg+xml'});
+  const url = URL.createObjectURL(blob);
+  const img = new Image();
+  img.onload = () => {
+    const canvas = document.createElement('canvas');
+    canvas.width = 1200; canvas.height = 1200;
+    const ctx = canvas.getContext('2d');
+    ctx.fillStyle = '#F5F0E8';
+    ctx.fillRect(0, 0, 1200, 1200);
+    ctx.drawImage(img, 0, 0, 1200, 1200);
+    URL.revokeObjectURL(url);
+    canvas.toBlob(b => {
+      const a = document.createElement('a');
+      a.href = URL.createObjectURL(b);
+      a.download = 'bloom-logo-warm.jpg';
+      a.click();
+    }, 'image/jpeg', 0.95);
+  };
+  img.src = url;
+}
+</script>
+</body>
+</html>

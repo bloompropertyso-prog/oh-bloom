@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<title>Bloom Logo — Primary Mark</title>
+<style>
+  *{margin:0;padding:0;box-sizing:border-box}
+  body{background:#E8E6E1;min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:24px;font-family:system-ui,sans-serif}
+  .label{font-size:13px;font-weight:600;color:#888;letter-spacing:1.5px;text-transform:uppercase}
+  .card{background:#FAFAF8;border-radius:20px;box-shadow:0 8px 40px rgba(0,0,0,.12);overflow:hidden;width:600px;height:600px}
+  .btn{background:#1A6B72;color:#fff;border:none;border-radius:40px;padding:12px 32px;font-size:14px;font-weight:700;cursor:pointer;letter-spacing:.5px}
+  .btn:hover{background:#155a60}
+</style>
+</head>
+<body>
+<div class="label">Primary Mark · Teal + Amber · Light Background</div>
+<div class="card">
+  <svg id="logo" width="600" height="600" viewBox="0 0 600 600" xmlns="http://www.w3.org/2000/svg">
+    <rect width="600" height="600" fill="#FAFAF8"/>
+    <g transform="translate(300, 282) scale(2.8)">
+      <ellipse cx="0" cy="-52" rx="16" ry="32" fill="#1A6B72" opacity="1" transform="rotate(0)"/>
+      <ellipse cx="0" cy="-52" rx="16" ry="32" fill="#1A6B72" opacity="0.82" transform="rotate(72)"/>
+      <ellipse cx="0" cy="-52" rx="16" ry="32" fill="#1A6B72" opacity="0.64" transform="rotate(144)"/>
+      <ellipse cx="0" cy="-52" rx="16" ry="32" fill="#1A6B72" opacity="0.74" transform="rotate(216)"/>
+      <ellipse cx="0" cy="-52" rx="16" ry="32" fill="#1A6B72" opacity="0.9" transform="rotate(288)"/>
+      <circle cx="0" cy="0" r="16" fill="#E8913A" opacity="0.25"/>
+      <circle cx="0" cy="0" r="11" fill="#E8913A"/>
+      <circle cx="-3" cy="-3" r="3.5" fill="#fff" opacity="0.4"/>
+      <line x1="0" y1="13" x2="0" y2="44" stroke="#1A6B72" stroke-width="3.5" stroke-linecap="round"/>
+      <path d="M0,32 C-22,18 -28,4 -14,2 C-4,1 0,14 0,32 Z" fill="#1A6B72" opacity="0.65"/>
+      <path d="M0,26 C18,14 26,2 14,1 C4,0 0,12 0,26 Z" fill="#1A6B72" opacity="0.5"/>
+    </g>
+  </svg>
+</div>
+<button class="btn" onclick="downloadJpeg()">↓ Download JPEG</button>
+
+<script>
+function downloadJpeg() {
+  const svg = document.getElementById('logo');
+  const xml = new XMLSerializer().serializeToString(svg);
+  const blob = new Blob([xml], {type: 'image/svg+xml'});
+  const url = URL.createObjectURL(blob);
+  const img = new Image();
+  img.onload = () => {
+    const canvas = document.createElement('canvas');
+    canvas.width = 1200; canvas.height = 1200;
+    const ctx = canvas.getContext('2d');
+    ctx.fillStyle = '#FAFAF8';
+    ctx.fillRect(0, 0, 1200, 1200);
+    ctx.drawImage(img, 0, 0, 1200, 1200);
+    URL.revokeObjectURL(url);
+    canvas.toBlob(b => {
+      const a = document.createElement('a');
+      a.href = URL.createObjectURL(b);
+      a.download = 'bloom-logo-primary.jpg';
+      a.click();
+    }, 'image/jpeg', 0.95);
+  };
+  img.src = url;
+}
+</script>
+</body>
+</html>
