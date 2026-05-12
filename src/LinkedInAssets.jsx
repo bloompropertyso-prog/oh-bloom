@@ -218,7 +218,7 @@ function Slide1() {
         paddingTop: 36, borderTop: `1px solid ${C.border}`,
         display: 'flex', alignItems: 'center', justifyContent: 'space-between',
       }}>
-        <div style={{ fontFamily: fH, fontSize: 22, fontWeight: 700, color: C.black }}>Bryttani Patterson</div>
+        <div style={{ fontFamily: fH, fontSize: 22, fontWeight: 700, color: C.black }}>Bloom Digital</div>
         <div style={{ fontFamily: fH, fontSize: 20, fontWeight: 700, color: C.teal }}>ohbloom.com</div>
       </div>
     </div>
@@ -330,7 +330,7 @@ function Slide3() {
         display: 'flex', alignItems: 'center', justifyContent: 'space-between',
       }}>
         <div>
-          <div style={{ fontFamily: fH, fontSize: 22, fontWeight: 700, color: C.black }}>Bryttani Patterson</div>
+          <div style={{ fontFamily: fH, fontSize: 22, fontWeight: 700, color: C.black }}>Bloom Digital</div>
           <div style={{ fontFamily: fB, fontSize: 17, color: C.soft, marginTop: 4 }}>
             Web Developer & AI Automation Specialist
           </div>
@@ -695,7 +695,7 @@ export default function LinkedInAssets() {
         <div style={{ padding: '22px 20px 16px', borderBottom: `1px solid ${C.border}` }}>
           <div style={{ fontFamily: fH, fontSize: 15, fontWeight: 800, color: C.black }}>LinkedIn Assets</div>
           <div style={{ fontFamily: fB, fontSize: 12, color: C.soft, marginTop: 3 }}>
-            Bryttani Patterson · ohbloom.com
+            Bloom Digital · ohbloom.com
           </div>
         </div>
 
