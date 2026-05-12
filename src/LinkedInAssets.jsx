@@ -136,7 +136,7 @@ function LinkedInBanner() {
           fontFamily: fH, fontSize: 50, fontWeight: 800, color: C.black,
           lineHeight: 1.13, marginBottom: 20, letterSpacing: '-0.02em', maxWidth: 680,
         }}>
-          I help small businesses save time and capture more leads.
+          Helping small businesses save time and capture more leads.
         </div>
         <div style={{ fontFamily: fB, fontSize: 18, color: C.soft, fontWeight: 400 }}>
           Websites · AI Chatbots · Business Automation · ohbloom.com
