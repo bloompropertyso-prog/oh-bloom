@@ -1081,17 +1081,17 @@ function Portfolio() {
       <div className="wrap">
         <RevealSection>
           <div style={{ textAlign: 'center', marginBottom: 16 }}>
-            <span className="eyebrow">Real Demos. Real Use Cases.</span>
+            <span className="eyebrow">REAL DEMOS. REAL RESULTS.</span>
             <h2 className="sec-h" style={{ fontSize: '2.2rem', fontWeight: 700, letterSpacing: '-0.02em', marginBottom: 16 }}>
-              Not 'I'm Open for Work.' —<br />'Here's What I Built.'
+              See Exactly What I Can Build for Your Business.
             </h2>
             <p style={{ fontFamily: 'var(--font-b)', fontSize: 17, color: '#6A6A6A', maxWidth: 600, margin: '0 auto', lineHeight: 1.75 }}>
-              Every project below was built to demonstrate exactly what's possible for real small businesses. This is how automation and AI actually work in practice — not in theory.
+              Every project below is a fully working demonstration built for a real business type. Click in, explore, and imagine what this could do for yours.
             </p>
           </div>
           {/* Callout */}
           <div style={{ background: 'rgba(232,145,58,0.08)', borderLeft: '4px solid var(--amber)', borderRadius: '0 8px 8px 0', padding: '14px 20px', margin: '32px auto 0', maxWidth: 680, fontFamily: 'var(--font-b)', fontSize: 14, color: 'var(--text-b)', lineHeight: 1.65 }}>
-            These are demonstration projects built to show real-world use cases. They reflect the quality and type of work available for your business.
+            These are live demonstration projects — not mockups. Each one shows a real use case for a real type of business. If you see something that fits what you do, that&apos;s exactly what we can build together.
           </div>
         </RevealSection>
 
