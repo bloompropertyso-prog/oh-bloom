@@ -1,0 +1,896 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>FreelancerOS — Bryttani Patterson</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<style>
+:root{--bg:#FAFAF8;--sidebar:#1A6B72;--sa:rgba(255,255,255,0.15);--st:rgba(255,255,255,0.85);--accent:#1A6B72;--amber:#E8913A;--card:#FFFFFF;--border:#EEEDE8;--text:#1C1C1E;--muted:#6B6B68;--success:#2E7D32;--danger:#C62828;--hf:'Plus Jakarta Sans',sans-serif;--bf:'Inter',sans-serif}
+*{box-sizing:border-box;margin:0;padding:0}html,body{height:100%}
+body{font-family:var(--bf);background:var(--bg);color:var(--text);display:flex;height:100vh;overflow:hidden}
+
+/* SPINNER */
+#spin-ov{display:none;position:fixed;inset:0;background:rgba(255,255,255,.55);z-index:2000;align-items:center;justify-content:center}
+.spin{width:30px;height:30px;border:3px solid var(--border);border-top-color:var(--accent);border-radius:50%;animation:spin .65s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+
+#sidebar{width:240px;min-width:240px;background:var(--sidebar);display:flex;flex-direction:column;height:100vh;position:fixed;left:0;top:0;z-index:100;transition:transform .3s}
+#sbh{padding:24px 20px 20px;border-bottom:1px solid rgba(255,255,255,.1)}
+#sbh h1{font-family:var(--hf);font-weight:700;font-size:18px;color:#fff;letter-spacing:-.3px}
+#sbh p{font-size:12px;color:rgba(255,255,255,.6);margin-top:3px}
+#nav{flex:1;padding:12px 0;overflow-y:auto}
+.ni{display:flex;align-items:center;gap:10px;padding:11px 20px;cursor:pointer;color:var(--st);font-size:14px;font-weight:500;transition:background .15s;border-left:3px solid transparent;user-select:none}
+.ni:hover{background:rgba(255,255,255,.08)}.ni.active{background:var(--sa);border-left-color:#fff;color:#fff}
+.ni svg{opacity:.8;flex-shrink:0}.ni.active svg{opacity:1}
+#sbf{padding:16px 20px;border-top:1px solid rgba(255,255,255,.1)}
+#sbf a{color:var(--amber);font-size:12px;text-decoration:none;font-weight:500}
+
+#main{margin-left:240px;flex:1;height:100vh;overflow-y:auto;display:flex;flex-direction:column}
+.sec{display:none;padding:32px 36px}.sec.active{display:block}
+.ph{margin-bottom:28px}
+.ph h2{font-family:var(--hf);font-size:24px;font-weight:700}
+.ph p{color:var(--muted);font-size:14px;margin-top:4px}
+.card{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:20px 24px}
+.ct{font-family:var(--hf);font-size:15px;font-weight:700;margin-bottom:14px}
+
+.sg{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-bottom:24px}
+.sc{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:20px}
+.sc .lb{font-size:11px;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:.5px}
+.sc .vl{font-family:var(--hf);font-size:28px;font-weight:700;margin-top:8px}
+.sc .sb{font-size:12px;color:var(--muted);margin-top:4px}
+.pb{height:6px;background:var(--border);border-radius:3px;overflow:hidden;margin-top:8px}
+.pf{height:100%;background:var(--amber);border-radius:3px;transition:width .4s}
+
+.twoc{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:24px}
+.rb{display:flex;align-items:center;justify-content:space-between;margin-bottom:16px}
+.mb24{margin-bottom:24px}
+
+.btn{display:inline-flex;align-items:center;gap:6px;padding:9px 16px;border-radius:8px;font-size:14px;font-weight:500;cursor:pointer;border:none;transition:all .15s;font-family:var(--bf);white-space:nowrap}
+.bp{background:var(--accent);color:#fff}.bp:hover{background:#155c63}
+.ba{background:transparent;color:var(--amber);border:1.5px solid var(--amber)}.ba:hover{background:rgba(232,145,58,.08)}
+.baf{background:var(--amber);color:#fff}.baf:hover{background:#d4812e}
+.bg2{background:transparent;color:var(--muted);border:1px solid var(--border)}.bg2:hover{background:var(--bg)}
+.bdn{background:#fef2f2;color:var(--danger);border:1px solid #fecaca}.bdn:hover{background:#fee2e2}
+.bsm{padding:5px 10px;font-size:12px}.bxs{padding:3px 8px;font-size:11px}
+
+.tw{overflow-x:auto}
+table{width:100%;border-collapse:collapse}
+th{text-align:left;font-size:11px;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:.4px;padding:10px 12px;border-bottom:1px solid var(--border);white-space:nowrap}
+td{padding:11px 12px;font-size:13px;border-bottom:1px solid var(--border);vertical-align:middle}
+tr:last-child td{border-bottom:none}
+tbody tr{cursor:pointer}tbody tr:hover{background:#F5F0E8}
+.atd{display:flex;gap:6px}
+
+.badge{display:inline-block;padding:3px 8px;border-radius:20px;font-size:11px;font-weight:600;white-space:nowrap}
+.b-bl{background:#EFF6FF;color:#1D4ED8}.b-am{background:#FFFBEB;color:#B45309}
+.b-pu{background:#F5F3FF;color:#6D28D9}.b-gr{background:#F0FDF4;color:#166534}
+.b-gy{background:#F9FAFB;color:#6B7280}.b-or{background:#FFF7ED;color:#C2410C}
+.b-te{background:#F0FDFA;color:#0F766E}
+
+.fbar{display:flex;gap:10px;align-items:center;flex-wrap:wrap}
+.fi,.fs{padding:8px 12px;border:1px solid var(--border);border-radius:8px;font-size:13px;font-family:var(--bf);background:#fff;color:var(--text);outline:none}
+.fi:focus,.fs:focus{border-color:var(--accent)}
+
+.tabs{display:flex;border-bottom:1px solid var(--border);margin-bottom:24px}
+.tab{padding:10px 20px;font-size:14px;font-weight:500;color:var(--muted);cursor:pointer;border-bottom:2px solid transparent;transition:all .15s}
+.tab.active{color:var(--accent);border-bottom-color:var(--accent)}
+.tp{display:none}.tp.active{display:block}
+
+.mbd{display:none;position:fixed;inset:0;background:rgba(0,0,0,.45);backdrop-filter:blur(4px);z-index:1000;align-items:center;justify-content:center}
+.mbd.open{display:flex}
+.modal{background:#fff;border-radius:12px;padding:28px;width:560px;max-width:95vw;max-height:90vh;overflow-y:auto;position:relative}
+.modal h3{font-family:var(--hf);font-size:18px;font-weight:700;margin-bottom:20px}
+.mcl{position:absolute;top:14px;right:14px;background:none;border:none;cursor:pointer;color:var(--muted);font-size:22px;line-height:1;padding:4px}
+
+.fg{margin-bottom:16px}
+.fg label{display:block;font-size:11px;font-weight:600;color:var(--muted);margin-bottom:6px;text-transform:uppercase;letter-spacing:.4px}
+.fg input,.fg select,.fg textarea{width:100%;padding:10px 12px;border:1px solid var(--border);border-radius:8px;font-size:14px;font-family:var(--bf);color:var(--text);background:#fff;outline:none;transition:border .15s}
+.fg input:focus,.fg select:focus,.fg textarea:focus{border-color:var(--accent);box-shadow:0 0 0 3px rgba(26,107,114,.08)}
+.fg textarea{resize:vertical;min-height:80px}
+.fr{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.fac{display:flex;gap:10px;justify-content:flex-end;margin-top:8px}
+
+.dp{position:fixed;right:-440px;top:0;width:420px;height:100vh;background:#fff;box-shadow:-4px 0 24px rgba(0,0,0,.12);z-index:200;transition:right .3s;overflow-y:auto;padding:28px}
+.dp.open{right:0}
+.dph{display:flex;justify-content:space-between;align-items:center;margin-bottom:24px}
+.dph h3{font-family:var(--hf);font-size:18px;font-weight:700}
+.dr{margin-bottom:14px}
+.dr .dl{font-size:11px;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:.4px;margin-bottom:3px}
+.dr .dv{font-size:14px;white-space:pre-wrap}
+
+.out{background:#F9F9F7;border:1px solid var(--border);border-radius:8px;padding:16px;font-size:13px;line-height:1.7;white-space:pre-wrap;min-height:60px;margin-top:12px;font-family:var(--bf)}
+
+#tc{position:fixed;bottom:24px;right:24px;z-index:9999;display:flex;flex-direction:column;gap:8px;pointer-events:none}
+.toast{background:#1C1C1E;color:#fff;padding:10px 16px;border-radius:20px;font-size:13px;font-weight:500;opacity:0;transform:translateY(8px);transition:all .2s;pointer-events:none}
+.toast.show{opacity:1;transform:translateY(0)}
+
+.empty{text-align:center;padding:52px 20px;color:var(--muted)}
+.empty p{font-size:14px;max-width:320px;margin:0 auto;line-height:1.6}
+
+.abox{background:linear-gradient(135deg,var(--accent) 0%,#155c63 100%);color:#fff;border-radius:12px;padding:20px 24px;margin-bottom:24px}
+.abox .al{font-size:13px;opacity:.8}
+.abox .av{font-family:var(--hf);font-size:36px;font-weight:800;margin-top:4px}
+.mg{display:grid;grid-template-columns:repeat(6,1fr);gap:12px;margin-top:20px}
+.mc{background:var(--card);border:1px solid var(--border);border-radius:10px;padding:14px;text-align:center}
+.mc .mn{font-size:11px;font-weight:600;color:var(--muted);text-transform:uppercase}
+.mc .mt{font-family:var(--hf);font-size:16px;font-weight:700;margin-top:6px}
+.bch{display:flex;align-items:flex-end;gap:6px;height:100px;padding-bottom:4px}
+.bcl{flex:1;display:flex;flex-direction:column;align-items:center;height:100%;justify-content:flex-end;gap:3px}
+.bb{width:100%;background:var(--accent);border-radius:3px 3px 0 0;min-height:2px;opacity:.85}
+.bbl{font-size:9px;color:var(--muted);font-weight:500}
+
+.wc{display:grid;grid-template-columns:repeat(7,1fr);gap:8px;margin-bottom:24px}
+.dc{background:var(--card);border:1px solid var(--border);border-radius:10px;padding:10px 8px;min-height:88px}
+.dc .dcl{font-size:10px;font-weight:600;color:var(--muted);text-transform:uppercase}
+.dc .dcn{font-size:20px;font-weight:700;font-family:var(--hf);margin:2px 0 6px}
+.dc.td{border-color:var(--accent);background:rgba(26,107,114,.03)}
+.dc.td .dcn{color:var(--accent)}
+.dcp{background:rgba(26,107,114,.1);color:var(--accent);font-size:10px;padding:3px 5px;border-radius:4px;margin-bottom:3px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.streak{display:inline-flex;align-items:center;gap:6px;background:#FFF7ED;color:#C2410C;padding:8px 14px;border-radius:20px;font-size:14px;font-weight:600;margin-bottom:20px}
+.chips{display:flex;flex-wrap:wrap;gap:8px;margin-top:12px}
+.chip{background:#fff;border:1px solid var(--border);border-radius:20px;padding:6px 12px;font-size:12px;cursor:pointer;transition:all .15s}
+.chip:hover{border-color:var(--accent);color:var(--accent);background:rgba(26,107,114,.04)}
+
+.tp2{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:24px;margin-bottom:20px}
+.tp2 h3{font-family:var(--hf);font-size:16px;font-weight:700;margin-bottom:4px}
+.tp2 .td2{font-size:13px;color:var(--muted);margin-bottom:20px}
+.gh{display:flex;justify-content:space-between;align-items:center;margin-bottom:8px}
+.po{background:#fff;border:1px solid var(--border);border-radius:10px;padding:28px;font-size:13px;line-height:1.8;white-space:pre-wrap;font-family:var(--bf);margin-top:12px}
+.qa{display:flex;gap:12px;margin-bottom:28px;flex-wrap:wrap}
+.fi2{padding:10px 0;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between}
+.fi2:last-child{border-bottom:none}
+.fi2 .fn{font-weight:600;font-size:13px}.fi2 .fb2{font-size:12px;color:var(--muted)}
+.ai2{padding:10px 0;border-bottom:1px solid var(--border);display:flex;gap:10px}
+.ai2:last-child{border-bottom:none}
+.adot{width:8px;height:8px;background:var(--accent);border-radius:50%;margin-top:4px;flex-shrink:0}
+.ai2 .an{font-weight:600;font-size:13px}.ai2 .aa{font-size:12px;color:var(--muted)}
+
+#ham{display:none;position:fixed;top:16px;left:16px;z-index:300;background:var(--accent);border:none;border-radius:8px;padding:8px;cursor:pointer;color:#fff}
+#sbo{display:none;position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:99}
+.pfoot{padding:20px 36px;font-size:12px;color:var(--muted);border-top:1px solid var(--border);margin-top:auto}
+
+/* checkbox style for message_sent */
+.cb-row{display:flex;align-items:center;gap:10px;padding:10px 0;cursor:pointer}
+.cb-row input[type=checkbox]{width:18px;height:18px;accent-color:var(--accent);cursor:pointer;flex-shrink:0}
+.cb-row span{font-size:14px;color:var(--text)}
+
+@media(max-width:768px){
+  #ham{display:flex}#sidebar{transform:translateX(-100%)}
+  #sidebar.mo{transform:translateX(0)}#sbo.open{display:block}
+  #main{margin-left:0}.sec{padding:20px 16px;padding-top:64px}
+  .sg{grid-template-columns:repeat(2,1fr)}.twoc{grid-template-columns:1fr}
+  .fr{grid-template-columns:1fr}.mg{grid-template-columns:repeat(3,1fr)}
+  .wc{grid-template-columns:repeat(4,1fr)}.qa{flex-direction:column}
+}
+@media(max-width:480px){.sg{grid-template-columns:1fr 1fr}.wc{grid-template-columns:repeat(2,1fr)}}
+</style>
+</head>
+<body>
+
+<div id="spin-ov"><div class="spin"></div></div>
+<div id="tc"></div>
+<button id="ham" onclick="toggleSB()"><svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg></button>
+<div id="sbo" onclick="toggleSB()"></div>
+
+<div id="sidebar">
+  <div id="sbh"><h1>FreelancerOS</h1><p id="sbn">Bryttani Patterson</p></div>
+  <nav id="nav">
+    <div class="ni active" onclick="show('dashboard')" data-s="dashboard"><svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>Dashboard</div>
+    <div class="ni" onclick="show('leads')" data-s="leads"><svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>Leads</div>
+    <div class="ni" onclick="show('outreach')" data-s="outreach"><svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>Outreach</div>
+    <div class="ni" onclick="show('aitools')" data-s="aitools"><svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>AI Tools</div>
+    <div class="ni" onclick="show('income')" data-s="income"><svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>Income</div>
+    <div class="ni" onclick="show('linkedin')" data-s="linkedin"><svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="2" y="2" width="20" height="20" rx="4"/><path d="M7 10v7M7 7v.5M11 17v-4a2 2 0 0 1 4 0v4M11 10v7"/></svg>LinkedIn</div>
+    <div class="ni" onclick="show('settings')" data-s="settings"><svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>Settings</div>
+  </nav>
+  <div id="sbf"><a href="https://ohbloom.com" target="_blank">ohbloom.com</a></div>
+</div>
+
+<div id="main">
+
+<!-- DASHBOARD -->
+<div id="s-dashboard" class="sec active">
+  <div class="ph"><h2>Dashboard</h2><p>Welcome back — here's what's happening.</p></div>
+  <div class="sg">
+    <div class="sc"><div class="lb">Total Leads</div><div class="vl" id="d-leads">0</div><div class="sb">in pipeline</div></div>
+    <div class="sc"><div class="lb">Outreach Sent</div><div class="vl" id="d-out">0</div><div class="sb">emails &amp; messages</div></div>
+    <div class="sc"><div class="lb">Revenue This Month</div><div class="vl" id="d-rev">$0</div><div class="sb" id="d-rsub">this month</div></div>
+    <div class="sc"><div class="lb">Monthly Goal</div><div class="vl" id="d-gpct">0%</div><div class="pb"><div class="pf" id="d-gbar" style="width:0%"></div></div><div class="sb" id="d-gsub">of $5,000 goal</div></div>
+  </div>
+  <div class="twoc">
+    <div class="card"><div class="ct">Upcoming Follow-ups</div><div id="d-fu"><div class="empty"><p>No follow-ups due — you're all caught up ✓</p></div></div></div>
+    <div class="card"><div class="ct">Recent Activity</div><div id="d-act"><div class="empty"><p>No recent activity yet.</p></div></div></div>
+  </div>
+  <div class="qa">
+    <button class="btn ba" onclick="openLeadModal()"><svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>Add Lead</button>
+    <button class="btn ba" onclick="openLoModal()"><svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>Log Outreach</button>
+    <button class="btn ba" onclick="show('aitools')"><svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>Generate Email</button>
+  </div>
+</div>
+
+<!-- LEADS -->
+<div id="s-leads" class="sec">
+  <div class="ph"><h2>Client &amp; Lead Tracker</h2><p>Manage your pipeline from first contact to active client.</p></div>
+  <div class="rb">
+    <div class="fbar"><input type="text" id="lsrch" class="fi" placeholder="Search name or business…" oninput="rLeads()" style="width:220px"><select id="lfilt" class="fs" onchange="rLeads()"><option value="">All Statuses</option><option>New Lead</option><option>Contacted</option><option>Proposal Sent</option><option>Active Client</option><option>Not Interested</option><option>Follow Up</option></select></div>
+    <button class="btn bp" onclick="openLeadModal()"><svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>Add Lead</button>
+  </div>
+  <div class="card" style="padding:0"><div class="tw"><table><thead><tr><th>Name</th><th>Business</th><th>Email</th><th>Service</th><th>Budget</th><th>Status</th><th>Follow-up</th><th>Actions</th></tr></thead><tbody id="ltb"></tbody></table></div><div id="le" class="empty" style="display:none"><p>No leads yet. Add your first one or use the Outreach Manager to find potential clients.</p></div></div>
+</div>
+
+<!-- OUTREACH -->
+<div id="s-outreach" class="sec">
+  <div class="ph"><h2>Outreach Manager</h2><p>Track local businesses and LinkedIn prospects.</p></div>
+  <div class="tabs"><div class="tab active" onclick="stab('or','local',this)">Local Business Outreach</div><div class="tab" onclick="stab('or','li',this)">LinkedIn Outreach</div></div>
+  <div id="tp-or-local" class="tp active">
+    <div class="rb">
+      <div class="fbar"><input type="text" id="losrch" class="fi" placeholder="Search business…" oninput="rLocal()" style="width:200px"><select id="lofilt" class="fs" onchange="rLocal()"><option value="">All Statuses</option><option>Not Contacted</option><option>Email Sent</option><option>Followed Up</option><option>Call Scheduled</option><option>Converted</option><option>Not Interested</option></select></div>
+      <button class="btn bp" onclick="openLoModal()">+ Add Business</button>
+    </div>
+    <div class="card" style="padding:0;margin-bottom:20px"><div class="tw"><table><thead><tr><th>Business</th><th>Contact</th><th>Email</th><th>Type</th><th>Status</th><th>Last Contact</th><th>Actions</th></tr></thead><tbody id="lotb"></tbody></table></div><div id="loe" class="empty" style="display:none"><p>No businesses tracked yet.</p></div></div>
+    <div class="card">
+      <div class="ct">Email Template Generator</div>
+      <div class="fr" style="margin-bottom:16px"><div class="fg"><label>Business Type</label><select id="etgt" class="fs" style="width:100%"><option>Restaurant</option><option>Salon &amp; Spa</option><option>Fitness Studio</option><option>Coach &amp; Consultant</option><option>Real Estate</option><option>Contractor</option><option>Retail</option><option>Other</option></select></div><div class="fg"><label>Business Name</label><input id="etgn" class="fi" style="width:100%" placeholder="e.g. The Rustic Table"></div></div>
+      <div class="fr" style="margin-bottom:16px"><div class="fg"><label>Owner Name (optional)</label><input id="etgo" class="fi" style="width:100%" placeholder="e.g. Sarah"></div><div class="fg"><label>Pain Point (optional)</label><input id="etgp" class="fi" style="width:100%" placeholder="e.g. no online booking"></div></div>
+      <button class="btn bp" onclick="genLocalEmail()">Generate Email</button>
+      <div id="etgout" style="display:none"><div class="out" id="etgtxt"></div><div style="display:flex;gap:8px;margin-top:10px"><button class="btn bg2 bsm" onclick="cp('etgtxt')">Copy Email</button><button class="btn ba bsm" onclick="addETGToOut()">Add to Outreach Tracker</button></div></div>
+    </div>
+  </div>
+  <div id="tp-or-li" class="tp">
+    <div class="rb">
+      <div class="fbar"><input type="text" id="lisrch" class="fi" placeholder="Search name or company…" oninput="rLiOut()" style="width:200px"><select id="lifilt" class="fs" onchange="rLiOut()"><option value="">All Statuses</option><option>Not Connected</option><option>Request Sent</option><option>Connected</option><option>Messaged</option><option>Responded</option><option>Not Interested</option></select></div>
+      <button class="btn bp" onclick="openLiModal()">+ Add Prospect</button>
+    </div>
+    <div class="card" style="padding:0;margin-bottom:20px"><div class="tw"><table><thead><tr><th>Name</th><th>Title</th><th>Company</th><th>Connection</th><th>Msg Sent</th><th>Response</th><th>Follow-up</th><th>Actions</th></tr></thead><tbody id="litb"></tbody></table></div><div id="lie" class="empty" style="display:none"><p>No LinkedIn prospects yet.</p></div></div>
+    <div class="card">
+      <div class="ct">LinkedIn Message Generator</div>
+      <div class="fr" style="margin-bottom:16px"><div class="fg"><label>Prospect Name</label><input id="lmgn" class="fi" style="width:100%" placeholder="e.g. Sarah"></div><div class="fg"><label>Title / Industry</label><input id="lmgi" class="fi" style="width:100%" placeholder="e.g. restaurant owner"></div></div>
+      <div class="fg" style="margin-bottom:16px"><label>Message Type</label><select id="lmgt" class="fs" style="width:100%"><option>Connection Request</option><option>First Message After Connecting</option><option>Follow-up</option></select></div>
+      <button class="btn bp" onclick="genLiMsg()">Generate Message</button>
+      <div id="lmgout" style="display:none"><div class="out" id="lmgtxt"></div><button class="btn bg2 bsm" style="margin-top:10px" onclick="cp('lmgtxt')">Copy Message</button></div>
+    </div>
+  </div>
+</div>
+
+<!-- AI TOOLS -->
+<div id="s-aitools" class="sec">
+  <div class="ph"><h2>AI Tools</h2><p>Generate emails, posts, and proposals in seconds.</p></div>
+  <div class="tp2">
+    <h3>Cold Email Generator</h3><p class="td2">Create personalized outreach emails for local businesses.</p>
+    <div class="fr"><div class="fg"><label>Business Name</label><input id="aibn" class="fi" style="width:100%" placeholder="The Rustic Table"></div><div class="fg"><label>Business Type</label><select id="aibt" class="fs" style="width:100%"><option>Restaurant</option><option>Salon &amp; Spa</option><option>Fitness Studio</option><option>Coach &amp; Consultant</option><option>Real Estate</option><option>Contractor</option><option>Retail</option><option>Other</option></select></div></div>
+    <div class="fr"><div class="fg"><label>Website (optional)</label><input id="aiwb" class="fi" style="width:100%"></div><div class="fg"><label>Pain Point (optional)</label><input id="aipp" class="fi" style="width:100%" placeholder="no online booking"></div></div>
+    <div class="fg" style="margin-bottom:16px"><label>Owner Name (optional)</label><input id="aiow" class="fi" style="width:260px" placeholder="Sarah"></div>
+    <button class="btn bp" onclick="genAIEmail()"><svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>Generate Email</button>
+    <div id="aieo" style="display:none"><div class="out" id="aiett"></div><div style="display:flex;gap:8px;margin-top:10px"><button class="btn bg2 bsm" onclick="cp('aiett')">Copy Email</button><button class="btn ba bsm" onclick="addAIToOut()">Add to Outreach Tracker</button></div></div>
+  </div>
+  <div class="tp2">
+    <h3>LinkedIn Post Generator</h3><p class="td2">Create engaging posts for your content strategy.</p>
+    <div class="fr"><div class="fg"><label>Post Type</label><select id="lpt" class="fs" style="width:100%"><option>Value Post</option><option>Story Post</option><option>Demo Showcase</option><option>Direct Offer</option><option>Behind the Scenes</option></select></div><div class="fg"><label>Topic (optional)</label><input id="lptp" class="fi" style="width:100%" placeholder="e.g. lead capture for restaurants"></div></div>
+    <button class="btn bp" onclick="genLPPost()"><svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>Generate Post</button>
+    <div id="lpout" style="display:none"><div class="out" id="lptxt"></div><button class="btn bg2 bsm" style="margin-top:10px" onclick="cp('lptxt')">Copy Post</button></div>
+  </div>
+  <div class="tp2">
+    <h3>Proposal Generator</h3><p class="td2">Generate a complete client proposal ready to send.</p>
+    <div class="fr"><div class="fg"><label>Client Name</label><input id="prc" class="fi" style="width:100%" placeholder="Sarah Johnson"></div><div class="fg"><label>Business Name</label><input id="prb" class="fi" style="width:100%" placeholder="The Rustic Table"></div></div>
+    <div class="fr"><div class="fg"><label>Service Type</label><select id="prs" class="fs" style="width:100%"><option>AI Chatbot</option><option>Website + Chatbot</option><option>Lead Automation</option><option>Onboarding Automation</option><option>Web App</option><option>Custom Package</option></select></div><div class="fg"><label>Price</label><input id="prp" class="fi" style="width:100%" placeholder="$1,500"></div></div>
+    <div class="fr"><div class="fg"><label>Timeline</label><input id="prt" class="fi" style="width:100%" placeholder="2–3 weeks"></div><div class="fg"></div></div>
+    <div class="fg" style="margin-bottom:16px"><label>Project Description</label><textarea id="prd" class="fi" style="width:100%;min-height:72px" placeholder="Brief description of what the client needs…"></textarea></div>
+    <button class="btn bp" onclick="genProp()"><svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>Generate Proposal</button>
+    <div id="prout" style="display:none"><div class="po" id="prtxt"></div><div style="display:flex;gap:8px;margin-top:12px"><button class="btn bg2 bsm" onclick="cp('prtxt')">Copy Proposal</button><button class="btn bg2 bsm" onclick="window.print()">Print</button></div></div>
+  </div>
+</div>
+
+<!-- INCOME -->
+<div id="s-income" class="sec">
+  <div class="ph"><h2>Income Tracker</h2><p>Track payments and monitor progress toward your monthly goal.</p></div>
+  <div class="abox"><div class="al">Annual Total</div><div class="av" id="ant">$0</div></div>
+  <div class="card mb24">
+    <div class="gh"><div><div class="ct" style="margin-bottom:4px">Monthly Goal</div><div style="font-size:13px;color:var(--muted)">Revenue this month: <strong id="mrev">$0</strong></div></div>
+    <div style="display:flex;align-items:center;gap:8px"><input id="gi" type="number" style="width:100px;padding:6px 10px;border:1px solid var(--border);border-radius:8px;font-size:14px;font-family:var(--bf)" placeholder="5000"><button class="btn bp bsm" onclick="saveGoal()">Save Goal</button></div></div>
+    <div class="pb" style="height:10px;margin-top:12px"><div class="pf" id="iprog" style="width:0%;background:var(--accent)"></div></div>
+    <div style="font-size:12px;color:var(--muted);margin-top:6px" id="glbl">0% of goal reached</div>
+  </div>
+  <div class="rb"><h3 style="font-family:var(--hf);font-weight:700;font-size:16px">Payments</h3><button class="btn bp" onclick="openIncModal()">+ Log Payment</button></div>
+  <div class="card" style="padding:0;margin-bottom:24px"><div class="tw"><table><thead><tr><th>Date</th><th>Client</th><th>Project</th><th>Amount</th><th>Method</th><th>Actions</th></tr></thead><tbody id="itb"></tbody></table></div><div id="ie" class="empty" style="display:none"><p>No payments logged yet. Your first client is closer than you think.</p></div></div>
+  <div class="card"><div class="ct">Monthly Breakdown</div><div class="bch" id="ichart"></div><div class="mg" id="mgrid"></div></div>
+</div>
+
+<!-- LINKEDIN PLANNER -->
+<div id="s-linkedin" class="sec">
+  <div class="ph"><h2>LinkedIn Planner</h2><p>Plan and track your content calendar.</p></div>
+  <div id="stk"></div>
+  <div class="card mb24">
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px">
+      <div style="display:flex;align-items:center;gap:12px"><button class="btn bg2 bsm" onclick="mw(-1)">← Prev</button><strong id="wlbl" style="font-family:var(--hf);font-size:15px"></strong><button class="btn bg2 bsm" onclick="mw(1)">Next →</button></div>
+      <button class="btn bp" onclick="openPostModal()">+ Add Post</button>
+    </div>
+    <div class="wc" id="wcal"></div>
+  </div>
+  <div class="card mb24"><div class="ct">All Posts</div><div class="tw"><table><thead><tr><th>Date</th><th>Title</th><th>Type</th><th>Status</th><th>Actions</th></tr></thead><tbody id="ptb"></tbody></table></div><div id="pe" class="empty" style="display:none"><p>No posts yet. Start planning your LinkedIn content calendar.</p></div></div>
+  <div class="card"><div class="ct">Idea Bank</div><p style="font-size:13px;color:var(--muted)">Click any idea to pre-fill a new post.</p><div class="chips" id="idchips"></div></div>
+</div>
+
+<!-- SETTINGS -->
+<div id="s-settings" class="sec">
+  <div class="ph"><h2>Settings</h2><p>Manage your profile and app preferences.</p></div>
+  <div style="max-width:520px">
+    <div class="card mb24"><div class="ct">Your Profile</div>
+      <div class="fg"><label>Your Name</label><input id="stn"></div>
+      <div class="fg"><label>Business Name</label><input id="stb"></div>
+      <div class="fg"><label>Website</label><input id="stw"></div>
+      <div class="fg"><label>Email</label><input id="ste"></div>
+      <div class="fg"><label>Monthly Revenue Goal ($)</label><input id="stg" type="number"></div>
+      <button class="btn bp" onclick="saveSettings()">Save Settings</button>
+    </div>
+    <div class="card"><div class="ct">Data Management</div><div style="display:flex;gap:10px;flex-wrap:wrap"><button class="btn bg2" onclick="expCSV()">Export to CSV</button><button class="btn bdn" onclick="clearData()">Clear All Data</button></div></div>
+  </div>
+</div>
+
+<div class="pfoot">© 2026 FreelancerOS · Built for Bryttani Patterson · <a href="https://ohbloom.com" target="_blank" style="color:var(--accent)">ohbloom.com</a></div>
+</div><!-- /main -->
+
+<!-- LEAD MODAL -->
+<div id="ldm" class="mbd"><div class="modal">
+  <button class="mcl" onclick="closeM('ldm')">×</button><h3 id="ldmt">Add Lead</h3><input type="hidden" id="ldeid">
+  <div class="fr"><div class="fg"><label>Name *</label><input id="ln" placeholder="Jane Smith"></div><div class="fg"><label>Business Name</label><input id="lbz" placeholder="Smith's Salon"></div></div>
+  <div class="fr"><div class="fg"><label>Email</label><input id="lem" type="email"></div><div class="fg"><label>Phone</label><input id="lph"></div></div>
+  <div class="fg"><label>Website</label><input id="lwb"></div>
+  <div class="fr"><div class="fg"><label>Service Interested In</label><select id="lsv"><option>AI Chatbot</option><option>Website + Chatbot</option><option>Lead Automation</option><option>Onboarding Automation</option><option>Web App</option><option>Other</option></select></div><div class="fg"><label>Budget Range</label><select id="lbg"><option>Unknown</option><option>Under $500</option><option>$500–$1,500</option><option>$1,500–$3,000</option><option>$3,000+</option></select></div></div>
+  <div class="fr"><div class="fg"><label>Status</label><select id="lst"><option>New Lead</option><option>Contacted</option><option>Proposal Sent</option><option>Active Client</option><option>Not Interested</option><option>Follow Up</option></select></div><div class="fg"><label>Follow-up Date</label><input id="lfu" type="date"></div></div>
+  <div class="fg"><label>Notes</label><textarea id="lnt"></textarea></div>
+  <div class="fac"><button class="btn bg2" onclick="closeM('ldm')">Cancel</button><button class="btn bp" onclick="saveLead()">Save Lead</button></div>
+</div></div>
+
+<!-- LEAD DETAIL PANEL -->
+<div id="ldp" class="dp">
+  <div class="dph"><h3 id="dpn">Lead Details</h3><button class="btn bg2 bsm" onclick="closeDp()">✕ Close</button></div>
+  <div id="dpc"></div>
+  <div style="display:flex;gap:8px;margin-top:20px"><button class="btn bp bsm" id="dpe">Edit</button><button class="btn bdn bsm" id="dpd">Delete</button></div>
+</div>
+
+<!-- LOCAL OUTREACH MODAL -->
+<div id="lom" class="mbd"><div class="modal">
+  <button class="mcl" onclick="closeM('lom')">×</button><h3 id="lomt">Add Business</h3><input type="hidden" id="loeid">
+  <div class="fr"><div class="fg"><label>Business Name *</label><input id="lobn" placeholder="The Rustic Table"></div><div class="fg"><label>Owner / Contact</label><input id="loow"></div></div>
+  <div class="fr"><div class="fg"><label>Email</label><input id="loem" type="email"></div><div class="fg"><label>Website</label><input id="lowb"></div></div>
+  <div class="fg"><label>Business Type</label><select id="lobt"><option>Restaurant</option><option>Salon &amp; Spa</option><option>Fitness Studio</option><option>Coach &amp; Consultant</option><option>Real Estate</option><option>Contractor</option><option>Retail</option><option>Other</option></select></div>
+  <div class="fr"><div class="fg"><label>Status</label><select id="lost"><option>Not Contacted</option><option>Email Sent</option><option>Followed Up</option><option>Call Scheduled</option><option>Converted</option><option>Not Interested</option></select></div><div class="fg"><label>Last Contact Date</label><input id="lolc" type="date"></div></div>
+  <div class="fg"><label>Notes</label><textarea id="lont"></textarea></div>
+  <div class="fac"><button class="btn bg2" onclick="closeM('lom')">Cancel</button><button class="btn bp" onclick="saveLocal()">Save</button></div>
+</div></div>
+
+<!-- LINKEDIN OUTREACH MODAL -->
+<div id="liom" class="mbd"><div class="modal">
+  <button class="mcl" onclick="closeM('liom')">×</button><h3>Add LinkedIn Prospect</h3><input type="hidden" id="lieid">
+  <div class="fr"><div class="fg"><label>Name *</label><input id="lin" placeholder="Alex Rivera"></div><div class="fg"><label>Title</label><input id="lit"></div></div>
+  <div class="fr"><div class="fg"><label>Company</label><input id="lic"></div><div class="fg"><label>LinkedIn URL</label><input id="liu"></div></div>
+  <div class="fr"><div class="fg"><label>Connection Status</label><select id="lics"><option>Not Connected</option><option>Request Sent</option><option>Connected</option><option>Messaged</option><option>Responded</option><option>Not Interested</option></select></div><div class="fg"><label>Follow-up Date</label><input id="lifu" type="date"></div></div>
+  <div class="fg"><label>Message Sent</label><label class="cb-row"><input type="checkbox" id="limsb"><span>A message was sent to this prospect</span></label></div>
+  <div class="fg"><label>Response / Notes</label><textarea id="lirp" style="min-height:60px"></textarea></div>
+  <div class="fac"><button class="btn bg2" onclick="closeM('liom')">Cancel</button><button class="btn bp" onclick="saveLiOut()">Save</button></div>
+</div></div>
+
+<!-- INCOME MODAL -->
+<div id="incm" class="mbd"><div class="modal">
+  <button class="mcl" onclick="closeM('incm')">×</button><h3 id="incmt">Log Payment</h3><input type="hidden" id="inceid">
+  <div class="fr"><div class="fg"><label>Client Name *</label><input id="incl"></div><div class="fg"><label>Project</label><input id="incp"></div></div>
+  <div class="fr"><div class="fg"><label>Amount *</label><input id="inca" type="number" placeholder="1500"></div><div class="fg"><label>Date *</label><input id="incd" type="date"></div></div>
+  <div class="fg"><label>Payment Method</label><select id="incmt2"><option>Bank Transfer</option><option>Venmo</option><option>PayPal</option><option>Cash App</option><option>Check</option><option>Other</option></select></div>
+  <div class="fg"><label>Notes</label><textarea id="incn" style="min-height:60px"></textarea></div>
+  <div class="fac"><button class="btn bg2" onclick="closeM('incm')">Cancel</button><button class="btn bp" onclick="saveIncome()">Save Payment</button></div>
+</div></div>
+
+<!-- POST MODAL -->
+<div id="postm" class="mbd"><div class="modal">
+  <button class="mcl" onclick="closeM('postm')">×</button><h3 id="postmt">Add Post</h3><input type="hidden" id="posteid">
+  <div class="fg"><label>Title *</label><input id="postt" placeholder="What this post is about"></div>
+  <div class="fr"><div class="fg"><label>Post Type</label><select id="postty"><option>Value</option><option>Story</option><option>Demo</option><option>Offer</option><option>Behind the Scenes</option><option>Personal</option></select></div><div class="fg"><label>Scheduled Date</label><input id="postd" type="date"></div></div>
+  <div class="fg"><label>Status</label><select id="postst"><option>Draft</option><option>Scheduled</option><option>Published</option></select></div>
+  <div class="fg"><label>Content</label><textarea id="postc" style="min-height:120px" placeholder="Write your post…"></textarea></div>
+  <div class="fac"><button class="btn bg2" onclick="closeM('postm')">Cancel</button><button class="btn bp" onclick="savePost()">Save Post</button></div>
+</div></div>
+
+<script>
+// ── SUPABASE ──────────────────────────────────────────────────────────────────
+const SURL='https://ydlgzsycpjkjbpoywudt.supabase.co';
+const SKEY='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InlkbGd6c3ljcGpramJwb3l3dWR0Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzc4MDU2NjQsImV4cCI6MjA5MzM4MTY2NH0.I7Rhc77EhLY93Jw3OI9tbdyVQgT3mRQCwzcwjKAKOfI';
+const sb=window.supabase.createClient(SURL,SKEY);
+
+// ── IN-MEMORY CACHE ───────────────────────────────────────────────────────────
+const DB={leads:[],lout:[],liout:[],inc:[],posts:[],cfg:{name:'Bryttani Patterson',biz:'Bloom Digital',site:'ohbloom.com',email:'hello@ohbloom.com',goal:5000}};
+
+// ── HELPERS ───────────────────────────────────────────────────────────────────
+function uid(){return Date.now().toString(36)+Math.random().toString(36).slice(2);}
+function tod(){return new Date().toISOString().split('T')[0];}
+function fm$(n){return '$'+(+n||0).toLocaleString();}
+function fmd(d){if(!d)return'—';const p=String(d).split('-');return`${p[1]}/${p[2]}/${p[0]}`;}
+function esc(s){return s?String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'):''}
+function g(id){const e=document.getElementById(id);return e?(e.type==='checkbox'?e.checked:e.value):'';}
+function sv(id,v){const e=document.getElementById(id);if(!e)return;if(e.type==='checkbox')e.checked=!!v;else e.value=v==null?'':v;}
+
+function loading(on){document.getElementById('spin-ov').style.display=on?'flex':'none';}
+function dbErr(e,ctx){if(!e)return false;console.error(ctx||'',e);toast('Connection error — check your internet');return true;}
+
+// ── ROW MAPPERS ───────────────────────────────────────────────────────────────
+function mL(r){return{id:r.id,nm:r.name||'',bz:r.business||'',em:r.email||'',ph:r.phone||'',wb:r.website||'',sv:r.service||'AI Chatbot',bg:r.budget||'Unknown',st:r.status||'New Lead',fu:r.follow_up_date||'',nt:r.notes||'',ts:new Date(r.created_at).getTime()};}
+function mO(r){return{id:r.id,bn:r.business_name||'',ow:r.contact_name||'',em:r.email||'',wb:r.website||'',bt:r.business_type||'Other',st:r.status||'Not Contacted',lc:r.last_contact||'',nt:r.notes||'',ts:new Date(r.created_at).getTime()};}
+function mLi(r){return{id:r.id,nm:r.name||'',ti:r.title||'',co:r.company||'',ur:r.linkedin_url||'',cs:r.connection_status||'Not Connected',ms:!!r.message_sent,rp:r.response||'',fu:r.follow_up_date||'',ts:new Date(r.created_at).getTime()};}
+function mI(r){return{id:r.id,cl:r.client_name||'',pj:r.project||'',amt:+(r.amount)||0,dt:r.payment_date||'',mt:r.payment_method||'',nt:r.notes||'',ts:new Date(r.created_at).getTime()};}
+function mP(r){return{id:r.id,tt:r.title||'',ty:r.post_type||'Value',ct:r.content||'',dt:r.scheduled_date||'',pst:r.status||'Draft',ts:new Date(r.created_at).getTime()};}
+
+// ── LOAD ALL ──────────────────────────────────────────────────────────────────
+async function loadAll(){
+  loading(true);
+  try{
+    const[l,o,li,inc,posts,cfg]=await Promise.all([
+      sb.from('leads').select('*').order('created_at',{ascending:false}),
+      sb.from('outreach').select('*').order('created_at',{ascending:false}),
+      sb.from('linkedin_prospects').select('*').order('created_at',{ascending:false}),
+      sb.from('income').select('*').order('created_at',{ascending:false}),
+      sb.from('linkedin_posts').select('*').order('created_at',{ascending:false}),
+      sb.from('settings').select('*')
+    ]);
+    if(!l.error) DB.leads=l.data.map(mL);
+    if(!o.error) DB.lout=o.data.map(mO);
+    if(!li.error) DB.liout=li.data.map(mLi);
+    if(!inc.error) DB.inc=inc.data.map(mI);
+    if(!posts.error) DB.posts=posts.data.map(mP);
+    if(!cfg.error&&cfg.data) cfg.data.forEach(r=>{if(r.key==='goal')DB.cfg.goal=parseInt(r.value)||5000;else if(r.key in DB.cfg)DB.cfg[r.key]=r.value;});
+    if(l.error||o.error||li.error||inc.error||posts.error) toast('Some data failed to load — check your connection');
+  }catch(e){toast('Connection error — check your internet');}
+  finally{loading(false);}
+}
+
+// ── TOAST ─────────────────────────────────────────────────────────────────────
+function toast(msg){
+  const ct=document.getElementById('tc'),t=document.createElement('div');
+  t.className='toast';t.textContent=msg;ct.appendChild(t);
+  requestAnimationFrame(()=>t.classList.add('show'));
+  setTimeout(()=>{t.classList.remove('show');setTimeout(()=>t.remove(),300);},2500);
+}
+
+// ── COPY ──────────────────────────────────────────────────────────────────────
+function cp(id){
+  const el=document.getElementById(id);
+  (navigator.clipboard?navigator.clipboard.writeText(el.textContent):Promise.reject()).then(()=>toast('Copied!')).catch(()=>{const r=document.createRange();r.selectNode(el);window.getSelection().removeAllRanges();window.getSelection().addRange(r);document.execCommand('copy');window.getSelection().removeAllRanges();toast('Copied!');});
+}
+
+// ── NAV ───────────────────────────────────────────────────────────────────────
+let cur='dashboard';
+function show(id){
+  document.querySelectorAll('.sec').forEach(s=>s.classList.remove('active'));
+  document.querySelectorAll('.ni').forEach(n=>n.classList.remove('active'));
+  document.getElementById('s-'+id).classList.add('active');
+  document.querySelector('[data-s="'+id+'"]').classList.add('active');
+  cur=id;closeDp();
+  if(id==='dashboard')rDash();
+  if(id==='leads')rLeads();
+  if(id==='outreach'){rLocal();rLiOut();}
+  if(id==='income')rIncome();
+  if(id==='linkedin')rLI();
+  if(id==='settings')loadSettings();
+  document.getElementById('sidebar').classList.remove('mo');
+  document.getElementById('sbo').classList.remove('open');
+}
+function toggleSB(){document.getElementById('sidebar').classList.toggle('mo');document.getElementById('sbo').classList.toggle('open');}
+function stab(grp,id,el){document.querySelectorAll('#s-'+grp+' .tab').forEach(t=>t.classList.remove('active'));document.querySelectorAll('#s-'+grp+' .tp').forEach(p=>p.classList.remove('active'));el.classList.add('active');document.getElementById('tp-'+grp+'-'+id).classList.add('active');}
+function openM(id){document.getElementById(id).classList.add('open');}
+function closeM(id){document.getElementById(id).classList.remove('open');}
+document.addEventListener('click',e=>{if(e.target.classList.contains('mbd'))e.target.classList.remove('open');});
+
+// ── BADGES ────────────────────────────────────────────────────────────────────
+const LBM={'New Lead':'b-bl','Contacted':'b-am','Proposal Sent':'b-pu','Active Client':'b-gr','Not Interested':'b-gy','Follow Up':'b-or'};
+const LOBM={'Not Contacted':'b-gy','Email Sent':'b-am','Followed Up':'b-bl','Call Scheduled':'b-pu','Converted':'b-gr','Not Interested':'b-gy'};
+const LIBM={'Not Connected':'b-gy','Request Sent':'b-am','Connected':'b-bl','Messaged':'b-pu','Responded':'b-gr','Not Interested':'b-gy'};
+const PBM={'Draft':'b-gy','Scheduled':'b-bl','Published':'b-gr'};
+function bdg(t,m){return`<span class="badge ${m[t]||'b-gy'}">${esc(t)}</span>`;}
+
+// ── DASHBOARD ─────────────────────────────────────────────────────────────────
+function rDash(){
+  const now=new Date(),mo=now.getMonth(),yr=now.getFullYear();
+  document.getElementById('d-leads').textContent=DB.leads.length;
+  const os=DB.lout.filter(o=>o.st!=='Not Contacted').length+DB.liout.filter(o=>o.cs!=='Not Connected').length;
+  document.getElementById('d-out').textContent=os;
+  const mr=DB.inc.filter(p=>{const d=new Date(p.dt);return d.getMonth()===mo&&d.getFullYear()===yr;}).reduce((a,b)=>a+(+b.amt),0);
+  document.getElementById('d-rev').textContent=fm$(mr);
+  document.getElementById('d-rsub').textContent=now.toLocaleString('default',{month:'long'})+' '+yr;
+  const goal=DB.cfg.goal||5000,pct=Math.min(100,Math.round(mr/goal*100));
+  document.getElementById('d-gpct').textContent=pct+'%';
+  document.getElementById('d-gbar').style.width=pct+'%';
+  document.getElementById('d-gsub').textContent='of '+fm$(goal)+' goal';
+  const s7=new Date();s7.setDate(s7.getDate()+7);
+  const up=DB.leads.filter(l=>l.fu&&new Date(l.fu)<=s7&&new Date(l.fu)>=new Date(tod())).sort((a,b)=>new Date(a.fu)-new Date(b.fu));
+  document.getElementById('d-fu').innerHTML=up.length?up.slice(0,5).map(l=>`<div class="fi2"><div><div class="fn">${esc(l.nm)}</div><div class="fb2">${esc(l.bz||'—')}</div></div><div style="text-align:right"><div class="fb2">${fmd(l.fu)}</div>${bdg(l.st,LBM)}</div></div>`).join(''):'<div class="empty"><p>No follow-ups due — you\'re all caught up ✓</p></div>';
+  const rec=[...DB.leads.map(l=>({n:l.nm,a:'lead added',ts:l.ts||0})),...DB.lout.map(o=>({n:o.bn,a:'outreach logged',ts:o.ts||0}))].sort((a,b)=>b.ts-a.ts).slice(0,5);
+  document.getElementById('d-act').innerHTML=rec.length?rec.map(r=>`<div class="ai2"><div class="adot"></div><div><div class="an">${esc(r.n)}</div><div class="aa">${r.a} · ${r.ts?new Date(r.ts).toLocaleDateString():''}</div></div></div>`).join(''):'<div class="empty"><p>No recent activity yet.</p></div>';
+}
+
+// ── LEADS ─────────────────────────────────────────────────────────────────────
+function rLeads(){
+  const q=(g('lsrch')||'').toLowerCase(),f=g('lfilt');
+  const data=DB.leads.filter(l=>(!q||(l.nm+' '+(l.bz||'')).toLowerCase().includes(q))&&(!f||l.st===f));
+  const tb=document.getElementById('ltb'),em=document.getElementById('le');
+  if(!data.length){tb.innerHTML='';em.style.display='block';return;}
+  em.style.display='none';
+  tb.innerHTML=data.map(l=>`<tr onclick="showLDp('${l.id}')"><td><strong>${esc(l.nm)}</strong></td><td>${esc(l.bz||'—')}</td><td>${esc(l.em||'—')}</td><td>${esc(l.sv||'—')}</td><td>${esc(l.bg||'—')}</td><td>${bdg(l.st,LBM)}</td><td>${fmd(l.fu)}</td><td onclick="event.stopPropagation()"><div class="atd"><button class="btn bg2 bxs" onclick="editLead('${l.id}')">Edit</button><button class="btn bdn bxs" onclick="delLead('${l.id}')">Del</button></div></td></tr>`).join('');
+}
+
+function openLeadModal(){
+  ['ln','lbz','lem','lph','lwb','lnt'].forEach(x=>sv(x,''));
+  sv('lsv','AI Chatbot');sv('lbg','Unknown');sv('lst','New Lead');sv('lfu',tod());sv('ldeid','');
+  document.getElementById('ldmt').textContent='Add Lead';openM('ldm');
+}
+
+async function saveLead(){
+  const nm=g('ln').trim();if(!nm){toast('Name is required');return;}
+  const eid=g('ldeid');
+  const row={name:nm,business:g('lbz'),email:g('lem')||null,phone:g('lph')||null,website:g('lwb')||null,service:g('lsv'),budget:g('lbg'),status:g('lst'),follow_up_date:g('lfu')||null,notes:g('lnt')||null};
+  loading(true);
+  try{
+    let rec;
+    if(eid){
+      const{data,error}=await sb.from('leads').update(row).eq('id',eid).select().single();
+      if(dbErr(error,'update lead')){loading(false);return;}
+      rec=data;const i=DB.leads.findIndex(x=>x.id===eid);DB.leads[i]=mL(rec);
+    }else{
+      const{data,error}=await sb.from('leads').insert([row]).select().single();
+      if(dbErr(error,'insert lead')){loading(false);return;}
+      rec=data;DB.leads.unshift(mL(rec));
+    }
+    closeM('ldm');rLeads();if(cur==='dashboard')rDash();toast(eid?'Lead updated':'Lead saved');
+  }finally{loading(false);}
+}
+
+function editLead(id){
+  const l=DB.leads.find(x=>x.id===id);if(!l)return;
+  document.getElementById('ldmt').textContent='Edit Lead';sv('ldeid',id);
+  sv('ln',l.nm);sv('lbz',l.bz);sv('lem',l.em);sv('lph',l.ph);sv('lwb',l.wb);sv('lsv',l.sv);sv('lbg',l.bg);sv('lst',l.st);sv('lfu',l.fu);sv('lnt',l.nt);
+  closeDp();openM('ldm');
+}
+
+async function delLead(id){
+  if(!confirm('Delete this lead?'))return;
+  loading(true);
+  const{error}=await sb.from('leads').delete().eq('id',id);
+  loading(false);
+  if(dbErr(error,'delete lead'))return;
+  DB.leads=DB.leads.filter(x=>x.id!==id);rLeads();closeDp();if(cur==='dashboard')rDash();toast('Lead deleted');
+}
+
+function showLDp(id){
+  const l=DB.leads.find(x=>x.id===id);if(!l)return;
+  document.getElementById('dpn').textContent=l.nm;
+  document.getElementById('dpc').innerHTML=`<div class="dr"><div class="dl">Business</div><div class="dv">${esc(l.bz||'—')}</div></div><div class="dr"><div class="dl">Email</div><div class="dv">${esc(l.em||'—')}</div></div><div class="dr"><div class="dl">Phone</div><div class="dv">${esc(l.ph||'—')}</div></div><div class="dr"><div class="dl">Website</div><div class="dv">${esc(l.wb||'—')}</div></div><div class="dr"><div class="dl">Service</div><div class="dv">${esc(l.sv||'—')}</div></div><div class="dr"><div class="dl">Budget</div><div class="dv">${esc(l.bg||'—')}</div></div><div class="dr"><div class="dl">Status</div><div class="dv">${bdg(l.st,LBM)}</div></div><div class="dr"><div class="dl">Follow-up</div><div class="dv">${fmd(l.fu)}</div></div><div class="dr"><div class="dl">Notes</div><div class="dv">${esc(l.nt||'—')}</div></div>`;
+  document.getElementById('dpe').onclick=()=>editLead(id);document.getElementById('dpd').onclick=()=>delLead(id);
+  document.getElementById('ldp').classList.add('open');
+}
+function closeDp(){document.getElementById('ldp').classList.remove('open');}
+
+// ── LOCAL OUTREACH ────────────────────────────────────────────────────────────
+function rLocal(){
+  const q=(g('losrch')||'').toLowerCase(),f=g('lofilt');
+  const data=DB.lout.filter(o=>(!q||o.bn.toLowerCase().includes(q))&&(!f||o.st===f));
+  const tb=document.getElementById('lotb'),em=document.getElementById('loe');
+  if(!data.length){tb.innerHTML='';em.style.display='block';return;}
+  em.style.display='none';
+  tb.innerHTML=data.map(o=>`<tr><td><strong>${esc(o.bn)}</strong></td><td>${esc(o.ow||'—')}</td><td>${esc(o.em||'—')}</td><td>${esc(o.bt||'—')}</td><td>${bdg(o.st,LOBM)}</td><td>${fmd(o.lc)}</td><td onclick="event.stopPropagation()"><div class="atd"><button class="btn bg2 bxs" onclick="editLocal('${o.id}')">Edit</button><button class="btn bdn bxs" onclick="delLocal('${o.id}')">Del</button></div></td></tr>`).join('');
+}
+
+function openLoModal(){
+  ['lobn','loow','loem','lowb','lont'].forEach(x=>sv(x,''));sv('lobt','Restaurant');sv('lost','Not Contacted');sv('lolc','');sv('loeid','');
+  document.getElementById('lomt').textContent='Add Business';openM('lom');
+}
+
+async function saveLocal(){
+  const bn=g('lobn').trim();if(!bn){toast('Business name required');return;}
+  const eid=g('loeid');
+  const row={business_name:bn,contact_name:g('loow')||null,email:g('loem')||null,website:g('lowb')||null,business_type:g('lobt'),status:g('lost'),last_contact:g('lolc')||null,notes:g('lont')||null,outreach_type:'local'};
+  loading(true);
+  try{
+    if(eid){
+      const{data,error}=await sb.from('outreach').update(row).eq('id',eid).select().single();
+      if(dbErr(error,'update outreach')){loading(false);return;}
+      const i=DB.lout.findIndex(x=>x.id===eid);DB.lout[i]=mO(data);
+    }else{
+      const{data,error}=await sb.from('outreach').insert([row]).select().single();
+      if(dbErr(error,'insert outreach')){loading(false);return;}
+      DB.lout.unshift(mO(data));
+    }
+    closeM('lom');rLocal();if(cur==='dashboard')rDash();toast(eid?'Updated':'Saved');
+  }finally{loading(false);}
+}
+
+function editLocal(id){
+  const o=DB.lout.find(x=>x.id===id);if(!o)return;
+  document.getElementById('lomt').textContent='Edit Business';sv('loeid',id);
+  sv('lobn',o.bn);sv('loow',o.ow);sv('loem',o.em);sv('lowb',o.wb);sv('lobt',o.bt);sv('lost',o.st);sv('lolc',o.lc);sv('lont',o.nt);
+  openM('lom');
+}
+
+async function delLocal(id){
+  if(!confirm('Delete?'))return;
+  loading(true);const{error}=await sb.from('outreach').delete().eq('id',id);loading(false);
+  if(dbErr(error,'delete outreach'))return;
+  DB.lout=DB.lout.filter(x=>x.id!==id);rLocal();toast('Deleted');
+}
+
+// ── LINKEDIN OUTREACH ─────────────────────────────────────────────────────────
+function rLiOut(){
+  const q=(g('lisrch')||'').toLowerCase(),f=g('lifilt');
+  const data=DB.liout.filter(o=>(!q||(o.nm+(o.co||'')).toLowerCase().includes(q))&&(!f||o.cs===f));
+  const tb=document.getElementById('litb'),em=document.getElementById('lie');
+  if(!data.length){tb.innerHTML='';em.style.display='block';return;}
+  em.style.display='none';
+  tb.innerHTML=data.map(o=>`<tr><td><strong>${esc(o.nm)}</strong></td><td>${esc(o.ti||'—')}</td><td>${esc(o.co||'—')}</td><td>${bdg(o.cs,LIBM)}</td><td>${o.ms?'<span class="badge b-gr">Sent ✓</span>':'<span class="badge b-gy">Not sent</span>'}</td><td style="max-width:110px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${esc(o.rp||'—')}</td><td>${fmd(o.fu)}</td><td onclick="event.stopPropagation()"><div class="atd"><button class="btn bg2 bxs" onclick="editLiOut('${o.id}')">Edit</button><button class="btn bdn bxs" onclick="delLiOut('${o.id}')">Del</button></div></td></tr>`).join('');
+}
+
+function openLiModal(){
+  ['lin','lit','lic','liu','lirp'].forEach(x=>sv(x,''));sv('limsb',false);sv('lics','Not Connected');sv('lifu','');sv('lieid','');openM('liom');
+}
+
+async function saveLiOut(){
+  const nm=g('lin').trim();if(!nm){toast('Name required');return;}
+  const eid=g('lieid');
+  const row={name:nm,title:g('lit')||null,company:g('lic')||null,linkedin_url:g('liu')||null,connection_status:g('lics'),message_sent:g('limsb'),response:g('lirp')||null,follow_up_date:g('lifu')||null};
+  loading(true);
+  try{
+    if(eid){
+      const{data,error}=await sb.from('linkedin_prospects').update(row).eq('id',eid).select().single();
+      if(dbErr(error,'update li')){loading(false);return;}
+      const i=DB.liout.findIndex(x=>x.id===eid);DB.liout[i]=mLi(data);
+    }else{
+      const{data,error}=await sb.from('linkedin_prospects').insert([row]).select().single();
+      if(dbErr(error,'insert li')){loading(false);return;}
+      DB.liout.unshift(mLi(data));
+    }
+    closeM('liom');rLiOut();toast('Saved');
+  }finally{loading(false);}
+}
+
+function editLiOut(id){
+  const o=DB.liout.find(x=>x.id===id);if(!o)return;
+  sv('lieid',id);sv('lin',o.nm);sv('lit',o.ti);sv('lic',o.co);sv('liu',o.ur);sv('lics',o.cs);sv('limsb',o.ms);sv('lifu',o.fu);sv('lirp',o.rp);
+  openM('liom');
+}
+
+async function delLiOut(id){
+  if(!confirm('Delete?'))return;
+  loading(true);const{error}=await sb.from('linkedin_prospects').delete().eq('id',id);loading(false);
+  if(dbErr(error,'delete li'))return;
+  DB.liout=DB.liout.filter(x=>x.id!==id);rLiOut();toast('Deleted');
+}
+
+// ── EMAIL TEMPLATES ───────────────────────────────────────────────────────────
+function emailTpl(type,bn,ow,pain){
+  const n=ow||'there';const pp=pain?`\n\nI noticed ${pain} — that's exactly the kind of thing I help with.`:'';
+  const T={
+    'Restaurant':`Subject: Quick question about ${bn}'s website\n\nHi ${n},\n\nI came across ${bn} and noticed your website could be working harder for you — specifically around capturing reservations and answering common questions after hours.${pp}\n\nI build AI chat assistants for restaurants in the Lexington area that handle FAQs, share menu info, and guide visitors to book a table automatically.\n\nWould you be open to seeing a 2-minute demo? No call needed — I can send everything over email.\n\n— Bryttani · ohbloom.com`,
+    'Salon & Spa':`Subject: A quick idea for ${bn}\n\nHi ${n},\n\nI was looking at ${bn} online and thought of something that could save you a lot of time — an AI assistant on your website that answers booking questions, shares your services and pricing, and captures client info automatically, even at 2am.${pp}\n\nI build these for salons in the area starting at $300. Would you like to see how it works? I can send a live demo link — no call needed.\n\n— Bryttani · ohbloom.com`,
+    'Fitness Studio':`Subject: Quick idea for ${bn}\n\nHi ${n},\n\nI build AI booking assistants and automation systems for fitness studios — so your website handles class questions, captures leads, and guides people to sign up automatically.${pp}\n\nWant me to send a quick demo?\n\n— Bryttani · ohbloom.com`,
+    'Coach & Consultant':`Subject: Are you losing leads between calls?\n\nHi ${n},\n\nI work with coaches and consultants to set up automated systems that capture leads, respond instantly, and onboard new clients without any manual work.${pp}\n\nStarting at $500. No call needed.\n\n— Bryttani · ohbloom.com`,
+    'Real Estate':`Subject: Automating your lead follow-up\n\nHi ${n},\n\nI help real estate professionals set up automated lead capture and follow-up systems so no inquiry falls through the cracks.${pp}\n\nEvery lead gets an instant response — without you lifting a finger. Starting at $500.\n\n— Bryttani · ohbloom.com`,
+    'Contractor':`Subject: A quick idea for ${bn}\n\nHi ${n},\n\nI help contractors automatically capture estimate requests and follow up with leads — so you're not losing jobs because you couldn't respond fast enough.${pp}\n\nStarting at $400. No call needed.\n\n— Bryttani · ohbloom.com`,
+    'Retail':`Subject: A quick idea for ${bn}\n\nHi ${n},\n\nI help retail businesses set up AI assistants that handle product questions, capture leads, and guide visitors to buy — even after hours.${pp}\n\nStarting at $300.\n\n— Bryttani · ohbloom.com`
+  };
+  return T[type]||`Subject: A quick idea for ${bn}\n\nHi ${n},\n\nI came across ${bn} and wanted to reach out — I build AI chatbots and automation systems for small businesses in the Lexington area that help capture leads and save time.${pp}\n\nWould you be open to a quick demo? No call needed.\n\n— Bryttani · ohbloom.com`;
+}
+
+function genLocalEmail(){const bn=g('etgn');if(!bn){toast('Enter a business name');return;}document.getElementById('etgtxt').textContent=emailTpl(g('etgt'),bn,g('etgo'),g('etgp'));document.getElementById('etgout').style.display='block';}
+
+async function addETGToOut(){
+  const bn=g('etgn');if(!bn)return;
+  const row={business_name:bn,contact_name:g('etgo')||null,email:null,website:null,business_type:g('etgt'),status:'Email Sent',last_contact:tod(),notes:'Added via Email Template Generator',outreach_type:'local'};
+  loading(true);const{data,error}=await sb.from('outreach').insert([row]).select().single();loading(false);
+  if(dbErr(error,'add to outreach'))return;
+  DB.lout.unshift(mO(data));rLocal();toast('Added to outreach tracker');
+}
+
+function genAIEmail(){const bn=g('aibn');if(!bn){toast('Enter a business name');return;}document.getElementById('aiett').textContent=emailTpl(g('aibt'),bn,g('aiow'),g('aipp'));document.getElementById('aieo').style.display='block';}
+
+async function addAIToOut(){
+  const bn=g('aibn');if(!bn)return;
+  const row={business_name:bn,contact_name:g('aiow')||null,email:null,website:g('aiwb')||null,business_type:g('aibt'),status:'Email Sent',last_contact:tod(),notes:'Added via AI Tools',outreach_type:'local'};
+  loading(true);const{data,error}=await sb.from('outreach').insert([row]).select().single();loading(false);
+  if(dbErr(error,'add ai to outreach'))return;
+  DB.lout.unshift(mO(data));toast('Added to outreach tracker');
+}
+
+// ── LINKEDIN MSG GENERATOR ────────────────────────────────────────────────────
+function genLiMsg(){
+  const nm=g('lmgn')||'there',ind=g('lmgi')||'your industry',tp=g('lmgt');
+  const M={'Connection Request':`Hi ${nm} — I noticed you're in ${ind} and wanted to connect. I work with small businesses on AI automation and web systems that save time and capture more leads. Would love to be in your network!\n\n— Bryttani`,'First Message After Connecting':`Hi ${nm}, thanks for connecting!\n\nI build AI chatbots and automation systems for ${ind} businesses — specifically around lead capture and client onboarding. If that's ever something you're thinking about, I'd love to share how it works. No pitch, just a quick look.\n\n— Bryttani · ohbloom.com`,'Follow-up':`Hi ${nm}, just wanted to follow up on my last message. I know things get busy — if you'd like to see a quick demo of what I build, I'm happy to send a link over. No call needed.\n\n— Bryttani`};
+  document.getElementById('lmgtxt').textContent=M[tp]||M['Connection Request'];document.getElementById('lmgout').style.display='block';
+}
+
+// ── LINKEDIN POST GENERATOR ───────────────────────────────────────────────────
+function genLPPost(){
+  const tp=g('lpt'),topic=g('lptp')||'AI automation for small businesses';
+  const P={'Value Post':`Is your website actually working for you — or just sitting there?\n\nHere's what most small business owners don't realize:\n\n1. Your website should be capturing leads 24/7 — not just showing your hours\n2. AI tools can handle 80% of repetitive client questions automatically\n3. You don't need a big budget or tech team to make this happen\n\nThe fix is simpler than you think.\n\nIf you're a small business owner dealing with ${topic}, drop a comment or message me. I'll show you exactly what I'd build.\n\n#SmallBusiness #AIAutomation #Automation #LexingtonSC`,'Story Post':`I talked to a business owner last week who was answering the same 5 questions every single day.\n\nShe was spending 30+ minutes a day just on that — and losing leads in the process.\n\nI see this constantly when it comes to ${topic}.\n\nHere's what I built to fix it: a simple AI assistant on her website that handles all of it automatically — 24/7.\n\nIf your business is dealing with the same thing — this is exactly what I do.\n\n👉 ohbloom.com\n\n#SmallBusiness #AIAutomation #LexingtonSC`,'Demo Showcase':`Here's what I built for a local business this week:\n\n→ AI chatbot that answers FAQs automatically\n→ Lead capture that texts the owner when someone's interested\n→ Follow-up sequence that runs itself\n\nTotal setup: 3 days. Investment: $500.\n\n${topic} is something I help small businesses automate at Bloom Digital.\n\n👉 ohbloom.com\n\n#SmallBusiness #AITools #LexingtonSC`,'Direct Offer':`If you run a small business and you're still handling ${topic} manually — this is for you.\n\nI build systems that do it automatically. Starting at $300.\n\n✓ AI chatbot live on your website in days\n✓ Leads captured and sent straight to your phone\n✓ Follow-up sequences that run without you\n\nSend me a message or visit ohbloom.com\n\n#SmallBusiness #Automation #LexingtonSC`,'Behind the Scenes':`What does a day building AI tools for small businesses actually look like?\n\nThis week: ${topic}.\n\n→ Discovery call to understand the business\n→ Building chatbot flows and automations\n→ Testing as a real customer would\n→ Handing off with a full walkthrough\n\nThe ROI is immediate — clients stop losing leads overnight.\n\nDM me or visit ohbloom.com\n\n#SmallBusiness #BehindTheScenes #AIAutomation`};
+  document.getElementById('lptxt').textContent=P[tp]||P['Value Post'];document.getElementById('lpout').style.display='block';
+}
+
+// ── PROPOSAL GENERATOR ────────────────────────────────────────────────────────
+const PI={'AI Chatbot':['Custom AI chatbot trained on your business info and FAQs','Handles inquiries, captures leads, and answers questions 24/7','Embedded directly on your existing website','Admin panel to update responses anytime','30 days of post-launch support'],'Website + Chatbot':['Full website redesign and development','Mobile-responsive, fast-loading design','AI chatbot integrated into the site','Lead capture forms and contact flows','SEO basics and Google-ready setup','30 days of post-launch support'],'Lead Automation':['Automated lead capture from your website or social','Instant notification to your phone or email per new lead','Follow-up email or text sequence (up to 3 steps)','Simple tracking dashboard','30 days of post-launch support'],'Onboarding Automation':['Automated welcome sequence for new clients','Digital intake form or questionnaire','Contract or agreement delivery automation','Onboarding checklist delivery','30 days of post-launch support'],'Web App':['Custom web application built to your requirements','User authentication if needed','Database and backend setup','Mobile-responsive frontend','Testing and QA','30 days of post-launch support'],'Custom Package':['Scope defined in discovery call','All deliverables documented before kickoff','Milestone-based delivery','30 days of post-launch support']};
+const PA={'AI Chatbot':"We'll begin with a discovery session to document your most common customer questions and business details. From there, I'll build and train a custom AI assistant that handles inquiries, captures leads, and represents your brand — without you lifting a finger.",'Website + Chatbot':"We'll start with a discovery session to align on design, messaging, and goals. I'll build a modern, fast website that works on all devices — and integrate an AI assistant that captures leads and handles FAQs automatically.",'Lead Automation':"We'll map out your current lead flow and identify where prospects are falling through the cracks. I'll build an automated system that captures every lead, notifies you instantly, and follows up on your behalf.",'Onboarding Automation':"We'll document your current onboarding process and identify every manual step. I'll build an automated system that handles welcome messages, intake, contracts, and client setup — professionally.",'Web App':"We'll align on scope, user flows, and requirements before any code is written. I build clean, fast web applications designed to solve your specific business problem.",'Custom Package':"Based on our discovery conversation, I'll design a custom scope that addresses your specific needs and goals."};
+
+function genProp(){
+  const cl=g('prc'),bz=g('prb'),svc=g('prs'),pr=g('prp'),tm=g('prt'),ds=g('prd');
+  if(!cl||!bz){toast('Client name and business name required');return;}
+  const inc=(PI[svc]||PI['Custom Package']).map(i=>'• '+i).join('\n');
+  const sep='━'.repeat(42);
+  const out=`BLOOM DIGITAL — PROJECT PROPOSAL\n${sep}\nPrepared for: ${cl} · ${bz}\nDate: ${new Date().toLocaleDateString('en-US',{year:'numeric',month:'long',day:'numeric'})}\nPrepared by: Bryttani Patterson · ohbloom.com · hello@ohbloom.com\n\n${sep}\nPROJECT OVERVIEW\n${sep}\n${bz} has expressed interest in ${svc}. This proposal outlines the scope, investment, and timeline.${ds?'\n\n'+ds:''}\n\n${sep}\nTHE APPROACH\n${sep}\n${PA[svc]||PA['Custom Package']}\n\n${sep}\nWHAT'S INCLUDED\n${sep}\n${inc}\n\n${sep}\nINVESTMENT\n${sep}\n${pr||'[Price TBD]'} — due in two installments: 50% to begin, 50% on delivery\n\n${sep}\nTIMELINE\n${sep}\n${tm||'[Timeline TBD]'} from project kickoff\n\n${sep}\nNEXT STEPS\n${sep}\nTo move forward, reply to this proposal or reach out at hello@ohbloom.com.\nA 50% deposit confirms your spot and begins the project.\n\nThis proposal is valid for 14 days.\n\nBryttani Patterson\nBloom Digital · ohbloom.com`;
+  document.getElementById('prtxt').textContent=out;document.getElementById('prout').style.display='block';
+}
+
+// ── INCOME ────────────────────────────────────────────────────────────────────
+function rIncome(){
+  const now=new Date(),mo=now.getMonth(),yr=now.getFullYear();
+  document.getElementById('ant').textContent=fm$(DB.inc.reduce((a,b)=>a+(+b.amt),0));
+  const mr=DB.inc.filter(p=>{const d=new Date(p.dt);return d.getMonth()===mo&&d.getFullYear()===yr;}).reduce((a,b)=>a+(+b.amt),0);
+  document.getElementById('mrev').textContent=fm$(mr);
+  const goal=DB.cfg.goal||5000,pct=Math.min(100,Math.round(mr/goal*100));
+  document.getElementById('iprog').style.width=pct+'%';document.getElementById('glbl').textContent=pct+'% of '+fm$(goal)+' goal reached';document.getElementById('gi').value=goal;
+  const sorted=[...DB.inc].sort((a,b)=>new Date(b.dt)-new Date(a.dt));
+  const tb=document.getElementById('itb'),em=document.getElementById('ie');
+  if(!sorted.length){tb.innerHTML='';em.style.display='block';}else{em.style.display='none';tb.innerHTML=sorted.map(p=>`<tr><td>${fmd(p.dt)}</td><td>${esc(p.cl)}</td><td>${esc(p.pj||'—')}</td><td><strong>${fm$(p.amt)}</strong></td><td>${esc(p.mt||'—')}</td><td><div class="atd"><button class="btn bg2 bxs" onclick="editInc('${p.id}')">Edit</button><button class="btn bdn bxs" onclick="delInc('${p.id}')">Del</button></div></td></tr>`).join('');}
+  const MN=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+  const bm=Array(12).fill(0);DB.inc.forEach(p=>{const d=new Date(p.dt);if(d.getFullYear()===yr)bm[d.getMonth()]+=(+p.amt);});
+  const mx=Math.max(...bm,1);
+  document.getElementById('ichart').innerHTML=bm.map((v,i)=>`<div class="bcl"><div style="font-size:9px;font-weight:600;color:var(--text)">${v>0?'$'+Math.round(v/100)*100:''}</div><div class="bb" style="height:${Math.round(v/mx*100)}%"></div><div class="bbl">${MN[i]}</div></div>`).join('');
+  document.getElementById('mgrid').innerHTML=MN.map((m,i)=>`<div class="mc"><div class="mn">${m}</div><div class="mt">${bm[i]>0?fm$(bm[i]):'—'}</div></div>`).join('');
+}
+
+async function saveGoal(){
+  const goal=parseInt(g('gi'))||5000;DB.cfg.goal=goal;
+  const{error}=await sb.from('settings').upsert({key:'goal',value:String(goal)},{onConflict:'key'});
+  if(dbErr(error,'save goal'))return;
+  rIncome();if(cur==='dashboard')rDash();toast('Goal saved');
+}
+
+function openIncModal(){
+  ['incl','incp','inca','incn'].forEach(x=>sv(x,''));sv('incd',tod());sv('incmt2','Bank Transfer');sv('inceid','');
+  document.getElementById('incmt').textContent='Log Payment';openM('incm');
+}
+
+async function saveIncome(){
+  const cl=g('incl').trim(),amt=g('inca'),dt=g('incd');
+  if(!cl||!amt||!dt){toast('Client, amount, and date required');return;}
+  const eid=g('inceid');
+  const row={client_name:cl,project:g('incp')||null,amount:parseFloat(amt),payment_date:dt,payment_method:g('incmt2'),notes:g('incn')||null};
+  loading(true);
+  try{
+    if(eid){
+      const{data,error}=await sb.from('income').update(row).eq('id',eid).select().single();
+      if(dbErr(error,'update income')){loading(false);return;}
+      const i=DB.inc.findIndex(x=>x.id===eid);DB.inc[i]=mI(data);
+    }else{
+      const{data,error}=await sb.from('income').insert([row]).select().single();
+      if(dbErr(error,'insert income')){loading(false);return;}
+      DB.inc.unshift(mI(data));
+    }
+    closeM('incm');rIncome();if(cur==='dashboard')rDash();toast(eid?'Updated':'Payment logged');
+  }finally{loading(false);}
+}
+
+function editInc(id){
+  const p=DB.inc.find(x=>x.id===id);if(!p)return;
+  document.getElementById('incmt').textContent='Edit Payment';sv('inceid',id);sv('incl',p.cl);sv('incp',p.pj);sv('inca',p.amt);sv('incd',p.dt);sv('incmt2',p.mt);sv('incn',p.nt);openM('incm');
+}
+
+async function delInc(id){
+  if(!confirm('Delete this payment?'))return;
+  loading(true);const{error}=await sb.from('income').delete().eq('id',id);loading(false);
+  if(dbErr(error,'delete income'))return;
+  DB.inc=DB.inc.filter(x=>x.id!==id);rIncome();toast('Deleted');
+}
+
+// ── LINKEDIN PLANNER ──────────────────────────────────────────────────────────
+const DAYS=['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
+const IDEAS=['What an AI chatbot actually costs for a small business','I built a fake salon website — here\'s what happened','3 things your website should be doing while you sleep','Why I left banking to build AI tools for small businesses','The $300 system that captures leads after hours','What 10 years in operations taught me about automation','I\'m a mom building an AI business — here\'s week 1','How a salon owner could save 5 hours a week with one tool','Stop saying "I\'m open for work" — do this instead','The difference between a website and a website that works'];
+let wo=0;
+function getWS(off){const d=new Date();d.setDate(d.getDate()-d.getDay()+(off*7));d.setHours(0,0,0,0);return d;}
+function mw(d){wo+=d;rLI();}
+
+function rLI(){
+  const ws=getWS(wo),we=new Date(ws);we.setDate(we.getDate()+6);
+  const op={month:'short',day:'numeric'};
+  document.getElementById('wlbl').textContent=ws.toLocaleDateString('en-US',op)+' – '+we.toLocaleDateString('en-US',op);
+  const now=new Date(),s7=new Date();s7.setDate(s7.getDate()-6);
+  const pub=DB.posts.filter(p=>p.pst==='Published'&&new Date(p.dt)>=s7&&new Date(p.dt)<=now).length;
+  document.getElementById('stk').innerHTML=`<div class="streak">🔥 ${pub} day${pub!==1?'s':''} posted this week</div>`;
+  const tds=tod();
+  document.getElementById('wcal').innerHTML=Array.from({length:7},(_,i)=>{const d=new Date(ws);d.setDate(d.getDate()+i);const ds=d.toISOString().split('T')[0];const dp=DB.posts.filter(p=>p.dt===ds);return`<div class="dc${ds===tds?' td':''}"><div class="dcl">${DAYS[d.getDay()]}</div><div class="dcn">${d.getDate()}</div>${dp.map(p=>`<div class="dcp" onclick="editPost('${p.id}')" title="${esc(p.tt)}">${esc(p.tt)}</div>`).join('')}</div>`;}).join('');
+  const sorted=[...DB.posts].sort((a,b)=>new Date(b.dt)-new Date(a.dt));
+  const tb=document.getElementById('ptb'),em=document.getElementById('pe');
+  if(!sorted.length){tb.innerHTML='';em.style.display='block';}else{em.style.display='none';tb.innerHTML=sorted.map(p=>`<tr><td>${fmd(p.dt)}</td><td><strong>${esc(p.tt)}</strong></td><td><span class="badge b-te">${esc(p.ty)}</span></td><td>${bdg(p.pst,PBM)}</td><td><div class="atd"><button class="btn bg2 bxs" onclick="editPost('${p.id}')">Edit</button><button class="btn bdn bxs" onclick="delPost('${p.id}')">Del</button></div></td></tr>`).join('');}
+  document.getElementById('idchips').innerHTML=IDEAS.map((idea,i)=>`<div class="chip" onclick="prefillPost(${i})">${esc(idea)}</div>`).join('');
+}
+
+function openPostModal(pre){
+  ['postt','postc'].forEach(x=>sv(x,''));sv('postty','Value');sv('postst','Draft');sv('postd',tod());sv('posteid','');
+  document.getElementById('postmt').textContent='Add Post';if(pre)sv('postt',pre);openM('postm');
+}
+function prefillPost(i){openPostModal(IDEAS[i]);}
+
+async function savePost(){
+  const tt=g('postt').trim();if(!tt){toast('Title required');return;}
+  const eid=g('posteid');
+  const row={title:tt,post_type:g('postty'),content:g('postc')||null,scheduled_date:g('postd')||null,status:g('postst')};
+  loading(true);
+  try{
+    if(eid){
+      const{data,error}=await sb.from('linkedin_posts').update(row).eq('id',eid).select().single();
+      if(dbErr(error,'update post')){loading(false);return;}
+      const i=DB.posts.findIndex(x=>x.id===eid);DB.posts[i]=mP(data);
+    }else{
+      const{data,error}=await sb.from('linkedin_posts').insert([row]).select().single();
+      if(dbErr(error,'insert post')){loading(false);return;}
+      DB.posts.unshift(mP(data));
+    }
+    closeM('postm');rLI();toast(eid?'Updated':'Post saved');
+  }finally{loading(false);}
+}
+
+function editPost(id){
+  const p=DB.posts.find(x=>x.id===id);if(!p)return;
+  document.getElementById('postmt').textContent='Edit Post';sv('posteid',id);sv('postt',p.tt);sv('postty',p.ty);sv('postd',p.dt);sv('postst',p.pst);sv('postc',p.ct);openM('postm');
+}
+
+async function delPost(id){
+  if(!confirm('Delete this post?'))return;
+  loading(true);const{error}=await sb.from('linkedin_posts').delete().eq('id',id);loading(false);
+  if(dbErr(error,'delete post'))return;
+  DB.posts=DB.posts.filter(x=>x.id!==id);rLI();toast('Deleted');
+}
+
+// ── SETTINGS ──────────────────────────────────────────────────────────────────
+function loadSettings(){sv('stn',DB.cfg.name);sv('stb',DB.cfg.biz);sv('stw',DB.cfg.site);sv('ste',DB.cfg.email);sv('stg',DB.cfg.goal);}
+
+async function saveSettings(){
+  const updates=[{key:'name',value:g('stn')},{key:'biz',value:g('stb')},{key:'site',value:g('stw')},{key:'email',value:g('ste')},{key:'goal',value:g('stg')}];
+  loading(true);const{error}=await sb.from('settings').upsert(updates,{onConflict:'key'});loading(false);
+  if(dbErr(error,'save settings'))return;
+  DB.cfg.name=g('stn');DB.cfg.biz=g('stb');DB.cfg.site=g('stw');DB.cfg.email=g('ste');DB.cfg.goal=parseInt(g('stg'))||5000;
+  document.getElementById('sbn').textContent=DB.cfg.name;toast('Settings saved');
+}
+
+// ── EXPORT CSV ────────────────────────────────────────────────────────────────
+async function expCSV(){
+  loading(true);
+  try{
+    const[l,o,li,inc,posts]=await Promise.all([sb.from('leads').select('*'),sb.from('outreach').select('*'),sb.from('linkedin_prospects').select('*'),sb.from('income').select('*'),sb.from('linkedin_posts').select('*')]);
+    function toCSV(rows){
+      if(!rows||!rows.length)return'(no data)\n';
+      const keys=Object.keys(rows[0]);
+      return keys.join(',')+'\n'+rows.map(r=>keys.map(k=>{const v=r[k]==null?'':String(r[k]);return v.includes(',')||v.includes('"')||v.includes('\n')?`"${v.replace(/"/g,'""')}"`:v;}).join(',')).join('\n')+'\n';
+    }
+    let csv=`FreelancerOS Export — ${new Date().toLocaleDateString()}\n\nLEADS\n${toCSV(l.data)}\nOUTREACH\n${toCSV(o.data)}\nLINKEDIN PROSPECTS\n${toCSV(li.data)}\nINCOME\n${toCSV(inc.data)}\nLINKEDIN POSTS\n${toCSV(posts.data)}`;
+    const b=new Blob([csv],{type:'text/csv'});const a=document.createElement('a');a.href=URL.createObjectURL(b);a.download='freelanceros-'+tod()+'.csv';a.click();toast('Exported to CSV');
+  }catch(e){toast('Export failed — check connection');}
+  finally{loading(false);}
+}
+
+// ── CLEAR DATA ────────────────────────────────────────────────────────────────
+async function clearData(){
+  if(!confirm('Delete ALL data from Supabase? This cannot be undone.'))return;
+  if(!confirm('Last chance — are you sure?'))return;
+  loading(true);
+  await Promise.all([sb.from('leads').delete().neq('id','00000000-0000-0000-0000-000000000000'),sb.from('outreach').delete().neq('id','00000000-0000-0000-0000-000000000000'),sb.from('linkedin_prospects').delete().neq('id','00000000-0000-0000-0000-000000000000'),sb.from('income').delete().neq('id','00000000-0000-0000-0000-000000000000'),sb.from('linkedin_posts').delete().neq('id','00000000-0000-0000-0000-000000000000')]);
+  DB.leads=[];DB.lout=[];DB.liout=[];DB.inc=[];DB.posts=[];
+  loading(false);rDash();toast('All data cleared');
+}
+
+// ── INIT ──────────────────────────────────────────────────────────────────────
+(async()=>{
+  await loadAll();
+  document.getElementById('sbn').textContent=DB.cfg.name;
+  rDash();
+  rLI();
+})();
+</script>
+</body>
+</html>
