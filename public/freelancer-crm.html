@@ -225,7 +225,7 @@ tbody tr{cursor:pointer}tbody tr:hover{background:#F5F0E8}
 <!-- OUTREACH -->
 <div id="s-outreach" class="sec">
   <div class="ph"><h2>Outreach Manager</h2><p>Track local businesses and LinkedIn prospects.</p></div>
-  <div class="tabs"><div class="tab active" onclick="stab('or','local',this)">Local Business Outreach</div><div class="tab" onclick="stab('or','li',this)">LinkedIn Outreach</div></div>
+  <div class="tabs"><div class="tab active" onclick="stab('or','local',this)">Local Business Outreach</div><div class="tab" onclick="stab('or','li',this)">LinkedIn Outreach</div><div class="tab" onclick="stab('or','apollo',this)">🔍 Find Leads</div></div>
   <div id="tp-or-local" class="tp active">
     <div class="rb">
       <div class="fbar"><input type="text" id="losrch" class="fi" placeholder="Search business…" oninput="rLocal()" style="width:200px"><select id="lofilt" class="fs" onchange="rLocal()"><option value="">All Statuses</option><option>Not Contacted</option><option>Email Sent</option><option>Followed Up</option><option>Call Scheduled</option><option>Converted</option><option>Not Interested</option></select></div>
@@ -238,6 +238,34 @@ tbody tr{cursor:pointer}tbody tr:hover{background:#F5F0E8}
       <div class="fr" style="margin-bottom:16px"><div class="fg"><label>Owner Name (optional)</label><input id="etgo" class="fi" style="width:100%" placeholder="e.g. Sarah"></div><div class="fg"><label>Pain Point (optional)</label><input id="etgp" class="fi" style="width:100%" placeholder="e.g. no online booking"></div></div>
       <button class="btn bp" onclick="genLocalEmail()">Generate Email</button>
       <div id="etgout" style="display:none"><div class="out" id="etgtxt"></div><div style="display:flex;gap:8px;margin-top:10px"><button class="btn bg2 bsm" onclick="cp('etgtxt')">Copy Email</button><button class="btn ba bsm" onclick="addETGToOut()">Add to Outreach Tracker</button></div></div>
+    </div>
+  </div>
+  <div id="tp-or-apollo" class="tp">
+    <div class="card" style="margin-bottom:20px">
+      <div class="ct">Apollo.io Lead Finder</div>
+      <p style="font-size:13px;color:var(--muted);margin-bottom:20px">Search for leads on Apollo.io — find local businesses and contacts that match your niche, then add them back here.</p>
+      <div class="fr" style="margin-bottom:12px">
+        <div class="fg"><label>Industry / Business Type</label><select id="apin" class="fs" style="width:100%"><option>Restaurant</option><option>Salon &amp; Spa</option><option>Fitness Studio</option><option>Coach &amp; Consultant</option><option>Real Estate</option><option>Contractor</option><option>Retail</option><option>Marketing Agency</option><option>Healthcare</option><option>Legal</option><option>Accounting</option><option>Other</option></select></div>
+        <div class="fg"><label>City / Location</label><input id="aploc" class="fi" style="width:100%" placeholder="Lexington, SC"></div>
+      </div>
+      <div class="fg" style="margin-bottom:20px"><label>Company Size</label><select id="apcs" class="fs" style="width:260px"><option value="">Any Size</option><option value="1,10">1–10 employees</option><option value="11,50">11–50 employees</option><option value="51,200">51–200 employees</option><option value="201,500">201–500 employees</option></select></div>
+      <div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap">
+        <button class="btn bp" onclick="searchApollo()"><svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>Search Apollo</button>
+        <button class="btn ba" onclick="addFromApollo()"><svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>Add Lead from Apollo</button>
+      </div>
+    </div>
+    <div class="card">
+      <div class="ct">How to find &amp; import leads</div>
+      <ol style="font-size:13px;line-height:2.2;padding-left:20px;color:var(--text)">
+        <li>Click <strong>Search Apollo</strong> — it opens Apollo.io with your filters pre-filled</li>
+        <li>Create a free Apollo account if you don't have one (25 free exports/month)</li>
+        <li>Find contacts that match your search criteria</li>
+        <li>Copy their info manually or export from Apollo</li>
+        <li>Come back and click <strong>Add Lead from Apollo</strong> to log them here</li>
+      </ol>
+      <div style="margin-top:16px;padding:12px 14px;background:#F0FDFA;border:1px solid #99F6E4;border-radius:8px;font-size:12px;color:#0F766E">
+        <strong>Tip:</strong> Apollo's free plan includes 50 email credits and 10 export credits per month. Upgrade for bulk exports.
+      </div>
     </div>
   </div>
   <div id="tp-or-li" class="tp">
@@ -382,6 +410,31 @@ tbody tr{cursor:pointer}tbody tr:hover{background:#F5F0E8}
   <div class="fg"><label>Payment Method</label><select id="incmt2"><option>Bank Transfer</option><option>Venmo</option><option>PayPal</option><option>Cash App</option><option>Check</option><option>Other</option></select></div>
   <div class="fg"><label>Notes</label><textarea id="incn" style="min-height:60px"></textarea></div>
   <div class="fac"><button class="btn bg2" onclick="closeM('incm')">Cancel</button><button class="btn bp" onclick="saveIncome()">Save Payment</button></div>
+</div></div>
+
+<!-- BUFFER PUBLISH MODAL -->
+<div id="bufm" class="mbd"><div class="modal">
+  <button class="mcl" onclick="closeM('bufm')">×</button><h3>Publish to LinkedIn</h3><input type="hidden" id="bufpid">
+  <div style="background:#F0FDFA;border:1px solid #99F6E4;border-radius:10px;padding:14px 16px;margin-bottom:18px">
+    <div style="font-size:13px;font-weight:600;color:#0F766E;margin-bottom:4px">To post directly to LinkedIn, connect your Buffer account</div>
+    <div style="font-size:13px;color:var(--muted)">Buffer is a free social scheduling tool. Connect it once and schedule LinkedIn posts in seconds.</div>
+  </div>
+  <div style="font-size:11px;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:.4px;margin-bottom:8px">Your Post</div>
+  <div id="bufpost" style="background:#F9F9F7;border:1px solid var(--border);border-radius:8px;padding:16px;font-size:13px;line-height:1.7;white-space:pre-wrap;max-height:180px;overflow-y:auto;font-family:var(--bf);margin-bottom:18px"></div>
+  <div style="display:flex;gap:10px;flex-wrap:wrap;margin-bottom:20px">
+    <button class="btn bp" onclick="window.open('https://buffer.com','_blank')"><svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>Connect Buffer</button>
+    <button class="btn bg2" onclick="copyBufPost()"><svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>Copy Post to Clipboard</button>
+  </div>
+  <div style="background:#F9F9F7;border:1px solid var(--border);border-radius:8px;padding:14px 16px;margin-bottom:20px">
+    <div style="font-size:11px;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:.4px;margin-bottom:10px">Steps</div>
+    <ol style="font-size:13px;line-height:2.1;padding-left:18px;color:var(--text)">
+      <li>Copy your post using the button above</li>
+      <li>Open Buffer and connect your LinkedIn account</li>
+      <li>Paste your post and schedule it</li>
+      <li>Come back and click <strong>Mark as Published</strong> below</li>
+    </ol>
+  </div>
+  <div class="fac"><button class="btn bg2" onclick="closeM('bufm')">Cancel</button><button class="btn baf" onclick="markPublished()">✓ Mark as Published</button></div>
 </div></div>
 
 <!-- POST MODAL -->
@@ -577,7 +630,7 @@ function rLocal(){
   const tb=document.getElementById('lotb'),em=document.getElementById('loe');
   if(!data.length){tb.innerHTML='';em.style.display='block';return;}
   em.style.display='none';
-  tb.innerHTML=data.map(o=>`<tr><td><strong>${esc(o.bn)}</strong></td><td>${esc(o.ow||'—')}</td><td>${esc(o.em||'—')}</td><td>${esc(o.bt||'—')}</td><td>${bdg(o.st,LOBM)}</td><td>${fmd(o.lc)}</td><td onclick="event.stopPropagation()"><div class="atd"><button class="btn bg2 bxs" onclick="editLocal('${o.id}')">Edit</button><button class="btn bdn bxs" onclick="delLocal('${o.id}')">Del</button></div></td></tr>`).join('');
+  tb.innerHTML=data.map(o=>`<tr><td><strong>${esc(o.bn)}</strong></td><td>${esc(o.ow||'—')}</td><td>${esc(o.em||'—')}</td><td>${esc(o.bt||'—')}</td><td>${bdg(o.st,LOBM)}</td><td>${fmd(o.lc)}</td><td onclick="event.stopPropagation()"><div class="atd"><button class="btn bg2 bxs" onclick="editLocal('${o.id}')">Edit</button>${o.wb?`<button class="btn bg2 bxs" onclick="findEmail('${esc(o.wb)}')" title="Opens Hunter.io to find contact emails for this business — free for 25 searches/month">📧 Find Email</button>`:''}<button class="btn bdn bxs" onclick="delLocal('${o.id}')">Del</button></div></td></tr>`).join('');
 }
 
 function openLoModal(){
@@ -806,7 +859,7 @@ function rLI(){
   document.getElementById('wcal').innerHTML=Array.from({length:7},(_,i)=>{const d=new Date(ws);d.setDate(d.getDate()+i);const ds=d.toISOString().split('T')[0];const dp=DB.posts.filter(p=>p.dt===ds);return`<div class="dc${ds===tds?' td':''}"><div class="dcl">${DAYS[d.getDay()]}</div><div class="dcn">${d.getDate()}</div>${dp.map(p=>`<div class="dcp" onclick="editPost('${p.id}')" title="${esc(p.tt)}">${esc(p.tt)}</div>`).join('')}</div>`;}).join('');
   const sorted=[...DB.posts].sort((a,b)=>new Date(b.dt)-new Date(a.dt));
   const tb=document.getElementById('ptb'),em=document.getElementById('pe');
-  if(!sorted.length){tb.innerHTML='';em.style.display='block';}else{em.style.display='none';tb.innerHTML=sorted.map(p=>`<tr><td>${fmd(p.dt)}</td><td><strong>${esc(p.tt)}</strong></td><td><span class="badge b-te">${esc(p.ty)}</span></td><td>${bdg(p.pst,PBM)}</td><td><div class="atd"><button class="btn bg2 bxs" onclick="editPost('${p.id}')">Edit</button><button class="btn bdn bxs" onclick="delPost('${p.id}')">Del</button></div></td></tr>`).join('');}
+  if(!sorted.length){tb.innerHTML='';em.style.display='block';}else{em.style.display='none';tb.innerHTML=sorted.map(p=>`<tr><td>${fmd(p.dt)}</td><td><strong>${esc(p.tt)}</strong></td><td><span class="badge b-te">${esc(p.ty)}</span></td><td>${bdg(p.pst,PBM)}</td><td><div class="atd"><button class="btn bg2 bxs" onclick="editPost('${p.id}')">Edit</button><button class="btn baf bxs" onclick="openBufferModal('${p.id}')">Publish</button><button class="btn bdn bxs" onclick="delPost('${p.id}')">Del</button></div></td></tr>`).join('');}
   document.getElementById('idchips').innerHTML=IDEAS.map((idea,i)=>`<div class="chip" onclick="prefillPost(${i})">${esc(idea)}</div>`).join('');
 }
 
@@ -845,6 +898,57 @@ async function delPost(id){
   loading(true);const{error}=await sb.from('linkedin_posts').delete().eq('id',id);loading(false);
   if(dbErr(error,'delete post'))return;
   DB.posts=DB.posts.filter(x=>x.id!==id);rLI();toast('Deleted');
+}
+
+// ── APOLLO LEAD FINDER ───────────────────────────────────────────────────────
+function searchApollo(){
+  const ind=g('apin'),loc=g('aploc'),cs=g('apcs');
+  const params=new URLSearchParams();
+  if(ind) params.set('personTitles[]',ind);
+  if(loc) params.set('personLocations[]',loc);
+  if(cs){const[mn,mx]=cs.split(',');params.set('organizationNumEmployeesRanges[]',mn+'_'+mx);}
+  window.open('https://app.apollo.io/#/people?'+params.toString(),'_blank');
+}
+
+function addFromApollo(){
+  const bt=g('apin');
+  openLoModal();
+  sv('lobt',bt);
+  sv('lont','Found via Apollo.io lead search');
+}
+
+// ── HUNTER.IO EMAIL FINDER ────────────────────────────────────────────────────
+function findEmail(website){
+  const domain=website.replace(/^https?:\/\//,'').replace(/\/.*/,'').replace(/^www\./,'');
+  window.open('https://hunter.io/domain-search?domain='+encodeURIComponent(domain),'_blank');
+}
+
+// ── BUFFER PUBLISHER ──────────────────────────────────────────────────────────
+function openBufferModal(id){
+  const p=DB.posts.find(x=>x.id===id);if(!p)return;
+  sv('bufpid',id);
+  document.getElementById('bufpost').textContent=p.ct||(p.tt+'\n\n(no content yet — edit this post to add your copy)');
+  openM('bufm');
+}
+
+function copyBufPost(){
+  const el=document.getElementById('bufpost');
+  (navigator.clipboard?navigator.clipboard.writeText(el.textContent):Promise.reject())
+    .then(()=>toast('Post copied to clipboard!'))
+    .catch(()=>{const r=document.createRange();r.selectNode(el);window.getSelection().removeAllRanges();window.getSelection().addRange(r);document.execCommand('copy');window.getSelection().removeAllRanges();toast('Post copied!');});
+}
+
+async function markPublished(){
+  const id=g('bufpid');if(!id)return;
+  const p=DB.posts.find(x=>x.id===id);if(!p)return;
+  const row={status:'Published',scheduled_date:p.dt||tod()};
+  loading(true);
+  try{
+    const{data,error}=await sb.from('linkedin_posts').update(row).eq('id',id).select().single();
+    if(dbErr(error,'mark published')){loading(false);return;}
+    const i=DB.posts.findIndex(x=>x.id===id);DB.posts[i]=mP(data);
+    closeM('bufm');rLI();toast('Post marked as Published 🎉');
+  }finally{loading(false);}
 }
 
 // ── SETTINGS ──────────────────────────────────────────────────────────────────
