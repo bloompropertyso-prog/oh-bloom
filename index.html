@@ -1,14 +1,745 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Bryttani Patterson — Web Design, AI Agents & Business Automation | ohbloom.com</title>
-    <meta name="description" content="Modern websites, AI agents, and business automation for small businesses. Based in Lexington, SC. No tech jargon — plain English." />
-  </head>
-  <body>
-    <div id="root"></div>
-    <script type="module" src="/src/main.jsx"></script>
-  </body>
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Bryttani Patterson — AI Systems for Solopreneurs</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --white:   #F8F8F6;
+    --black:   #1A1A1A;
+    --blue:    #2D4A6B;
+    --gold:    #B8963E;
+    --grey:    #E8E6E1;
+    --mid:     #6B6B6B;
+  }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--white);
+    color: var(--black);
+    font-size: 17px;
+    line-height: 1.6;
+  }
+
+  /* NAV */
+  nav {
+    padding: 1.25rem 2rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid var(--grey);
+    position: sticky;
+    top: 0;
+    background: var(--white);
+    z-index: 100;
+  }
+
+  .nav-name {
+    font-weight: 600;
+    font-size: 1rem;
+    color: var(--black);
+    text-decoration: none;
+    letter-spacing: -0.01em;
+  }
+
+  .nav-links {
+    display: flex;
+    gap: 2rem;
+    list-style: none;
+    align-items: center;
+  }
+
+  .nav-links a {
+    text-decoration: none;
+    color: var(--mid);
+    font-size: 0.9rem;
+    font-weight: 400;
+    transition: color 0.2s;
+  }
+
+  .nav-links a:hover { color: var(--black); }
+
+  .nav-cta {
+    background: var(--blue) !important;
+    color: var(--white) !important;
+    padding: 0.5rem 1.25rem;
+    border-radius: 4px;
+    font-weight: 500 !important;
+  }
+
+  /* HERO */
+  .hero {
+    max-width: 760px;
+    margin: 0 auto;
+    padding: 5rem 2rem 4rem;
+  }
+
+  .hero-label {
+    font-size: 0.85rem;
+    color: var(--gold);
+    font-weight: 500;
+    margin-bottom: 1.25rem;
+    letter-spacing: 0.02em;
+  }
+
+  .hero h1 {
+    font-size: clamp(2rem, 5vw, 3.25rem);
+    font-weight: 700;
+    line-height: 1.15;
+    letter-spacing: -0.03em;
+    color: var(--black);
+    margin-bottom: 1.5rem;
+    max-width: 680px;
+  }
+
+  .hero p {
+    font-size: 1.1rem;
+    color: var(--mid);
+    max-width: 560px;
+    line-height: 1.7;
+    margin-bottom: 2.5rem;
+  }
+
+  .hero-actions {
+    display: flex;
+    gap: 1rem;
+    flex-wrap: wrap;
+    align-items: center;
+  }
+
+  .btn-primary {
+    background: var(--blue);
+    color: var(--white);
+    padding: 0.875rem 1.75rem;
+    border-radius: 4px;
+    text-decoration: none;
+    font-weight: 600;
+    font-size: 0.95rem;
+    transition: background 0.2s;
+    display: inline-block;
+  }
+
+  .btn-primary:hover { background: #243d5a; }
+
+  .btn-ghost {
+    color: var(--black);
+    text-decoration: none;
+    font-size: 0.95rem;
+    font-weight: 500;
+    border-bottom: 1px solid var(--black);
+    padding-bottom: 1px;
+    transition: opacity 0.2s;
+  }
+
+  .btn-ghost:hover { opacity: 0.6; }
+
+  /* PROOF BAR */
+  .proof-bar {
+    border-top: 1px solid var(--grey);
+    border-bottom: 1px solid var(--grey);
+    padding: 1.25rem 2rem;
+    display: flex;
+    gap: 2.5rem;
+    flex-wrap: wrap;
+    max-width: 760px;
+    margin: 0 auto;
+  }
+
+  .proof-item {
+    font-size: 0.875rem;
+    color: var(--mid);
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+
+  .proof-item span {
+    color: var(--gold);
+    font-size: 1rem;
+  }
+
+  /* DEMO SECTION */
+  .demo-section {
+    max-width: 760px;
+    margin: 0 auto;
+    padding: 4rem 2rem;
+  }
+
+  .section-label {
+    font-size: 0.8rem;
+    color: var(--gold);
+    font-weight: 600;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    margin-bottom: 0.75rem;
+  }
+
+  .demo-section h2 {
+    font-size: clamp(1.4rem, 3vw, 2rem);
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    margin-bottom: 0.75rem;
+    color: var(--black);
+  }
+
+  .demo-section > p {
+    color: var(--mid);
+    margin-bottom: 2rem;
+    max-width: 520px;
+  }
+
+  .demo-frame {
+    background: var(--blue);
+    border-radius: 8px;
+    padding: 2.5rem 2rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 2rem;
+    flex-wrap: wrap;
+  }
+
+  .demo-frame-text h3 {
+    color: var(--white);
+    font-size: 1.1rem;
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+  }
+
+  .demo-frame-text p {
+    color: rgba(248,248,246,0.7);
+    font-size: 0.9rem;
+    max-width: 360px;
+    line-height: 1.6;
+  }
+
+  .demo-btn {
+    background: var(--gold);
+    color: var(--white);
+    padding: 0.875rem 1.5rem;
+    border-radius: 4px;
+    text-decoration: none;
+    font-weight: 600;
+    font-size: 0.9rem;
+    white-space: nowrap;
+    flex-shrink: 0;
+    transition: opacity 0.2s;
+  }
+
+  .demo-btn:hover { opacity: 0.85; }
+
+  /* SERVICES */
+  .services-section {
+    max-width: 760px;
+    margin: 0 auto;
+    padding: 4rem 2rem;
+    border-top: 1px solid var(--grey);
+  }
+
+  .services-section h2 {
+    font-size: clamp(1.4rem, 3vw, 2rem);
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    margin-bottom: 0.5rem;
+  }
+
+  .services-section > p {
+    color: var(--mid);
+    margin-bottom: 2.5rem;
+    max-width: 480px;
+  }
+
+  .service-list {
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+  }
+
+  .service-item {
+    padding: 1.75rem 0;
+    border-bottom: 1px solid var(--grey);
+    display: grid;
+    grid-template-columns: 1fr auto;
+    gap: 1rem;
+    align-items: start;
+  }
+
+  .service-item:first-child {
+    border-top: 1px solid var(--grey);
+  }
+
+  .service-name {
+    font-size: 1rem;
+    font-weight: 600;
+    color: var(--black);
+    margin-bottom: 0.35rem;
+  }
+
+  .service-desc {
+    font-size: 0.9rem;
+    color: var(--mid);
+    max-width: 480px;
+    line-height: 1.6;
+  }
+
+  .service-price {
+    font-size: 1rem;
+    font-weight: 700;
+    color: var(--blue);
+    white-space: nowrap;
+    padding-top: 0.1rem;
+  }
+
+  .service-tag {
+    display: inline-block;
+    background: var(--blue);
+    color: var(--white);
+    font-size: 0.7rem;
+    font-weight: 600;
+    padding: 0.2rem 0.6rem;
+    border-radius: 3px;
+    margin-left: 0.5rem;
+    vertical-align: middle;
+    letter-spacing: 0.02em;
+  }
+
+  .retainer-note {
+    margin-top: 1.25rem;
+    font-size: 0.875rem;
+    color: var(--mid);
+    padding: 1rem 1.25rem;
+    background: var(--grey);
+    border-radius: 4px;
+    line-height: 1.6;
+  }
+
+  /* HOW IT WORKS */
+  .how-section {
+    max-width: 760px;
+    margin: 0 auto;
+    padding: 4rem 2rem;
+    border-top: 1px solid var(--grey);
+  }
+
+  .how-section h2 {
+    font-size: clamp(1.4rem, 3vw, 2rem);
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    margin-bottom: 0.5rem;
+  }
+
+  .how-section > p {
+    color: var(--mid);
+    margin-bottom: 2.5rem;
+  }
+
+  .steps {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+  }
+
+  .step {
+    display: grid;
+    grid-template-columns: 2rem 1fr;
+    gap: 1rem;
+    align-items: start;
+  }
+
+  .step-num {
+    font-size: 0.8rem;
+    font-weight: 700;
+    color: var(--gold);
+    padding-top: 0.2rem;
+  }
+
+  .step-body h4 {
+    font-size: 0.95rem;
+    font-weight: 600;
+    margin-bottom: 0.25rem;
+  }
+
+  .step-body p {
+    font-size: 0.9rem;
+    color: var(--mid);
+    line-height: 1.6;
+  }
+
+  /* ABOUT */
+  .about-section {
+    max-width: 760px;
+    margin: 0 auto;
+    padding: 4rem 2rem;
+    border-top: 1px solid var(--grey);
+  }
+
+  .about-section h2 {
+    font-size: clamp(1.4rem, 3vw, 2rem);
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    margin-bottom: 1.5rem;
+  }
+
+  .about-body {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 3rem;
+    align-items: start;
+  }
+
+  .about-text p {
+    color: var(--mid);
+    line-height: 1.8;
+    margin-bottom: 1rem;
+    font-size: 0.95rem;
+  }
+
+  .about-text p:last-child { margin-bottom: 0; }
+
+  .about-text strong { color: var(--black); font-weight: 600; }
+
+  .about-stats {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+  }
+
+  .stat {
+    padding: 1.25rem;
+    background: var(--grey);
+    border-radius: 4px;
+  }
+
+  .stat-num {
+    font-size: 1.75rem;
+    font-weight: 700;
+    color: var(--blue);
+    letter-spacing: -0.03em;
+    line-height: 1;
+    margin-bottom: 0.25rem;
+  }
+
+  .stat-label {
+    font-size: 0.85rem;
+    color: var(--mid);
+    line-height: 1.4;
+  }
+
+  /* CTA */
+  .cta-section {
+    max-width: 760px;
+    margin: 0 auto 4rem;
+    padding: 3rem 2rem;
+    border-top: 1px solid var(--grey);
+  }
+
+  .cta-box {
+    background: var(--blue);
+    border-radius: 8px;
+    padding: 3rem;
+  }
+
+  .cta-box h2 {
+    font-size: clamp(1.3rem, 3vw, 1.9rem);
+    font-weight: 700;
+    color: var(--white);
+    letter-spacing: -0.02em;
+    margin-bottom: 0.75rem;
+    max-width: 480px;
+  }
+
+  .cta-box p {
+    color: rgba(248,248,246,0.75);
+    margin-bottom: 2rem;
+    font-size: 0.95rem;
+    max-width: 440px;
+    line-height: 1.7;
+  }
+
+  .cta-email {
+    display: flex;
+    gap: 0.75rem;
+    flex-wrap: wrap;
+  }
+
+  .cta-email input {
+    flex: 1;
+    min-width: 200px;
+    padding: 0.875rem 1rem;
+    border: none;
+    border-radius: 4px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.95rem;
+    background: rgba(255,255,255,0.15);
+    color: var(--white);
+    outline: none;
+  }
+
+  .cta-email input::placeholder { color: rgba(248,248,246,0.5); }
+
+  .cta-email input:focus { background: rgba(255,255,255,0.22); }
+
+  .cta-email button {
+    background: var(--gold);
+    color: var(--white);
+    border: none;
+    padding: 0.875rem 1.5rem;
+    border-radius: 4px;
+    font-family: 'DM Sans', sans-serif;
+    font-weight: 600;
+    font-size: 0.95rem;
+    cursor: pointer;
+    white-space: nowrap;
+    transition: opacity 0.2s;
+  }
+
+  .cta-email button:hover { opacity: 0.85; }
+
+  .cta-note {
+    margin-top: 0.75rem;
+    font-size: 0.8rem;
+    color: rgba(248,248,246,0.5);
+  }
+
+  /* FOOTER */
+  footer {
+    border-top: 1px solid var(--grey);
+    padding: 2rem;
+    max-width: 760px;
+    margin: 0 auto;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 1rem;
+  }
+
+  footer p {
+    font-size: 0.85rem;
+    color: var(--mid);
+  }
+
+  footer a {
+    font-size: 0.85rem;
+    color: var(--mid);
+    text-decoration: none;
+  }
+
+  footer a:hover { color: var(--black); }
+
+  /* RESPONSIVE */
+  @media (max-width: 640px) {
+    nav { padding: 1rem; }
+    .nav-links { gap: 1rem; }
+    .about-body { grid-template-columns: 1fr; gap: 2rem; }
+    .demo-frame { flex-direction: column; }
+    .cta-box { padding: 2rem 1.5rem; }
+    .service-item { grid-template-columns: 1fr; }
+    .service-price { padding-top: 0; }
+  }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <a href="#" class="nav-name">Bryttani Patterson</a>
+  <ul class="nav-links">
+    <li><a href="#services">Services</a></li>
+    <li><a href="#demo">Live Demo</a></li>
+    <li><a href="#about">About</a></li>
+    <li><a href="#contact" class="nav-cta">Get in Touch</a></li>
+  </ul>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <p class="hero-label">AI Systems for Solopreneurs</p>
+  <h1>You're losing clients you already attracted. I fix that.</h1>
+  <p>Slow follow-up, unanswered questions, and chaotic onboarding cost solopreneurs thousands every month. I build AI systems that handle all of it — automatically, without you touching it.</p>
+  <div class="hero-actions">
+    <a href="#contact" class="btn-primary">Book a Free Call</a>
+    <a href="#demo" class="btn-ghost">See a live demo</a>
+  </div>
+</section>
+
+<!-- PROOF BAR -->
+<div class="proof-bar">
+  <div class="proof-item"><span>✓</span> 10 years in banking & finance</div>
+  <div class="proof-item"><span>✓</span> Based in Lexington, SC</div>
+  <div class="proof-item"><span>✓</span> Builds done for you — not DIY templates</div>
+  <div class="proof-item"><span>✓</span> Active SC Notary</div>
+</div>
+
+<!-- LIVE DEMO -->
+<section class="demo-section" id="demo">
+  <p class="section-label">Live Demo</p>
+  <h2>See exactly what your clients would experience</h2>
+  <p>This is a real FAQ bot I built for a career coaching business. Try asking it about pricing, packages, or something it doesn't know — watch what happens.</p>
+  <div class="demo-frame">
+    <div class="demo-frame-text">
+      <h3>Pivot With Purpose Coaching — FAQ Bot</h3>
+      <p>Answers questions, handles pricing, captures leads automatically when it doesn't know something. Built in one afternoon.</p>
+    </div>
+    <a href="https://pivot-with-purpose-chatbot.vercel.app" target="_blank" class="demo-btn">Try it live</a>
+  </div>
+</section>
+
+<!-- SERVICES -->
+<section class="services-section" id="services">
+  <p class="section-label">Services</p>
+  <h2>Three systems. One less thing to think about.</h2>
+  <p>Each one is built specifically for your business, tested before delivery, and set up so you don't need a tech background to use it.</p>
+
+  <div class="service-list">
+    <div class="service-item">
+      <div>
+        <div class="service-name">FAQ Bot</div>
+        <div class="service-desc">Answers your most common questions automatically — pricing, process, packages, refunds. Lives on your website or links from your bio. Captures name and email when it can't answer and tells them you'll follow up.</div>
+      </div>
+      <div class="service-price">$500</div>
+    </div>
+
+    <div class="service-item">
+      <div>
+        <div class="service-name">Lead Follow-Up Agent</div>
+        <div class="service-desc">Someone fills out your contact form or sends an inquiry — the agent responds within minutes, asks qualifying questions, and either books a call or sends a proposal. You stop losing leads because life got busy.</div>
+      </div>
+      <div class="service-price">$750</div>
+    </div>
+
+    <div class="service-item">
+      <div>
+        <div class="service-name">Client Onboarding Agent</div>
+        <div class="service-desc">New client pays — the agent kicks off automatically. Sends the welcome email, intake form, access links, and answers early questions without you touching anything. Follows up if the intake form isn't completed in 48 hours.</div>
+      </div>
+      <div class="service-price">$1,000</div>
+    </div>
+
+    <div class="service-item">
+      <div>
+        <div class="service-name">Full System Bundle <span class="service-tag">Best Value</span></div>
+        <div class="service-desc">All three systems built and connected — FAQ bot, lead follow-up, and client onboarding working together. From first contact to fully onboarded client, handled automatically.</div>
+      </div>
+      <div class="service-price">$1,997</div>
+    </div>
+  </div>
+
+  <p class="retainer-note">All builds include a 30-day support window. Monthly maintenance retainers available at $150/month — covers updates when your offers or pricing change, and fixes if anything breaks.</p>
+</section>
+
+<!-- HOW IT WORKS -->
+<section class="how-section">
+  <p class="section-label">Process</p>
+  <h2>How it works</h2>
+  <p>Simple, fast, no tech knowledge required on your end.</p>
+
+  <div class="steps">
+    <div class="step">
+      <div class="step-num">01</div>
+      <div class="step-body">
+        <h4>Free 20-minute call</h4>
+        <p>We talk through your business, where clients drop off, and which system makes the most sense to build first. No pitch, just a real conversation.</p>
+      </div>
+    </div>
+    <div class="step">
+      <div class="step-num">02</div>
+      <div class="step-body">
+        <h4>I build it</h4>
+        <p>You send me your content — offers, pricing, policies, FAQs. I build the system, train it on your business, and test it thoroughly before you see it.</p>
+      </div>
+    </div>
+    <div class="step">
+      <div class="step-num">03</div>
+      <div class="step-body">
+        <h4>You review and approve</h4>
+        <p>I walk you through everything live. You test it, suggest changes, and we refine until it feels exactly like your business — not a generic bot.</p>
+      </div>
+    </div>
+    <div class="step">
+      <div class="step-num">04</div>
+      <div class="step-body">
+        <h4>It goes live</h4>
+        <p>I handle deployment, embedding, and setup. You get a system that works the same day it launches, with a 30-day window to flag anything that needs adjusting.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ABOUT -->
+<section class="about-section" id="about">
+  <p class="section-label">About</p>
+  <h2>Why I understand this better than most</h2>
+  <div class="about-body">
+    <div class="about-text">
+      <p>I spent <strong>10 years in banking and financial services</strong> watching businesses lose clients because of the same three problems — slow follow-up, unanswered questions, and broken onboarding. I lived those problems professionally before I ever knew how to fix them technically.</p>
+      <p>Now I build AI systems that fix exactly that. Not because I learned it from a YouTube course, but because I understand what actually breaks down between a client expressing interest and becoming a paying customer.</p>
+      <p>I'm a <strong>single mom based in Lexington, SC</strong>, building this business one client at a time. I'm not an agency. You get me — and I take that seriously.</p>
+    </div>
+    <div class="about-stats">
+      <div class="stat">
+        <div class="stat-num">10+</div>
+        <div class="stat-label">Years in banking and financial services</div>
+      </div>
+      <div class="stat">
+        <div class="stat-num">3</div>
+        <div class="stat-label">AI systems built to solve the exact problems I watched businesses struggle with</div>
+      </div>
+      <div class="stat">
+        <div class="stat-num">SC</div>
+        <div class="stat-label">Active Notary Commission — Lexington, South Carolina</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PRODUCT -->
+<section class="services-section" id="blueprint">
+  <p class="section-label">Digital Guide</p>
+  <h2>Want to build it yourself?</h2>
+  <p>The FAQ Bot Blueprint walks you through every step — from planning your questions to deploying a live bot — with screenshots at every stage so you're never guessing.</p>
+
+  <div style="margin-top: 2rem; border: 1px solid var(--grey); border-radius: 6px; padding: 2rem; display: grid; grid-template-columns: 1fr auto; gap: 1.5rem; align-items: start;">
+    <div>
+      <div style="font-size: 1rem; font-weight: 700; color: var(--black); margin-bottom: 0.5rem;">The FAQ Bot Blueprint</div>
+      <div style="font-size: 0.9rem; color: var(--mid); line-height: 1.7; margin-bottom: 1rem; max-width: 460px;">A step-by-step guide to building your own AI FAQ bot using Claude Code — even if you've never built one before. Includes screenshots of every key step, the exact FAQ questions to start with, and how to deploy it live for free.</div>
+      <div style="font-size: 0.8rem; color: var(--mid); line-height: 1.7;">
+        What's inside:<br>
+        Planning your FAQ content · Setting up Claude Code · Training the bot on your business · Testing locally · Deploying to Vercel · Recording your demo · Using it to get clients
+      </div>
+    </div>
+    <div style="text-align: right; flex-shrink: 0;">
+      <div style="font-size: 1.5rem; font-weight: 700; color: var(--blue); margin-bottom: 0.75rem;">$47</div>
+      <a href="https://buy.stripe.com/aFa14m53C4WsePl5ECew800" target="_blank" class="btn-primary" style="font-size: 0.9rem; padding: 0.75rem 1.25rem;">Buy the guide</a>
+      <div style="font-size: 0.75rem; color: var(--mid); margin-top: 0.5rem;">Instant download after payment</div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA -->
+<section class="cta-section" id="contact">
+  <div class="cta-box">
+    <h2>Let's figure out what's costing you the most right now</h2>
+    <p>Drop your email and I'll reach out to schedule a free 20-minute call. No pressure, no pitch deck — just a real conversation about your business.</p>
+    <div class="cta-email">
+      <input type="email" placeholder="your@email.com">
+      <button type="button">Send it</button>
+    </div>
+    <p class="cta-note">Or find me on LinkedIn — Bryttani Patterson</p>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <p>© 2026 Bryttani Patterson · ohbloom.com</p>
+  <a href="mailto:hello@ohbloom.com">hello@ohbloom.com</a>
+</footer>
+
+</body>
 </html>
