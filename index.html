@@ -3,547 +3,951 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Bryttani Patterson — AI Systems for Solopreneurs</title>
+<title>Bryttani Patterson — Inquiry Systems for Career Coaches</title>
 <link rel="icon" type="image/svg+xml" href="/favicon.svg">
-<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;1,400&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
 <style>
-  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-
-  :root {
-    --white:   #F8F8F6;
-    --black:   #1A1A1A;
-    --blue:    #2D4A6B;
-    --gold:    #B8963E;
-    --grey:    #E8E6E1;
-    --mid:     #6B6B6B;
-  }
-
-  html { scroll-behavior: smooth; }
-
-  body {
-    font-family: 'DM Sans', sans-serif;
-    background: var(--white);
-    color: var(--black);
-    font-size: 17px;
-    line-height: 1.6;
-  }
-
-  /* NAV */
-  nav {
-    padding: 1.25rem 2rem;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    border-bottom: 1px solid var(--grey);
-    position: sticky;
-    top: 0;
-    background: var(--white);
-    z-index: 100;
-  }
-
-  .nav-name {
-    font-weight: 600;
-    font-size: 1rem;
-    color: var(--black);
-    text-decoration: none;
-    letter-spacing: -0.01em;
-  }
-
-  .nav-links {
-    display: flex;
-    gap: 2rem;
-    list-style: none;
-    align-items: center;
-  }
-
-  .nav-links a {
-    text-decoration: none;
-    color: var(--mid);
-    font-size: 0.9rem;
-    font-weight: 400;
-    transition: color 0.2s;
-  }
-
-  .nav-links a:hover { color: var(--black); }
-
-  .nav-cta {
-    background: var(--blue) !important;
-    color: var(--white) !important;
-    padding: 0.5rem 1.25rem;
-    border-radius: 4px;
-    font-weight: 500 !important;
-  }
-
-  /* HERO */
-  .hero {
-    max-width: 760px;
-    margin: 0 auto;
-    padding: 5rem 2rem 4rem;
-  }
-
-  .hero-label {
-    font-size: 0.85rem;
-    color: var(--gold);
-    font-weight: 500;
-    margin-bottom: 1.25rem;
-    letter-spacing: 0.02em;
-  }
-
-  .hero h1 {
-    font-size: clamp(2rem, 5vw, 3.25rem);
-    font-weight: 700;
-    line-height: 1.15;
-    letter-spacing: -0.03em;
-    color: var(--black);
-    margin-bottom: 1.5rem;
-    max-width: 680px;
-  }
-
-  .hero p {
-    font-size: 1.1rem;
-    color: var(--mid);
-    max-width: 560px;
-    line-height: 1.7;
-    margin-bottom: 2.5rem;
-  }
-
-  .hero-actions {
-    display: flex;
-    gap: 1rem;
-    flex-wrap: wrap;
-    align-items: center;
-  }
-
-  .btn-primary {
-    background: var(--blue);
-    color: var(--white);
-    padding: 0.875rem 1.75rem;
-    border-radius: 4px;
-    text-decoration: none;
-    font-weight: 600;
-    font-size: 0.95rem;
-    transition: background 0.2s;
-    display: inline-block;
-  }
-
-  .btn-primary:hover { background: #243d5a; }
-
-  .btn-ghost {
-    color: var(--black);
-    text-decoration: none;
-    font-size: 0.95rem;
-    font-weight: 500;
-    border-bottom: 1px solid var(--black);
-    padding-bottom: 1px;
-    transition: opacity 0.2s;
-  }
-
-  .btn-ghost:hover { opacity: 0.6; }
-
-  /* PROOF BAR */
-  .proof-bar {
-    border-top: 1px solid var(--grey);
-    border-bottom: 1px solid var(--grey);
-    padding: 1.25rem 2rem;
-    display: flex;
-    gap: 2.5rem;
-    flex-wrap: wrap;
-    max-width: 760px;
-    margin: 0 auto;
-  }
-
-  .proof-item {
-    font-size: 0.875rem;
-    color: var(--mid);
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-  }
-
-  .proof-item span {
-    color: var(--gold);
-    font-size: 1rem;
-  }
-
-  /* DEMO SECTION */
-  .demo-section {
-    max-width: 760px;
-    margin: 0 auto;
-    padding: 4rem 2rem;
-  }
-
-  .section-label {
-    font-size: 0.8rem;
-    color: var(--gold);
-    font-weight: 600;
-    letter-spacing: 0.06em;
-    text-transform: uppercase;
-    margin-bottom: 0.75rem;
-  }
-
-  .demo-section h2 {
-    font-size: clamp(1.4rem, 3vw, 2rem);
-    font-weight: 700;
-    letter-spacing: -0.02em;
-    margin-bottom: 0.75rem;
-    color: var(--black);
-  }
-
-  .demo-section > p {
-    color: var(--mid);
-    margin-bottom: 2rem;
-    max-width: 520px;
-  }
-
-  .demo-frame {
-    background: var(--blue);
-    border-radius: 8px;
-    padding: 2.5rem 2rem;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 2rem;
-    flex-wrap: wrap;
-  }
-
-  .demo-frame-text h3 {
-    color: var(--white);
-    font-size: 1.1rem;
-    font-weight: 600;
-    margin-bottom: 0.5rem;
-  }
-
-  .demo-frame-text p {
-    color: rgba(248,248,246,0.7);
-    font-size: 0.9rem;
-    max-width: 360px;
-    line-height: 1.6;
-  }
-
-  .demo-btn {
-    background: var(--gold);
-    color: var(--white);
-    padding: 0.875rem 1.5rem;
-    border-radius: 4px;
-    text-decoration: none;
-    font-weight: 600;
-    font-size: 0.9rem;
-    white-space: nowrap;
-    flex-shrink: 0;
-    transition: opacity 0.2s;
-  }
-
-  .demo-btn:hover { opacity: 0.85; }
-
-  /* SERVICES */
-  .services-section {
-    max-width: 760px;
-    margin: 0 auto;
-    padding: 4rem 2rem;
-    border-top: 1px solid var(--grey);
-  }
-
-  .services-section h2 {
-    font-size: clamp(1.4rem, 3vw, 2rem);
-    font-weight: 700;
-    letter-spacing: -0.02em;
-    margin-bottom: 0.5rem;
-  }
-
-  .services-section > p {
-    color: var(--mid);
-    margin-bottom: 2.5rem;
-    max-width: 480px;
-  }
-
-  .service-list {
-    display: flex;
-    flex-direction: column;
-    gap: 0;
-  }
-
-  .service-item {
-    padding: 1.75rem 0;
-    border-bottom: 1px solid var(--grey);
-    display: grid;
-    grid-template-columns: 1fr auto;
-    gap: 1rem;
-    align-items: start;
-  }
-
-  .service-item:first-child {
-    border-top: 1px solid var(--grey);
-  }
-
-  .service-name {
-    font-size: 1rem;
-    font-weight: 600;
-    color: var(--black);
-    margin-bottom: 0.35rem;
-  }
-
-  .service-desc {
-    font-size: 0.9rem;
-    color: var(--mid);
-    max-width: 480px;
-    line-height: 1.6;
-  }
-
-  .service-price {
-    font-size: 1rem;
-    font-weight: 700;
-    color: var(--blue);
-    white-space: nowrap;
-    padding-top: 0.1rem;
-  }
-
-  .service-tag {
-    display: inline-block;
-    background: var(--blue);
-    color: var(--white);
-    font-size: 0.7rem;
-    font-weight: 600;
-    padding: 0.2rem 0.6rem;
-    border-radius: 3px;
-    margin-left: 0.5rem;
-    vertical-align: middle;
-    letter-spacing: 0.02em;
-  }
-
-  .retainer-note {
-    margin-top: 1.25rem;
-    font-size: 0.875rem;
-    color: var(--mid);
-    padding: 1rem 1.25rem;
-    background: var(--grey);
-    border-radius: 4px;
-    line-height: 1.6;
-  }
-
-  /* HOW IT WORKS */
-  .how-section {
-    max-width: 760px;
-    margin: 0 auto;
-    padding: 4rem 2rem;
-    border-top: 1px solid var(--grey);
-  }
-
-  .how-section h2 {
-    font-size: clamp(1.4rem, 3vw, 2rem);
-    font-weight: 700;
-    letter-spacing: -0.02em;
-    margin-bottom: 0.5rem;
-  }
-
-  .how-section > p {
-    color: var(--mid);
-    margin-bottom: 2.5rem;
-  }
-
-  .steps {
-    display: flex;
-    flex-direction: column;
-    gap: 1.5rem;
-  }
-
-  .step {
-    display: grid;
-    grid-template-columns: 2rem 1fr;
-    gap: 1rem;
-    align-items: start;
-  }
-
-  .step-num {
-    font-size: 0.8rem;
-    font-weight: 700;
-    color: var(--gold);
-    padding-top: 0.2rem;
-  }
-
-  .step-body h4 {
-    font-size: 0.95rem;
-    font-weight: 600;
-    margin-bottom: 0.25rem;
-  }
-
-  .step-body p {
-    font-size: 0.9rem;
-    color: var(--mid);
-    line-height: 1.6;
-  }
-
-  /* ABOUT */
-  .about-section {
-    max-width: 760px;
-    margin: 0 auto;
-    padding: 4rem 2rem;
-    border-top: 1px solid var(--grey);
-  }
-
-  .about-section h2 {
-    font-size: clamp(1.4rem, 3vw, 2rem);
-    font-weight: 700;
-    letter-spacing: -0.02em;
-    margin-bottom: 1.5rem;
-  }
-
-  .about-body {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 3rem;
-    align-items: start;
-  }
-
-  .about-text p {
-    color: var(--mid);
-    line-height: 1.8;
-    margin-bottom: 1rem;
-    font-size: 0.95rem;
-  }
-
-  .about-text p:last-child { margin-bottom: 0; }
-
-  .about-text strong { color: var(--black); font-weight: 600; }
-
-  .about-stats {
-    display: flex;
-    flex-direction: column;
-    gap: 1.5rem;
-  }
-
-  .stat {
-    padding: 1.25rem;
-    background: var(--grey);
-    border-radius: 4px;
-  }
-
-  .stat-num {
-    font-size: 1.75rem;
-    font-weight: 700;
-    color: var(--blue);
-    letter-spacing: -0.03em;
-    line-height: 1;
-    margin-bottom: 0.25rem;
-  }
-
-  .stat-label {
-    font-size: 0.85rem;
-    color: var(--mid);
-    line-height: 1.4;
-  }
-
-  /* CTA */
-  .cta-section {
-    max-width: 760px;
-    margin: 0 auto 4rem;
-    padding: 3rem 2rem;
-    border-top: 1px solid var(--grey);
-  }
-
-  .cta-box {
-    background: var(--blue);
-    border-radius: 8px;
-    padding: 3rem;
-  }
-
-  .cta-box h2 {
-    font-size: clamp(1.3rem, 3vw, 1.9rem);
-    font-weight: 700;
-    color: var(--white);
-    letter-spacing: -0.02em;
-    margin-bottom: 0.75rem;
-    max-width: 480px;
-  }
-
-  .cta-box p {
-    color: rgba(248,248,246,0.75);
-    margin-bottom: 2rem;
-    font-size: 0.95rem;
-    max-width: 440px;
-    line-height: 1.7;
-  }
-
-  .cta-email {
-    display: flex;
-    gap: 0.75rem;
-    flex-wrap: wrap;
-  }
-
-  .cta-email input {
-    flex: 1;
-    min-width: 200px;
-    padding: 0.875rem 1rem;
-    border: none;
-    border-radius: 4px;
-    font-family: 'DM Sans', sans-serif;
-    font-size: 0.95rem;
-    background: rgba(255,255,255,0.15);
-    color: var(--white);
-    outline: none;
-  }
-
-  .cta-email input::placeholder { color: rgba(248,248,246,0.5); }
-
-  .cta-email input:focus { background: rgba(255,255,255,0.22); }
-
-  .cta-email button {
-    background: var(--gold);
-    color: var(--white);
-    border: none;
-    padding: 0.875rem 1.5rem;
-    border-radius: 4px;
-    font-family: 'DM Sans', sans-serif;
-    font-weight: 600;
-    font-size: 0.95rem;
-    cursor: pointer;
-    white-space: nowrap;
-    transition: opacity 0.2s;
-  }
-
-  .cta-email button:hover { opacity: 0.85; }
-
-  .cta-note {
-    margin-top: 0.75rem;
-    font-size: 0.8rem;
-    color: rgba(248,248,246,0.5);
-  }
-
-  /* FOOTER */
-  footer {
-    border-top: 1px solid var(--grey);
-    padding: 2rem;
-    max-width: 760px;
-    margin: 0 auto;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    flex-wrap: wrap;
-    gap: 1rem;
-  }
-
-  footer p {
-    font-size: 0.85rem;
-    color: var(--mid);
-  }
-
-  footer a {
-    font-size: 0.85rem;
-    color: var(--mid);
-    text-decoration: none;
-  }
-
-  footer a:hover { color: var(--black); }
-
-  /* RESPONSIVE */
-  @media (max-width: 640px) {
-    nav { padding: 1rem; }
-    .nav-links { gap: 1rem; }
-    .about-body { grid-template-columns: 1fr; gap: 2rem; }
-    .demo-frame { flex-direction: column; }
-    .cta-box { padding: 2rem 1.5rem; }
-    .service-item { grid-template-columns: 1fr; }
-    .service-price { padding-top: 0; }
-  }
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+
+:root{
+  --cream:#F7F4EF;
+  --navy:#1B2A4A;
+  --gold:#C9A84C;
+  --tan:#8B7355;
+  --rule:#E0DAD0;
+  --mid:#666;
+  --white:#fff;
+}
+
+html{scroll-behavior:smooth}
+
+body{
+  font-family:'Inter',sans-serif;
+  background:var(--cream);
+  color:var(--navy);
+  font-size:16px;
+  line-height:1.6;
+  -webkit-font-smoothing:antialiased;
+}
+
+/* NAV */
+nav{
+  position:sticky;
+  top:0;
+  z-index:100;
+  background:rgba(247,244,239,0.96);
+  backdrop-filter:blur(8px);
+  border-bottom:1px solid var(--rule);
+  padding:1.25rem 3rem;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+}
+
+.nav-name{
+  font-family:'Playfair Display',serif;
+  font-size:1.05rem;
+  font-weight:700;
+  color:var(--navy);
+  text-decoration:none;
+}
+
+.nav-links{
+  display:flex;
+  gap:2.5rem;
+  list-style:none;
+  align-items:center;
+}
+
+.nav-links a{
+  font-size:0.82rem;
+  font-weight:400;
+  color:var(--mid);
+  text-decoration:none;
+  transition:color 0.2s;
+}
+
+.nav-links a:hover{color:var(--navy)}
+
+.nav-cta{
+  background:var(--navy);
+  color:var(--cream) !important;
+  padding:0.5rem 1.25rem;
+  border-radius:4px;
+  font-weight:500 !important;
+  transition:background 0.2s !important;
+}
+
+.nav-cta:hover{background:#243d5a !important}
+
+/* HERO */
+.hero{
+  padding:5rem 3rem 4rem;
+  border-bottom:1px solid var(--rule);
+  max-width:1100px;
+  margin:0 auto;
+}
+
+.hero-kicker{
+  font-size:0.75rem;
+  color:var(--gold);
+  letter-spacing:0.1em;
+  text-transform:uppercase;
+  font-weight:500;
+  margin-bottom:1.5rem;
+}
+
+.hero h1{
+  font-family:'Playfair Display',serif;
+  font-size:clamp(2.4rem,6vw,4.5rem);
+  font-weight:700;
+  line-height:1.1;
+  letter-spacing:-0.02em;
+  color:var(--navy);
+  max-width:780px;
+  margin-bottom:1.75rem;
+}
+
+.hero h1 em{
+  font-style:italic;
+  font-weight:400;
+  color:var(--gold);
+}
+
+.hero-sub{
+  font-size:1rem;
+  color:var(--mid);
+  max-width:540px;
+  line-height:1.8;
+  font-weight:300;
+  margin-bottom:1.25rem;
+}
+
+.hero-supporting{
+  font-size:0.85rem;
+  color:var(--tan);
+  max-width:480px;
+  line-height:1.7;
+  font-weight:300;
+  margin-bottom:2.5rem;
+  font-style:italic;
+}
+
+.hero-actions{
+  display:flex;
+  gap:1.25rem;
+  align-items:center;
+  flex-wrap:wrap;
+}
+
+.btn-primary{
+  background:var(--navy);
+  color:var(--cream);
+  padding:0.875rem 1.75rem;
+  border-radius:4px;
+  font-size:0.875rem;
+  font-weight:600;
+  text-decoration:none;
+  transition:background 0.2s;
+  display:inline-block;
+}
+
+.btn-primary:hover{background:#243d5a}
+
+.btn-ghost{
+  font-size:0.875rem;
+  font-weight:400;
+  color:var(--navy);
+  text-decoration:none;
+  border-bottom:1px solid var(--navy);
+  padding-bottom:1px;
+  transition:opacity 0.2s;
+}
+
+.btn-ghost:hover{opacity:0.6}
+
+.btn-outline{
+  font-size:0.875rem;
+  font-weight:500;
+  color:var(--navy);
+  text-decoration:none;
+  border:1px solid var(--navy);
+  padding:0.75rem 1.5rem;
+  border-radius:4px;
+  transition:background 0.2s,color 0.2s;
+  display:inline-block;
+}
+
+.btn-outline:hover{background:var(--navy);color:var(--cream)}
+
+/* CREDENTIAL BAR */
+.cred-bar{
+  border-bottom:1px solid var(--rule);
+  padding:1.25rem 3rem;
+  display:flex;
+  gap:3rem;
+  flex-wrap:wrap;
+  max-width:1100px;
+  margin:0 auto;
+}
+
+.cred{
+  font-size:0.75rem;
+  color:var(--tan);
+  letter-spacing:0.02em;
+}
+
+.cred strong{
+  color:var(--navy);
+  font-weight:600;
+}
+
+/* SECTIONS */
+.section{
+  max-width:1100px;
+  margin:0 auto;
+  padding:5rem 3rem;
+  border-bottom:1px solid var(--rule);
+}
+
+.section-label{
+  font-size:0.7rem;
+  color:var(--gold);
+  letter-spacing:0.1em;
+  text-transform:uppercase;
+  font-weight:500;
+  margin-bottom:1rem;
+}
+
+.section h2{
+  font-family:'Playfair Display',serif;
+  font-size:clamp(1.6rem,3vw,2.6rem);
+  font-weight:700;
+  letter-spacing:-0.02em;
+  line-height:1.2;
+  color:var(--navy);
+  margin-bottom:0.75rem;
+}
+
+/* PROBLEM SECTION */
+.problem-body{
+  max-width:600px;
+  margin-top:2rem;
+}
+
+.problem-body p{
+  font-size:0.95rem;
+  color:var(--mid);
+  line-height:1.9;
+  font-weight:300;
+  margin-bottom:1rem;
+}
+
+.problem-body p strong{
+  color:var(--navy);
+  font-weight:500;
+}
+
+.problem-list{
+  margin-top:1.5rem;
+  padding-top:1.5rem;
+  border-top:1px solid var(--rule);
+}
+
+.problem-list p{
+  font-size:0.875rem;
+  color:var(--mid);
+  line-height:1.8;
+  font-weight:300;
+  margin-bottom:0.5rem;
+}
+
+/* WORKFLOW */
+.workflow{
+  margin-top:3rem;
+  display:flex;
+  flex-direction:column;
+  align-items:flex-start;
+  gap:0;
+  max-width:420px;
+}
+
+.workflow-step{
+  display:flex;
+  align-items:center;
+  gap:1rem;
+  padding:0.75rem 1.25rem;
+  background:var(--white);
+  border:1px solid var(--rule);
+  border-radius:4px;
+  width:100%;
+}
+
+.workflow-step.highlight{
+  background:var(--navy);
+  border-color:var(--navy);
+}
+
+.workflow-step.highlight .step-label{color:var(--cream)}
+.workflow-step.highlight .step-sub{color:rgba(247,244,239,0.6)}
+
+.step-dot{
+  width:8px;
+  height:8px;
+  border-radius:50%;
+  background:var(--gold);
+  flex-shrink:0;
+}
+
+.step-label{
+  font-size:0.825rem;
+  font-weight:500;
+  color:var(--navy);
+}
+
+.step-sub{
+  font-size:0.72rem;
+  color:var(--tan);
+  margin-left:auto;
+}
+
+.workflow-arrow{
+  font-size:0.75rem;
+  color:var(--rule);
+  padding:0.25rem 1.25rem;
+  align-self:flex-start;
+  margin-left:1.6rem;
+}
+
+.workflow-human{
+  margin-top:0.5rem;
+  font-size:0.75rem;
+  color:var(--gold);
+  font-style:italic;
+  letter-spacing:0.02em;
+}
+
+/* SYSTEM — TWO STEPS */
+.system-grid{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:2rem;
+  margin-top:2.5rem;
+}
+
+.system-card{
+  background:var(--white);
+  border:1px solid var(--rule);
+  border-radius:8px;
+  padding:2rem;
+  position:relative;
+}
+
+.system-card::before{
+  content:'';
+  position:absolute;
+  top:0;left:0;right:0;
+  height:3px;
+  background:var(--gold);
+  border-radius:8px 8px 0 0;
+}
+
+.system-num{
+  font-size:0.7rem;
+  color:var(--gold);
+  letter-spacing:0.1em;
+  text-transform:uppercase;
+  font-weight:500;
+  margin-bottom:0.5rem;
+}
+
+.system-card h3{
+  font-family:'Playfair Display',serif;
+  font-size:1.2rem;
+  font-weight:700;
+  color:var(--navy);
+  margin-bottom:0.25rem;
+}
+
+.system-card .system-sub{
+  font-size:0.75rem;
+  color:var(--tan);
+  font-weight:400;
+  margin-bottom:1rem;
+  letter-spacing:0.02em;
+  text-transform:uppercase;
+}
+
+.system-card p{
+  font-size:0.875rem;
+  color:var(--mid);
+  line-height:1.75;
+  font-weight:300;
+  margin-bottom:1rem;
+}
+
+.system-features{
+  list-style:none;
+  margin-top:1rem;
+  padding-top:1rem;
+  border-top:1px solid var(--rule);
+}
+
+.system-features li{
+  font-size:0.825rem;
+  color:var(--mid);
+  padding:0.3rem 0;
+  display:flex;
+  align-items:baseline;
+  gap:0.5rem;
+  font-weight:300;
+}
+
+.system-features li::before{
+  content:'—';
+  color:var(--gold);
+  font-size:0.7rem;
+  flex-shrink:0;
+}
+
+.system-supporting{
+  margin-top:1.25rem;
+  padding-top:1.25rem;
+  border-top:1px solid var(--rule);
+  font-size:0.8rem;
+  color:var(--tan);
+  font-style:italic;
+  line-height:1.6;
+}
+
+/* DASHBOARD MOCKUP */
+.dashboard-mockup{
+  margin-top:1.5rem;
+  border:1px solid var(--rule);
+  border-radius:6px;
+  overflow:hidden;
+  background:var(--white);
+}
+
+.dash-header{
+  background:var(--navy);
+  padding:0.75rem 1rem;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+}
+
+.dash-title{
+  font-size:0.75rem;
+  color:var(--cream);
+  font-weight:500;
+  letter-spacing:0.04em;
+}
+
+.dash-badge{
+  font-size:0.65rem;
+  background:var(--gold);
+  color:var(--navy);
+  padding:0.2rem 0.5rem;
+  border-radius:3px;
+  font-weight:600;
+  letter-spacing:0.04em;
+}
+
+.dash-row{
+  padding:0.75rem 1rem;
+  border-bottom:1px solid var(--rule);
+  display:grid;
+  grid-template-columns:1fr auto;
+  gap:0.5rem;
+  align-items:center;
+}
+
+.dash-row:last-child{border-bottom:none}
+
+.dash-name{
+  font-size:0.8rem;
+  font-weight:500;
+  color:var(--navy);
+}
+
+.dash-detail{
+  font-size:0.72rem;
+  color:var(--mid);
+  font-weight:300;
+}
+
+.dash-status{
+  font-size:0.65rem;
+  font-weight:600;
+  letter-spacing:0.06em;
+  text-transform:uppercase;
+  padding:0.2rem 0.5rem;
+  border-radius:3px;
+}
+
+.status-new{background:#EEF2FF;color:#3730A3}
+.status-contacted{background:#FEF9EE;color:#92400E}
+.status-booked{background:#F0FDF4;color:#166534}
+
+/* DEMO SECTION */
+.demo-grid{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:4rem;
+  align-items:start;
+  margin-top:2.5rem;
+}
+
+.demo-text p{
+  font-size:0.95rem;
+  color:var(--mid);
+  line-height:1.8;
+  font-weight:300;
+  margin-bottom:2rem;
+  max-width:420px;
+}
+
+.demo-card{
+  background:var(--white);
+  border:1px solid var(--rule);
+  border-radius:8px;
+  padding:2rem;
+  position:relative;
+}
+
+.demo-card::before{
+  content:'';
+  position:absolute;
+  top:0;left:0;right:0;
+  height:3px;
+  background:var(--gold);
+  border-radius:8px 8px 0 0;
+}
+
+.demo-card-eyebrow{
+  font-size:0.7rem;
+  color:var(--gold);
+  letter-spacing:0.1em;
+  text-transform:uppercase;
+  margin-bottom:0.75rem;
+}
+
+.demo-card h3{
+  font-family:'Playfair Display',serif;
+  font-size:1.15rem;
+  font-weight:700;
+  color:var(--navy);
+  margin-bottom:0.5rem;
+}
+
+.demo-card p{
+  font-size:0.875rem;
+  color:var(--mid);
+  line-height:1.7;
+  font-weight:300;
+  margin-bottom:1.5rem;
+}
+
+.demo-link{
+  font-size:0.82rem;
+  font-weight:600;
+  color:var(--navy);
+  text-decoration:none;
+  border-bottom:1px solid var(--gold);
+  padding-bottom:1px;
+  transition:color 0.2s;
+}
+
+.demo-link:hover{color:var(--gold)}
+
+/* OFFER SECTION */
+.offer-card{
+  background:var(--white);
+  border:1px solid var(--rule);
+  border-radius:8px;
+  padding:2.5rem;
+  margin-top:2.5rem;
+  position:relative;
+}
+
+.offer-card::before{
+  content:'Done-For-You Service';
+  position:absolute;
+  top:-0.6rem;
+  left:2rem;
+  font-size:0.65rem;
+  letter-spacing:0.1em;
+  text-transform:uppercase;
+  color:var(--gold);
+  background:var(--white);
+  padding:0 0.5rem;
+}
+
+.offer-card h3{
+  font-family:'Playfair Display',serif;
+  font-size:1.6rem;
+  font-weight:700;
+  color:var(--navy);
+  margin-bottom:0.5rem;
+}
+
+.offer-card .offer-tagline{
+  font-size:0.95rem;
+  color:var(--mid);
+  font-weight:300;
+  line-height:1.7;
+  margin-bottom:2rem;
+  max-width:520px;
+}
+
+.offer-features{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:0.6rem 2rem;
+  margin-bottom:2rem;
+}
+
+.offer-feature{
+  font-size:0.85rem;
+  color:var(--mid);
+  font-weight:300;
+  display:flex;
+  align-items:baseline;
+  gap:0.5rem;
+}
+
+.offer-feature::before{
+  content:'✓';
+  color:var(--gold);
+  font-size:0.75rem;
+  flex-shrink:0;
+}
+
+.offer-footer{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  padding-top:1.5rem;
+  border-top:1px solid var(--rule);
+  flex-wrap:wrap;
+  gap:1.5rem;
+}
+
+.offer-price{
+  font-family:'Playfair Display',serif;
+  font-size:1.1rem;
+  color:var(--tan);
+  font-weight:400;
+}
+
+.offer-price strong{
+  font-size:1.6rem;
+  color:var(--navy);
+  font-weight:700;
+}
+
+.offer-note{
+  margin-top:1.5rem;
+  padding:1.25rem 1.5rem;
+  background:var(--cream);
+  border:1px solid var(--rule);
+  border-radius:6px;
+  font-size:0.85rem;
+  color:var(--mid);
+  font-weight:300;
+  line-height:1.7;
+}
+
+.offer-note strong{color:var(--navy);font-weight:500}
+
+/* ABOUT */
+.about-grid{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:5rem;
+  margin-top:2.5rem;
+}
+
+.about-quote{
+  font-family:'Playfair Display',serif;
+  font-size:1.15rem;
+  font-style:italic;
+  color:var(--navy);
+  line-height:1.6;
+  border-left:3px solid var(--gold);
+  padding-left:1.25rem;
+  margin-bottom:2rem;
+}
+
+.about-body p{
+  font-size:0.925rem;
+  color:var(--mid);
+  line-height:1.9;
+  font-weight:300;
+  margin-bottom:1.1rem;
+}
+
+.about-body p strong{color:var(--navy);font-weight:500}
+
+.stats-grid{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  margin-top:2.5rem;
+  border:1px solid var(--rule);
+  border-radius:6px;
+  overflow:hidden;
+  background:var(--white);
+}
+
+.stat{
+  padding:1.25rem 1.5rem;
+  border-right:1px solid var(--rule);
+  border-bottom:1px solid var(--rule);
+}
+
+.stat:nth-child(2n){border-right:none}
+.stat:last-child{border-bottom:none;border-right:none;grid-column:1/-1}
+.stat:nth-last-child(2){border-bottom:none}
+
+.stat-num{
+  font-family:'Playfair Display',serif;
+  font-size:2rem;
+  font-weight:700;
+  color:var(--navy);
+  line-height:1;
+  margin-bottom:0.3rem;
+}
+
+.stat-label{
+  font-size:0.75rem;
+  color:var(--tan);
+  line-height:1.5;
+  font-weight:300;
+}
+
+/* PRODUCT */
+.product-card{
+  background:var(--white);
+  border:1px solid var(--rule);
+  border-radius:8px;
+  padding:2.5rem;
+  display:grid;
+  grid-template-columns:1fr auto;
+  gap:3rem;
+  align-items:center;
+  margin-top:2.5rem;
+  position:relative;
+}
+
+.product-card::before{
+  content:'Guide No. 01';
+  position:absolute;
+  top:-0.6rem;
+  left:2rem;
+  font-size:0.65rem;
+  letter-spacing:0.1em;
+  text-transform:uppercase;
+  color:var(--gold);
+  background:var(--white);
+  padding:0 0.5rem;
+}
+
+.product-card h3{
+  font-family:'Playfair Display',serif;
+  font-size:1.4rem;
+  font-weight:700;
+  color:var(--navy);
+  margin-bottom:0.5rem;
+}
+
+.product-card .sub{
+  font-size:0.875rem;
+  color:var(--mid);
+  line-height:1.7;
+  font-weight:300;
+  max-width:480px;
+  margin-bottom:1.25rem;
+}
+
+.product-includes{
+  list-style:none;
+  display:flex;
+  flex-direction:column;
+  gap:0.3rem;
+}
+
+.product-includes li{
+  font-size:0.825rem;
+  color:var(--mid);
+  font-weight:300;
+  display:flex;
+  gap:0.5rem;
+  align-items:baseline;
+}
+
+.product-includes li::before{
+  content:'·';
+  color:var(--gold);
+  flex-shrink:0;
+}
+
+.product-price{
+  font-family:'Playfair Display',serif;
+  font-size:3rem;
+  font-weight:700;
+  color:var(--navy);
+  text-align:center;
+  display:block;
+  margin-bottom:1rem;
+}
+
+/* DIY CTA */
+.diy-cta{
+  background:var(--cream);
+  border:1px solid var(--rule);
+  border-radius:8px;
+  padding:2rem 2.5rem;
+  margin-top:2rem;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  gap:2rem;
+  flex-wrap:wrap;
+}
+
+.diy-cta h3{
+  font-family:'Playfair Display',serif;
+  font-size:1.2rem;
+  font-weight:700;
+  color:var(--navy);
+  margin-bottom:0.4rem;
+}
+
+.diy-cta p{
+  font-size:0.875rem;
+  color:var(--mid);
+  font-weight:300;
+  line-height:1.6;
+  max-width:480px;
+}
+
+.diy-actions{
+  display:flex;
+  gap:1rem;
+  align-items:center;
+  flex-shrink:0;
+  flex-wrap:wrap;
+}
+
+/* CTA */
+.cta-section{
+  max-width:1100px;
+  margin:0 auto;
+  padding:5rem 3rem 6rem;
+}
+
+.cta-box{
+  background:var(--navy);
+  border-radius:10px;
+  padding:3.5rem;
+}
+
+.cta-box h2{
+  font-family:'Playfair Display',serif;
+  font-size:clamp(1.5rem,3vw,2.2rem);
+  font-weight:700;
+  color:var(--cream);
+  letter-spacing:-0.02em;
+  margin-bottom:0.75rem;
+  max-width:520px;
+}
+
+.cta-box p{
+  font-size:0.95rem;
+  color:rgba(247,244,239,0.65);
+  margin-bottom:2rem;
+  max-width:460px;
+  font-weight:300;
+  line-height:1.8;
+}
+
+.cta-form{
+  display:flex;
+  gap:0;
+  max-width:440px;
+}
+
+.cta-form input{
+  flex:1;
+  padding:0.875rem 1rem;
+  background:rgba(255,255,255,0.1);
+  border:1px solid rgba(255,255,255,0.15);
+  border-right:none;
+  color:var(--cream);
+  font-family:'Inter',sans-serif;
+  font-size:0.9rem;
+  outline:none;
+  border-radius:4px 0 0 4px;
+}
+
+.cta-form input::placeholder{color:rgba(247,244,239,0.4)}
+.cta-form input:focus{background:rgba(255,255,255,0.15);border-color:var(--gold)}
+
+.cta-form button{
+  background:var(--gold);
+  color:var(--navy);
+  border:none;
+  padding:0.875rem 1.5rem;
+  font-family:'Inter',sans-serif;
+  font-size:0.82rem;
+  font-weight:700;
+  cursor:pointer;
+  white-space:nowrap;
+  border-radius:0 4px 4px 0;
+  transition:background 0.2s;
+}
+
+.cta-form button:hover{background:#dbb84f}
+
+.cta-note{
+  margin-top:0.75rem;
+  font-size:0.75rem;
+  color:rgba(247,244,239,0.4);
+}
+
+/* FOOTER */
+footer{
+  border-top:1px solid var(--rule);
+  padding:1.75rem 3rem;
+  max-width:1100px;
+  margin:0 auto;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  flex-wrap:wrap;
+  gap:1rem;
+}
+
+footer p{font-size:0.8rem;color:var(--tan)}
+footer a{font-size:0.8rem;color:var(--tan);text-decoration:none}
+footer a:hover{color:var(--navy)}
+
+/* RESPONSIVE */
+@media(max-width:768px){
+  nav{padding:1rem 1.5rem}
+  .nav-links{gap:1rem}
+  .hero,.section,.cred-bar,.cta-section,footer{padding-left:1.5rem;padding-right:1.5rem}
+  .demo-grid,.about-grid,.system-grid{grid-template-columns:1fr;gap:2rem}
+  .product-card{grid-template-columns:1fr}
+  .offer-features{grid-template-columns:1fr}
+  .cta-form{flex-direction:column}
+  .cta-form input{border-right:1px solid rgba(255,255,255,0.15);border-bottom:none;border-radius:4px 4px 0 0}
+  .cta-form button{border-radius:0 0 4px 4px}
+  .cta-box{padding:2rem 1.5rem}
+  .diy-cta{flex-direction:column;align-items:flex-start}
+  .offer-footer{flex-direction:column;align-items:flex-start}
+}
 </style>
 </head>
 <body>
@@ -552,189 +956,292 @@
 <nav>
   <a href="#" class="nav-name">Bryttani Patterson</a>
   <ul class="nav-links">
+    <li><a href="#how-it-works">How It Works</a></li>
     <li><a href="#services">Services</a></li>
-    <li><a href="#demo">Live Demo</a></li>
+    <li><a href="#blueprint">DIY Blueprint</a></li>
     <li><a href="#about">About</a></li>
-    <li><a href="#contact" class="nav-cta">Get in Touch</a></li>
+    <li><a href="#contact" class="nav-cta">Work Together</a></li>
   </ul>
 </nav>
 
 <!-- HERO -->
 <section class="hero">
-  <p class="hero-label">AI Systems for Solopreneurs</p>
-  <h1>You're losing clients you already attracted. I fix that.</h1>
-  <p>Slow follow-up, unanswered questions, and chaotic onboarding cost solopreneurs thousands every month. I build AI systems that handle all of it — automatically, without you touching it.</p>
+  <p class="hero-kicker">Inquiry Systems for Career Coaches</p>
+  <h1>Stop letting interested clients<br><em>fall through the cracks.</em></h1>
+  <p class="hero-sub">I build simple inquiry systems for independent career coaches — so potential clients can get answers, share their information, and show up in one place for you to follow up.</p>
+  <p class="hero-supporting">Built for solo career coaches who are great at what they do — but don't want every new inquiry living in their inbox.</p>
   <div class="hero-actions">
-    <a href="#contact" class="btn-primary">Book a Free Call</a>
-    <a href="#demo" class="btn-ghost">See a live demo</a>
+    <a href="#how-it-works" class="btn-primary">See How It Works</a>
+    <a href="#contact" class="btn-ghost">Work With Me</a>
   </div>
 </section>
 
-<!-- PROOF BAR -->
-<div class="proof-bar">
-  <div class="proof-item"><span>✓</span> 10 years in banking & finance</div>
-  <div class="proof-item"><span>✓</span> Based in Lexington, SC</div>
-  <div class="proof-item"><span>✓</span> Builds done for you — not DIY templates</div>
-  <div class="proof-item"><span>✓</span> Active SC Notary</div>
+<!-- CREDENTIAL BAR -->
+<div class="cred-bar">
+  <span class="cred"><strong>10+</strong> Years in Banking &amp; Financial Services</span>
+  <span class="cred"><strong>4+</strong> Years Managing a Customer-Facing Business</span>
+  <span class="cred"><strong>1</strong> Person Building Your System From Setup to Handoff</span>
 </div>
 
-<!-- LIVE DEMO -->
-<section class="demo-section" id="demo">
-  <p class="section-label">Live Demo</p>
-  <h2>See exactly what your clients would experience</h2>
-  <p>This is a real FAQ bot I built for a career coaching business. Try asking it about pricing, packages, or something it doesn't know — watch what happens.</p>
-  <div class="demo-frame">
-    <div class="demo-frame-text">
-      <h3>Pivot With Purpose Coaching — FAQ Bot</h3>
-      <p>Answers questions, handles pricing, captures leads automatically when it doesn't know something. Built in one afternoon.</p>
-    </div>
-    <a href="https://pivot-with-purpose-chatbot.vercel.app" target="_blank" class="demo-btn">Try it live</a>
-  </div>
-</section>
-
-<!-- SERVICES -->
-<section class="services-section" id="services">
-  <p class="section-label">Services</p>
-  <h2>Three systems. One less thing to think about.</h2>
-  <p>Each one is built specifically for your business, tested before delivery, and set up so you don't need a tech background to use it.</p>
-
-  <div class="service-list">
-    <div class="service-item">
-      <div>
-        <div class="service-name">FAQ Bot</div>
-        <div class="service-desc">Answers your most common questions automatically — pricing, process, packages, refunds. Lives on your website or links from your bio. Captures name and email when it can't answer and tells them you'll follow up.</div>
-      </div>
-      <div class="service-price">$500</div>
-    </div>
-
-    <div class="service-item">
-      <div>
-        <div class="service-name">Lead Follow-Up Agent</div>
-        <div class="service-desc">Someone fills out your contact form or sends an inquiry — the agent responds within minutes, asks qualifying questions, and either books a call or sends a proposal. You stop losing leads because life got busy.</div>
-      </div>
-      <div class="service-price">$750</div>
-    </div>
-
-    <div class="service-item">
-      <div>
-        <div class="service-name">Client Onboarding Agent</div>
-        <div class="service-desc">New client pays — the agent kicks off automatically. Sends the welcome email, intake form, access links, and answers early questions without you touching anything. Follows up if the intake form isn't completed in 48 hours.</div>
-      </div>
-      <div class="service-price">$1,000</div>
-    </div>
-
-    <div class="service-item">
-      <div>
-        <div class="service-name">Full System Bundle <span class="service-tag">Best Value</span></div>
-        <div class="service-desc">All three systems built and connected — FAQ bot, lead follow-up, and client onboarding working together. From first contact to fully onboarded client, handled automatically.</div>
-      </div>
-      <div class="service-price">$1,997</div>
+<!-- PROBLEM -->
+<section class="section">
+  <p class="section-label">The Problem</p>
+  <h2>You don't need another place<br>to find leads. You need to know<br>where your inquiries are.</h2>
+  <div class="problem-body">
+    <p>Someone finds you on LinkedIn. They visit your website. They ask a question. They want to know how your coaching works. They are interested — but you're busy.</p>
+    <p>The inquiry gets buried in your inbox, DMs, forms, or notes. A few days later, you can't remember who reached out or what they were looking for.</p>
+    <p><strong>That's the gap I help fix.</strong></p>
+    <div class="problem-list">
+      <p>The goal isn't to automate your entire business.</p>
+      <p>It's to make the first step easier:</p>
+      <p><strong>Answer the common questions. Capture the interested people. Keep them organized.</strong></p>
     </div>
   </div>
-
-  <p class="retainer-note">All builds include a 30-day support window. Monthly maintenance retainers available at $150/month — covers updates when your offers or pricing change, and fixes if anything breaks.</p>
 </section>
 
 <!-- HOW IT WORKS -->
-<section class="how-section">
-  <p class="section-label">Process</p>
-  <h2>How it works</h2>
-  <p>Simple, fast, no tech knowledge required on your end.</p>
+<section class="section" id="how-it-works">
+  <p class="section-label">How It Works</p>
+  <h2>One simple system. Two jobs.</h2>
+  <p style="font-size:0.95rem;color:var(--mid);font-weight:300;line-height:1.8;max-width:500px;margin-top:0.75rem">Your inquiries shouldn't have to depend on you remembering where every conversation started.</p>
 
-  <div class="steps">
-    <div class="step">
-      <div class="step-num">01</div>
-      <div class="step-body">
-        <h4>Free 20-minute call</h4>
-        <p>We talk through your business, where clients drop off, and which system makes the most sense to build first. No pitch, just a real conversation.</p>
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:4rem;margin-top:3rem;align-items:start">
+    <div class="system-grid" style="display:block">
+      <div class="system-card" style="margin-bottom:2rem">
+        <p class="system-num">01 — Answer</p>
+        <h3>FAQ &amp; Inquiry Bot</h3>
+        <p class="system-sub">For your website or LinkedIn</p>
+        <p>Give potential clients immediate answers to the questions you get all the time — your services, pricing, coaching process, availability, who you work with, and more.</p>
+        <p>The bot uses information you provide, so potential clients can get answers without waiting for a response to every basic question. If someone wants to learn more, the inquiry flow captures their information for you.</p>
+        <p class="system-supporting">Answer the repetitive questions without answering the same message over and over.</p>
+      </div>
+      <div class="system-card">
+        <p class="system-num">02 — Capture &amp; See</p>
+        <h3>Lead Dashboard</h3>
+        <p class="system-sub">Your simple inquiry view</p>
+        <p>When someone expresses interest, their information is captured and organized in one simple dashboard. You can see who's interested and where each inquiry stands.</p>
+        <ul class="system-features">
+          <li>Name and contact information</li>
+          <li>What they're interested in</li>
+          <li>Date of inquiry</li>
+          <li>Simple status tracking: New → Reviewed → Contacted → Booked</li>
+          <li>Notes and next step</li>
+        </ul>
+        <p class="system-supporting">No digging through DMs, emails, forms, and random notes trying to remember who said what.</p>
       </div>
     </div>
-    <div class="step">
-      <div class="step-num">02</div>
-      <div class="step-body">
-        <h4>I build it</h4>
-        <p>You send me your content — offers, pricing, policies, FAQs. I build the system, train it on your business, and test it thoroughly before you see it.</p>
+
+    <!-- WORKFLOW -->
+    <div>
+      <p style="font-size:0.7rem;color:var(--gold);letter-spacing:0.1em;text-transform:uppercase;font-weight:500;margin-bottom:1.25rem">The full flow</p>
+      <div class="workflow">
+        <div class="workflow-step">
+          <div class="step-dot"></div>
+          <span class="step-label">Career coach's website or LinkedIn</span>
+        </div>
+        <div class="workflow-arrow">↓</div>
+        <div class="workflow-step">
+          <div class="step-dot"></div>
+          <span class="step-label">New inquiry comes in</span>
+        </div>
+        <div class="workflow-arrow">↓</div>
+        <div class="workflow-step">
+          <div class="step-dot"></div>
+          <span class="step-label">FAQ bot answers immediately</span>
+        </div>
+        <div class="workflow-arrow">↓</div>
+        <div class="workflow-step">
+          <div class="step-dot"></div>
+          <span class="step-label">Interested? Information is captured</span>
+        </div>
+        <div class="workflow-arrow">↓</div>
+        <div class="workflow-step highlight">
+          <div class="step-dot" style="background:var(--gold)"></div>
+          <span class="step-label">Lead appears in your dashboard</span>
+        </div>
+        <div class="workflow-arrow">↓</div>
+        <div class="workflow-step highlight">
+          <div class="step-dot" style="background:var(--gold)"></div>
+          <span class="step-label">You follow up personally</span>
+          <span class="step-sub" style="color:var(--gold)">You step in</span>
+        </div>
+        <p class="workflow-human">You step in when it actually matters.</p>
       </div>
-    </div>
-    <div class="step">
-      <div class="step-num">03</div>
-      <div class="step-body">
-        <h4>You review and approve</h4>
-        <p>I walk you through everything live. You test it, suggest changes, and we refine until it feels exactly like your business — not a generic bot.</p>
-      </div>
-    </div>
-    <div class="step">
-      <div class="step-num">04</div>
-      <div class="step-body">
-        <h4>It goes live</h4>
-        <p>I handle deployment, embedding, and setup. You get a system that works the same day it launches, with a 30-day window to flag anything that needs adjusting.</p>
+
+      <!-- DASHBOARD MOCKUP -->
+      <div style="margin-top:2rem">
+        <p style="font-size:0.7rem;color:var(--gold);letter-spacing:0.1em;text-transform:uppercase;font-weight:500;margin-bottom:0.75rem">Example dashboard</p>
+        <div class="dashboard-mockup">
+          <div class="dash-header">
+            <span class="dash-title">New Inquiries</span>
+            <span class="dash-badge">3 New</span>
+          </div>
+          <div class="dash-row">
+            <div>
+              <div class="dash-name">Sarah Johnson</div>
+              <div class="dash-detail">Career transition · sarah@email.com</div>
+            </div>
+            <span class="dash-status status-new">New</span>
+          </div>
+          <div class="dash-row">
+            <div>
+              <div class="dash-name">Marcus Williams</div>
+              <div class="dash-detail">Interview coaching · marcus@email.com</div>
+            </div>
+            <span class="dash-status status-contacted">Contacted</span>
+          </div>
+          <div class="dash-row">
+            <div>
+              <div class="dash-name">Jessica Brown</div>
+              <div class="dash-detail">Executive coaching · jessica@email.com</div>
+            </div>
+            <span class="dash-status status-booked">Booked</span>
+          </div>
+        </div>
       </div>
     </div>
   </div>
+</section>
+
+<!-- LIVE DEMO -->
+<section class="section" id="demo">
+  <p class="section-label">Live Demo</p>
+  <h2>See what happens when a potential client reaches out.</h2>
+  <div class="demo-grid">
+    <div class="demo-text">
+      <p>This is a real FAQ and inquiry bot built for a career coaching business. Ask it about pricing, services, or something it doesn't know — watch it capture the inquiry automatically. This is what I build for you.</p>
+      <p style="font-size:0.875rem;color:var(--mid);font-weight:300;line-height:1.7;margin-bottom:2rem">Try asking: "How much does coaching cost?" or "I'd love to learn more."</p>
+      <a href="https://pivot-with-purpose-chatbot.vercel.app" target="_blank" class="btn-primary">Try it live</a>
+    </div>
+    <div class="demo-card">
+      <p class="demo-card-eyebrow">Pivot With Purpose Coaching — Demo</p>
+      <h3>Simone's Inquiry Assistant</h3>
+      <p>Answers questions about coaching services, pricing, and process. When someone is ready to learn more, it captures their information — and they show up in the coach's dashboard.</p>
+      <a href="https://pivot-with-purpose-chatbot.vercel.app" target="_blank" class="demo-link">Open the live demo →</a>
+    </div>
+  </div>
+</section>
+
+<!-- OFFER -->
+<section class="section" id="services">
+  <p class="section-label">The Service</p>
+  <h2>The Career Coach<br>Inquiry System</h2>
+  <p style="font-size:0.95rem;color:var(--mid);font-weight:300;line-height:1.8;max-width:520px;margin-top:0.75rem">A simple way to answer common questions, capture interested prospects, and keep your inquiries organized.</p>
+
+  <div class="offer-card">
+    <h3>What's included</h3>
+    <p class="offer-tagline">Everything you need to go from "someone reached out" to "I know who's interested and what they need."</p>
+    <div class="offer-features">
+      <div class="offer-feature">FAQ &amp; inquiry assistant, built around your coaching</div>
+      <div class="offer-feature">Lead capture built into the inquiry conversation</div>
+      <div class="offer-feature">Simple lead dashboard with inquiry overview</div>
+      <div class="offer-feature">Basic inquiry information — name, email, interest, date</div>
+      <div class="offer-feature">Simple lead status tracking</div>
+      <div class="offer-feature">Setup and customization for your specific services</div>
+      <div class="offer-feature">Human handoff when something needs your attention</div>
+      <div class="offer-feature">30-day support after delivery</div>
+    </div>
+    <div class="offer-footer">
+      <div>
+        <p class="offer-price">Starting at <strong>$___</strong></p>
+        <p style="font-size:0.75rem;color:var(--tan);margin-top:0.25rem;font-weight:300">Scope and pricing discussed on our call</p>
+      </div>
+      <a href="#contact" class="btn-primary">Let's Build Your System</a>
+    </div>
+  </div>
+
+  <div class="offer-note">
+    <strong>Don't need the full system?</strong> We can start with the FAQ / inquiry bot on its own — without the dashboard. A good starting point if you want to answer common questions and capture basic interest before committing to the full setup.
+  </div>
+
+  <p style="font-size:0.8rem;color:var(--tan);margin-top:1.5rem;font-style:italic;font-weight:300">Start with the pieces you need now. Additional features can be added as your business grows.</p>
 </section>
 
 <!-- ABOUT -->
-<section class="about-section" id="about">
+<section class="section" id="about">
   <p class="section-label">About</p>
-  <h2>Why I understand this better than most</h2>
-  <div class="about-body">
-    <div class="about-text">
-      <p>I spent <strong>10 years in banking and financial services</strong> watching businesses lose clients because of the same three problems — slow follow-up, unanswered questions, and broken onboarding. I lived those problems professionally before I ever knew how to fix them technically.</p>
-      <p>Now I build AI systems that fix exactly that. Not because I learned it from a YouTube course, but because I understand what actually breaks down between a client expressing interest and becoming a paying customer.</p>
-      <p>I'm a <strong>single mom based in Lexington, SC</strong>, building this business one client at a time. I'm not an agency. You get me — and I take that seriously.</p>
+  <h2>I understand the problem<br>before I build the solution.</h2>
+  <div class="about-grid">
+    <div>
+      <blockquote class="about-quote">"I spent years watching people fall through the cracks when a process depended on someone remembering to make the next move."</blockquote>
+      <div class="stats-grid">
+        <div class="stat">
+          <div class="stat-num">10+</div>
+          <div class="stat-label">Years in banking &amp; financial services</div>
+        </div>
+        <div class="stat">
+          <div class="stat-num">4+</div>
+          <div class="stat-label">Years managing a customer-facing business</div>
+        </div>
+        <div class="stat" style="grid-column:1/-1;border-right:none">
+          <div class="stat-num">1</div>
+          <div class="stat-label">Person building your system from setup to handoff</div>
+        </div>
+      </div>
     </div>
-    <div class="about-stats">
-      <div class="stat">
-        <div class="stat-num">10+</div>
-        <div class="stat-label">Years in banking and financial services</div>
-      </div>
-      <div class="stat">
-        <div class="stat-num">3</div>
-        <div class="stat-label">AI systems built to solve the exact problems I watched businesses struggle with</div>
-      </div>
-      <div class="stat">
-        <div class="stat-num">SC</div>
-        <div class="stat-label">Active Notary Commission — Lexington, South Carolina</div>
+    <div class="about-body">
+      <p>I spent more than a decade working in banking and financial services, where following up, answering questions, documenting information, and moving people through processes weren't optional — they were the job.</p>
+      <p>I saw firsthand how easily people fall through the cracks when a process depends on someone remembering to make the next call, send the next email, or keep track of the next step.</p>
+      <p>Today, I build simple systems that help small businesses handle those repetitive pieces without turning their business into a complicated tech project.</p>
+      <p><strong>My goal isn't to give you more software to manage. It's to make your existing process easier to manage.</strong></p>
+      <div style="margin-top:2rem;padding-top:2rem;border-top:1px solid var(--rule)">
+        <p style="font-size:0.875rem;color:var(--mid);font-weight:300;line-height:1.7;margin-bottom:0">You'll work directly with me from setup through handoff. No giant agency. No sales team between you and the person building your system. No unnecessary layers. Just a practical system built around your business and your process.</p>
       </div>
     </div>
   </div>
 </section>
 
-<!-- PRODUCT -->
-<section class="services-section" id="blueprint">
-  <p class="section-label">Digital Guide</p>
+<!-- BLUEPRINT -->
+<section class="section" id="blueprint">
+  <p class="section-label">DIY Blueprint</p>
   <h2>Want to build it yourself?</h2>
-  <p>The FAQ Bot Blueprint walks you through every step — from planning your questions to deploying a live bot — with screenshots at every stage so you're never guessing.</p>
+  <p style="font-size:0.95rem;color:var(--mid);font-weight:300;line-height:1.8;max-width:520px;margin-top:0.75rem">The FAQ Bot Blueprint walks you through every step — from planning your questions to deploying a live bot — with screenshots at every stage so you're never guessing.</p>
 
-  <div style="margin-top: 2rem; border: 1px solid var(--grey); border-radius: 6px; padding: 2rem; display: grid; grid-template-columns: 1fr auto; gap: 1.5rem; align-items: start;">
+  <div class="product-card">
     <div>
-      <div style="font-size: 1rem; font-weight: 700; color: var(--black); margin-bottom: 0.5rem;">The FAQ Bot Blueprint</div>
-      <div style="font-size: 0.9rem; color: var(--mid); line-height: 1.7; margin-bottom: 1rem; max-width: 460px;">A step-by-step guide to building your own AI FAQ bot using Claude Code — even if you've never built one before. Includes screenshots of every key step, the exact FAQ questions to start with, and how to deploy it live for free.</div>
-      <div style="font-size: 0.8rem; color: var(--mid); line-height: 1.7;">
-        What's inside:<br>
-        Planning your FAQ content · Setting up Claude Code · Training the bot on your business · Testing locally · Deploying to Vercel · Recording your demo · Using it to get clients
-      </div>
+      <h3>The FAQ Bot Blueprint</h3>
+      <p class="sub">A step-by-step guide to building your own AI FAQ bot using Claude Code — even if you've never built one before. Includes screenshots of every key step, the exact FAQ questions to start with, and instructions for testing and deploying your bot live for free.</p>
+      <ul class="product-includes">
+        <li>Planning your FAQ content</li>
+        <li>Setting up Claude Code</li>
+        <li>Training the bot on your business</li>
+        <li>Testing locally before going live</li>
+        <li>Deploying to Vercel for free</li>
+        <li>Embedding it on your website</li>
+        <li>Using it to get clients</li>
+      </ul>
     </div>
-    <div style="text-align: right; flex-shrink: 0;">
-      <div style="font-size: 1.5rem; font-weight: 700; color: var(--blue); margin-bottom: 0.75rem;">$47</div>
-      <a href="https://bloomproperties.gumroad.com/l/ezomn" target="_blank" class="btn-primary" style="font-size: 0.9rem; padding: 0.75rem 1.25rem;">Buy the guide</a>
-      <div style="font-size: 0.75rem; color: var(--mid); margin-top: 0.5rem;">Instant download after payment</div>
+    <div style="text-align:center;flex-shrink:0">
+      <span class="product-price">$47</span>
+      <a href="https://bloomproperties.gumroad.com/l/ezomn" target="_blank" class="btn-primary">Get the Blueprint</a>
+      <p style="font-size:0.72rem;color:var(--tan);margin-top:0.5rem">Instant download after payment</p>
+    </div>
+  </div>
+
+  <div class="diy-cta">
+    <div>
+      <h3>Build it yourself. Or let me build it for you.</h3>
+      <p>Some business owners want the playbook. Others want the finished system. Both are valid. The FAQ Bot Blueprint gives you the roadmap to build the FAQ bot yourself. If you'd rather skip the technical setup and have the system built around your business, that's what my done-for-you service is for.</p>
+    </div>
+    <div class="diy-actions">
+      <a href="https://bloomproperties.gumroad.com/l/ezomn" target="_blank" class="btn-outline">Get the Blueprint</a>
+      <a href="#contact" class="btn-primary">Work With Me</a>
     </div>
   </div>
 </section>
 
 <!-- CTA -->
-<section class="cta-section" id="contact">
+<div class="cta-section" id="contact">
   <div class="cta-box">
-    <h2>Let's figure out what's costing you the most right now</h2>
-    <p>Drop your email and I'll reach out to schedule a free 20-minute call. No pressure, no pitch deck — just a real conversation about your business.</p>
-    <div class="cta-email">
+    <h2>Let's talk about your inquiry process.</h2>
+    <p>Drop your email and I'll reach out to schedule a free call. No pitch deck, no pressure — just a conversation about how you currently handle new inquiries and whether a simple system would help.</p>
+    <div class="cta-form">
       <input type="email" placeholder="your@email.com">
       <button type="button">Send it</button>
     </div>
     <p class="cta-note">Or find me on LinkedIn — Bryttani Patterson</p>
   </div>
-</section>
+</div>
 
 <!-- FOOTER -->
 <footer>
