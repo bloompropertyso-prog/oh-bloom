@@ -328,6 +328,14 @@ nav{
 }
 
 /* SYSTEM — TWO STEPS */
+.how-it-works-grid{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:4rem;
+  margin-top:3rem;
+  align-items:start;
+}
+
 .system-grid{
   display:grid;
   grid-template-columns:1fr 1fr;
@@ -935,10 +943,11 @@ footer a:hover{color:var(--navy)}
 
 /* RESPONSIVE */
 @media(max-width:768px){
-  nav{padding:1rem 1.5rem}
-  .nav-links{gap:1rem}
+  nav{padding:1rem 1.5rem;flex-wrap:wrap;row-gap:0.75rem}
+  .nav-name{font-size:0.95rem;white-space:nowrap}
+  .nav-links{gap:1rem;flex-wrap:wrap}
   .hero,.section,.cred-bar,.cta-section,footer{padding-left:1.5rem;padding-right:1.5rem}
-  .demo-grid,.about-grid,.system-grid{grid-template-columns:1fr;gap:2rem}
+  .demo-grid,.about-grid,.system-grid,.how-it-works-grid{grid-template-columns:1fr;gap:2rem}
   .product-card{grid-template-columns:1fr}
   .offer-features{grid-template-columns:1fr}
   .cta-form{flex-direction:column}
@@ -1003,7 +1012,7 @@ footer a:hover{color:var(--navy)}
   <h2>One simple system. Two jobs.</h2>
   <p style="font-size:0.95rem;color:var(--mid);font-weight:300;line-height:1.8;max-width:500px;margin-top:0.75rem">Your inquiries shouldn't have to depend on you remembering where every conversation started.</p>
 
-  <div style="display:grid;grid-template-columns:1fr 1fr;gap:4rem;margin-top:3rem;align-items:start">
+  <div class="how-it-works-grid">
     <div class="system-grid" style="display:block">
       <div class="system-card" style="margin-bottom:2rem">
         <p class="system-num">01 — Answer</p>
