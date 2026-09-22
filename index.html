@@ -1061,11 +1061,11 @@ footer a:hover{color:var(--navy)}
   <div class="cta-box">
     <h2>Let's talk about the leads you're losing right now.</h2>
     <p>Drop your email and I'll reach out to schedule a free call. No pitch deck, no pressure — just a conversation about how you currently handle new inquiries and whether a simple system would help.</p>
-    <div class="cta-form">
-      <input type="email" placeholder="your@email.com">
-      <button type="button">Send it</button>
-    </div>
-    <p class="cta-note">Or find me on LinkedIn — Bloom Admin</p>
+    <form class="cta-form" id="lead-form">
+      <input type="email" id="lead-email" placeholder="your@email.com" required>
+      <button type="submit" id="lead-submit">Send it</button>
+    </form>
+    <p class="cta-note" id="lead-message">Or find me on LinkedIn — Bloom Admin</p>
   </div>
 </div>
 
@@ -1074,6 +1074,52 @@ footer a:hover{color:var(--navy)}
   <p>© 2026 Bloom Admin by Bryttani Patterson · ohbloom.com</p>
   <a href="mailto:hello@ohbloom.com">hello@ohbloom.com</a>
 </footer>
+
+<script>
+(function () {
+  var SUPABASE_URL = 'https://xlerqrghhghpadrvlptn.supabase.co';
+  var SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InhsZXJxcmdoaGdocGFkcnZscHRuIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODk1MDQ5MTksImV4cCI6MjEwNTA4MDkxOX0.UoKq4r1vkn07lvKyzor6nY6NJ2bwP8D8MyckkKj41j4';
+  var DEFAULT_NOTE = 'Or find me on LinkedIn — Bloom Admin';
+
+  var form = document.getElementById('lead-form');
+  var emailInput = document.getElementById('lead-email');
+  var submitBtn = document.getElementById('lead-submit');
+  var message = document.getElementById('lead-message');
+
+  form.addEventListener('submit', function (e) {
+    e.preventDefault();
+    var email = emailInput.value.trim();
+    if (!email) return;
+
+    submitBtn.disabled = true;
+    submitBtn.textContent = 'Sending…';
+    message.textContent = DEFAULT_NOTE;
+
+    fetch(SUPABASE_URL + '/rest/v1/bloom_admin_leads', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        apikey: SUPABASE_ANON_KEY,
+        Authorization: 'Bearer ' + SUPABASE_ANON_KEY,
+        Prefer: 'return=minimal',
+      },
+      body: JSON.stringify({ email: email }),
+    })
+      .then(function (res) {
+        if (!res.ok) throw new Error('Request failed');
+        emailInput.value = '';
+        message.textContent = "Thanks — I'll be in touch soon.";
+      })
+      .catch(function () {
+        message.textContent = 'Something went wrong. Please email hello@ohbloom.com instead.';
+      })
+      .finally(function () {
+        submitBtn.disabled = false;
+        submitBtn.textContent = 'Send it';
+      });
+  });
+})();
+</script>
 
 </body>
 </html>
