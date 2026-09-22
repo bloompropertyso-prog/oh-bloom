@@ -670,13 +670,6 @@ nav{
 .offer-note strong{color:var(--navy);font-weight:500}
 
 /* ABOUT */
-.about-grid{
-  display:grid;
-  grid-template-columns:1fr 1fr;
-  gap:5rem;
-  margin-top:2.5rem;
-}
-
 .about-quote{
   font-family:'Playfair Display',serif;
   font-size:1.15rem;
@@ -732,120 +725,6 @@ nav{
   color:var(--tan);
   line-height:1.5;
   font-weight:300;
-}
-
-/* PRODUCT */
-.product-card{
-  background:var(--white);
-  border:1px solid var(--rule);
-  border-radius:8px;
-  padding:2.5rem;
-  display:grid;
-  grid-template-columns:1fr auto;
-  gap:3rem;
-  align-items:center;
-  margin-top:2.5rem;
-  position:relative;
-}
-
-.product-card::before{
-  content:'Guide No. 01';
-  position:absolute;
-  top:-0.6rem;
-  left:2rem;
-  font-size:0.65rem;
-  letter-spacing:0.1em;
-  text-transform:uppercase;
-  color:var(--gold);
-  background:var(--white);
-  padding:0 0.5rem;
-}
-
-.product-card h3{
-  font-family:'Playfair Display',serif;
-  font-size:1.4rem;
-  font-weight:700;
-  color:var(--navy);
-  margin-bottom:0.5rem;
-}
-
-.product-card .sub{
-  font-size:0.875rem;
-  color:var(--mid);
-  line-height:1.7;
-  font-weight:300;
-  max-width:480px;
-  margin-bottom:1.25rem;
-}
-
-.product-includes{
-  list-style:none;
-  display:flex;
-  flex-direction:column;
-  gap:0.3rem;
-}
-
-.product-includes li{
-  font-size:0.825rem;
-  color:var(--mid);
-  font-weight:300;
-  display:flex;
-  gap:0.5rem;
-  align-items:baseline;
-}
-
-.product-includes li::before{
-  content:'·';
-  color:var(--gold);
-  flex-shrink:0;
-}
-
-.product-price{
-  font-family:'Playfair Display',serif;
-  font-size:3rem;
-  font-weight:700;
-  color:var(--navy);
-  text-align:center;
-  display:block;
-  margin-bottom:1rem;
-}
-
-/* DIY CTA */
-.diy-cta{
-  background:var(--cream);
-  border:1px solid var(--rule);
-  border-radius:8px;
-  padding:2rem 2.5rem;
-  margin-top:2rem;
-  display:flex;
-  justify-content:space-between;
-  align-items:center;
-  gap:2rem;
-  flex-wrap:wrap;
-}
-
-.diy-cta h3{
-  font-family:'Playfair Display',serif;
-  font-size:1.2rem;
-  font-weight:700;
-  color:var(--navy);
-  margin-bottom:0.4rem;
-}
-
-.diy-cta p{
-  font-size:0.875rem;
-  color:var(--mid);
-  font-weight:300;
-  line-height:1.6;
-  max-width:480px;
-}
-
-.diy-actions{
-  display:flex;
-  gap:1rem;
-  align-items:center;
-  flex-shrink:0;
-  flex-wrap:wrap;
 }
 
 /* CTA */
@@ -947,14 +826,12 @@ footer a:hover{color:var(--navy)}
   .nav-name{font-size:0.95rem;white-space:nowrap}
   .nav-links{gap:1rem;flex-wrap:wrap}
   .hero,.section,.cred-bar,.cta-section,footer{padding-left:1.5rem;padding-right:1.5rem}
-  .demo-grid,.about-grid,.system-grid,.how-it-works-grid{grid-template-columns:1fr;gap:2rem}
-  .product-card{grid-template-columns:1fr}
+  .demo-grid,.system-grid,.how-it-works-grid{grid-template-columns:1fr;gap:2rem}
   .offer-features{grid-template-columns:1fr}
   .cta-form{flex-direction:column}
   .cta-form input{border-right:1px solid rgba(255,255,255,0.15);border-bottom:none;border-radius:4px 4px 0 0}
   .cta-form button{border-radius:0 0 4px 4px}
   .cta-box{padding:2rem 1.5rem}
-  .diy-cta{flex-direction:column;align-items:flex-start}
   .offer-footer{flex-direction:column;align-items:flex-start}
 }
 </style>
@@ -967,7 +844,6 @@ footer a:hover{color:var(--navy)}
   <ul class="nav-links">
     <li><a href="#how-it-works">How It Works</a></li>
     <li><a href="#services">Services</a></li>
-    <li><a href="#blueprint">DIY Blueprint</a></li>
     <li><a href="#about">About</a></li>
     <li><a href="#contact" class="nav-cta">Work Together</a></li>
   </ul>
@@ -1168,58 +1044,15 @@ footer a:hover{color:var(--navy)}
 <section class="section" id="about">
   <p class="section-label">About</p>
   <h2>I've spent years helping businesses run.<br>Now I'm building the systems behind them.</h2>
-  <div class="about-grid">
-    <div>
-      <blockquote class="about-quote">"The goal isn't to replace the personal service that makes your business great. It's to help you maintain that level of service even when you're busy doing the work."</blockquote>
-    </div>
-    <div class="about-body">
-      <p>I've spent much of my career working in banking, customer service, operations, and small-business environments — helping businesses handle customers, information, processes, and the everyday things that keep work moving.</p>
-      <p>I've always taken pride in customer service. Because when someone reaches out to a business, that interaction is often their first impression. It shouldn't matter whether you're sitting at your desk with nothing going on or you're three jobs deep, dealing with a customer emergency and trying to keep the day moving. That customer should still feel like their inquiry matters.</p>
-      <p>Over the years, I've seen how easily that becomes difficult when you're busy. Calls get missed. Messages get buried. Questions get answered late. Important details end up scattered across texts, emails, and notes.</p>
-      <p>That's what led me to the systems side of things.</p>
-      <p>I want to help small businesses create a better experience for the people reaching out — without adding another complicated process for the business owner to manage.</p>
-      <p>I build simple systems that help businesses answer common questions, capture the information that matters, and keep new inquiries organized so they don't get lost when things get busy.</p>
-      <p><strong>The goal isn't to replace the personal service that makes your business great. It's to help you maintain that level of service even when you're busy doing the work.</strong></p>
-    </div>
-  </div>
-</section>
-
-<!-- BLUEPRINT -->
-<section class="section" id="blueprint">
-  <p class="section-label">DIY Blueprint</p>
-  <h2>Want to build it yourself?</h2>
-  <p style="font-size:0.95rem;color:var(--mid);font-weight:300;line-height:1.8;max-width:520px;margin-top:0.75rem">The FAQ Bot Blueprint walks you through every step — from planning your questions to deploying a live bot — with screenshots at every stage so you're never guessing.</p>
-
-  <div class="product-card">
-    <div>
-      <h3>The FAQ Bot Blueprint</h3>
-      <p class="sub">A step-by-step guide to building your own AI FAQ bot using Claude Code — even if you've never built one before. Includes screenshots of every key step, the exact FAQ questions to start with, and instructions for testing and deploying your bot live for free.</p>
-      <ul class="product-includes">
-        <li>Planning your FAQ content</li>
-        <li>Setting up Claude Code</li>
-        <li>Training the bot on your business</li>
-        <li>Testing locally before going live</li>
-        <li>Deploying to Vercel for free</li>
-        <li>Embedding it on your website</li>
-        <li>Using it to get clients</li>
-      </ul>
-    </div>
-    <div style="text-align:center;flex-shrink:0">
-      <span class="product-price">$47</span>
-      <a href="https://bloomproperties.gumroad.com/l/ezomn" target="_blank" class="btn-primary">Get the Blueprint</a>
-      <p style="font-size:0.72rem;color:var(--tan);margin-top:0.5rem">Instant download after payment</p>
-    </div>
-  </div>
-
-  <div class="diy-cta">
-    <div>
-      <h3>Build it yourself. Or let me build it for you.</h3>
-      <p>Some business owners want the playbook. Others want the finished system. Both are valid. The FAQ Bot Blueprint gives you the roadmap to build the FAQ bot yourself. If you'd rather skip the technical setup and have the system built around your business, that's what my done-for-you service is for.</p>
-    </div>
-    <div class="diy-actions">
-      <a href="https://bloomproperties.gumroad.com/l/ezomn" target="_blank" class="btn-outline">Get the Blueprint</a>
-      <a href="#contact" class="btn-primary">Work With Me</a>
-    </div>
+  <blockquote class="about-quote" style="margin-top:2.5rem">"The goal isn't to replace the personal service that makes your business great. It's to help you maintain that level of service even when you're busy doing the work."</blockquote>
+  <div class="about-body">
+    <p>I've spent much of my career working in banking, customer service, operations, and small-business environments — helping businesses handle customers, information, processes, and the everyday things that keep work moving.</p>
+    <p>I've always taken pride in customer service. Because when someone reaches out to a business, that interaction is often their first impression. It shouldn't matter whether you're sitting at your desk with nothing going on or you're three jobs deep, dealing with a customer emergency and trying to keep the day moving. That customer should still feel like their inquiry matters.</p>
+    <p>Over the years, I've seen how easily that becomes difficult when you're busy. Calls get missed. Messages get buried. Questions get answered late. Important details end up scattered across texts, emails, and notes.</p>
+    <p>That's what led me to the systems side of things.</p>
+    <p>I want to help small businesses create a better experience for the people reaching out — without adding another complicated process for the business owner to manage.</p>
+    <p>I build simple systems that help businesses answer common questions, capture the information that matters, and keep new inquiries organized so they don't get lost when things get busy.</p>
+    <p><strong>The goal isn't to replace the personal service that makes your business great. It's to help you maintain that level of service even when you're busy doing the work.</strong></p>
   </div>
 </section>
 
