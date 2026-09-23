@@ -1063,6 +1063,15 @@ footer a:hover{color:var(--navy)}
     <p>Drop your email and I'll reach out to schedule a free call. No pitch deck, no pressure — just a conversation about how you currently handle new inquiries and whether a simple system would help.</p>
     <form class="cta-form" id="lead-form">
       <input type="email" id="lead-email" placeholder="your@email.com" required>
+      <input
+        type="text"
+        id="lead-hp"
+        name="website"
+        tabindex="-1"
+        autocomplete="off"
+        aria-hidden="true"
+        style="position:absolute;left:-9999px;width:1px;height:1px;opacity:0"
+      >
       <button type="submit" id="lead-submit">Send it</button>
     </form>
     <p class="cta-note" id="lead-message">Or find me on LinkedIn — Bloom Admin</p>
@@ -1083,6 +1092,7 @@ footer a:hover{color:var(--navy)}
 
   var form = document.getElementById('lead-form');
   var emailInput = document.getElementById('lead-email');
+  var honeypot = document.getElementById('lead-hp');
   var submitBtn = document.getElementById('lead-submit');
   var message = document.getElementById('lead-message');
 
@@ -1090,6 +1100,16 @@ footer a:hover{color:var(--navy)}
     e.preventDefault();
     var email = emailInput.value.trim();
     if (!email) return;
+
+    // Honeypot: real visitors never see or fill this field, but bots that
+    // blindly fill every input on a page usually do. Pretend success
+    // without ever touching the database, so the bot has no signal to
+    // adapt to.
+    if (honeypot.value) {
+      emailInput.value = '';
+      message.textContent = "Thanks — I'll be in touch soon.";
+      return;
+    }
 
     submitBtn.disabled = true;
     submitBtn.textContent = 'Sending…';
