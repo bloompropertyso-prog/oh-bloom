@@ -6,7 +6,7 @@
 <title>Home Service Lead Systems | Bloom Admin</title>
 <meta name="description" content="Simple lead systems for home service businesses. Answer customer questions, capture new inquiries, and keep potential jobs organized for follow-up.">
 <link rel="icon" type="image/svg+xml" href="/favicon.svg">
-<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;1,400&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,900;1,400&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
 <style>
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 
@@ -100,12 +100,12 @@ nav{
 
 .hero h1{
   font-family:'Playfair Display',serif;
-  font-size:clamp(2.4rem,6vw,4.5rem);
-  font-weight:700;
-  line-height:1.1;
-  letter-spacing:-0.02em;
+  font-size:clamp(2.7rem,7vw,5.1rem);
+  font-weight:900;
+  line-height:1.04;
+  letter-spacing:-0.03em;
   color:var(--navy);
-  max-width:780px;
+  max-width:820px;
   margin-bottom:1.75rem;
 }
 
@@ -261,33 +261,6 @@ nav{
   line-height:1.8;
   font-weight:300;
   margin-bottom:0.5rem;
-}
-
-/* MINI FLOW (compact preview chips) */
-.mini-flow{
-  margin-top:2.5rem;
-  display:flex;
-  flex-wrap:wrap;
-  align-items:center;
-  gap:0.6rem;
-}
-
-.mini-flow-step{
-  font-size:0.72rem;
-  font-weight:600;
-  letter-spacing:0.02em;
-  text-transform:uppercase;
-  color:var(--navy);
-  background:var(--white);
-  border:1px solid var(--rule);
-  border-radius:999px;
-  padding:0.5rem 1rem;
-}
-
-.mini-flow-arrow{
-  color:var(--gold);
-  font-size:0.9rem;
-  flex-shrink:0;
 }
 
 /* WORKFLOW */
@@ -446,6 +419,31 @@ nav{
   flex-shrink:0;
 }
 
+.system-card.premium{
+  background:var(--navy);
+  border-color:var(--navy);
+}
+
+.system-card.premium h3{color:var(--cream)}
+.system-card.premium .system-sub{color:rgba(247,244,239,0.65)}
+.system-card.premium p{color:rgba(247,244,239,0.8)}
+.system-card.premium .system-features{border-top-color:rgba(247,244,239,0.2)}
+.system-card.premium .system-features li{color:rgba(247,244,239,0.85)}
+
+.btn-gold{
+  background:var(--gold);
+  color:var(--navy);
+  padding:0.875rem 1.75rem;
+  border-radius:4px;
+  font-size:0.875rem;
+  font-weight:600;
+  text-decoration:none;
+  transition:background 0.2s;
+  display:inline-block;
+}
+
+.btn-gold:hover{background:#dbb84f}
+
 .system-supporting{
   margin-top:1.25rem;
   padding-top:1.25rem;
@@ -522,9 +520,9 @@ nav{
   border-radius:3px;
 }
 
-.status-new{background:#EEF2FF;color:#3730A3}
-.status-contacted{background:#FEF9EE;color:#92400E}
-.status-booked{background:#F0FDF4;color:#166534}
+.status-new{background:#DBEAFE;color:#1E40AF}
+.status-contacted{background:#FEF3C7;color:#92400E}
+.status-booked{background:#DCFCE7;color:#166534}
 
 /* DEMO SECTION */
 .demo-grid{
@@ -683,6 +681,18 @@ nav{
   font-weight:700;
 }
 
+.price-badge{
+  display:inline-block;
+  font-family:'Playfair Display',serif;
+  font-size:1.05rem;
+  font-weight:700;
+  color:var(--navy);
+  background:rgba(201,168,76,0.15);
+  border:1px solid var(--gold);
+  padding:0.6rem 1.25rem;
+  border-radius:999px;
+}
+
 .offer-note{
   margin-top:1.5rem;
   padding:1.25rem 1.5rem;
@@ -740,8 +750,8 @@ nav{
 
 .stats-grid{
   display:grid;
-  grid-template-columns:1fr 1fr;
-  margin-top:2.5rem;
+  grid-template-columns:repeat(3,1fr);
+  margin-top:2rem;
   border:1px solid var(--rule);
   border-radius:6px;
   overflow:hidden;
@@ -749,14 +759,12 @@ nav{
 }
 
 .stat{
-  padding:1.25rem 1.5rem;
+  padding:1.5rem;
   border-right:1px solid var(--rule);
-  border-bottom:1px solid var(--rule);
+  text-align:center;
 }
 
-.stat:nth-child(2n){border-right:none}
-.stat:last-child{border-bottom:none;border-right:none;grid-column:1/-1}
-.stat:nth-last-child(2){border-bottom:none}
+.stat:last-child{border-right:none}
 
 .stat-num{
   font-family:'Playfair Display',serif;
@@ -875,6 +883,9 @@ footer a:hover{color:var(--navy)}
   .hero,.section,.cred-bar,.cta-section,footer{padding-left:1.5rem;padding-right:1.5rem}
   .demo-grid,.system-grid,.how-it-works-grid{grid-template-columns:1fr;gap:2rem}
   .offer-features{grid-template-columns:1fr}
+  .stats-grid{grid-template-columns:1fr}
+  .stat{border-right:none;border-bottom:1px solid var(--rule)}
+  .stat:last-child{border-bottom:none}
   .cta-form{flex-direction:column}
   .cta-form input{border-right:1px solid rgba(255,255,255,0.15);border-bottom:none;border-radius:4px 4px 0 0}
   .cta-form button{border-radius:0 0 4px 4px}
@@ -937,20 +948,41 @@ footer a:hover{color:var(--navy)}
     <p>It can answer routine questions, capture interested customers, and organize their information so you know who reached out and what they need.</p>
     <p><strong>Then you step in.</strong></p>
   </div>
-  <div class="mini-flow">
-    <span class="mini-flow-step">Customer Reaches Out</span>
-    <span class="mini-flow-arrow">→</span>
-    <span class="mini-flow-step">Common Question?</span>
-    <span class="mini-flow-arrow">→</span>
-    <span class="mini-flow-step">Gets an Answer</span>
-    <span class="mini-flow-arrow">→</span>
-    <span class="mini-flow-step">Wants More Information?</span>
-    <span class="mini-flow-arrow">→</span>
-    <span class="mini-flow-step">Information Is Captured</span>
-    <span class="mini-flow-arrow">→</span>
-    <span class="mini-flow-step">Lead Appears in Your Inquiry Dashboard</span>
-    <span class="mini-flow-arrow">→</span>
-    <span class="mini-flow-step">You Follow Up</span>
+  <div class="workflow" style="max-width:480px">
+    <div class="workflow-step">
+      <div class="step-dot"></div>
+      <span class="step-label">Customer Reaches Out</span>
+    </div>
+    <div class="workflow-arrow">↓</div>
+    <div class="workflow-step">
+      <div class="step-dot"></div>
+      <span class="step-label">Common Question?</span>
+    </div>
+    <div class="workflow-arrow">↓</div>
+    <div class="workflow-step">
+      <div class="step-dot"></div>
+      <span class="step-label">Gets an Answer</span>
+    </div>
+    <div class="workflow-arrow">↓</div>
+    <div class="workflow-step">
+      <div class="step-dot"></div>
+      <span class="step-label">Wants More Information?</span>
+    </div>
+    <div class="workflow-arrow">↓</div>
+    <div class="workflow-step">
+      <div class="step-dot"></div>
+      <span class="step-label">Information Is Captured</span>
+    </div>
+    <div class="workflow-arrow">↓</div>
+    <div class="workflow-step highlight">
+      <div class="step-dot" style="background:var(--gold)"></div>
+      <span class="step-label">Lead Appears in Your Inquiry Dashboard</span>
+    </div>
+    <div class="workflow-arrow">↓</div>
+    <div class="workflow-step highlight">
+      <div class="step-dot" style="background:var(--gold)"></div>
+      <span class="step-label">You Follow Up</span>
+    </div>
   </div>
 </section>
 
@@ -1121,8 +1153,8 @@ footer a:hover{color:var(--navy)}
     <div class="offer-footer">
       <div>
         <!-- STARTING PRICE: this is the only place the price appears on the site — edit this one line to update it everywhere. -->
-        <p class="offer-price">Starting at <strong>[PRICE TO BE SET]</strong></p>
-        <p style="font-size:0.75rem;color:var(--tan);margin-top:0.25rem;font-weight:300">Final pricing depends on the setup and customization needed for your business.</p>
+        <p class="offer-price"><span class="price-badge">Pricing starts at $500</span></p>
+        <p style="font-size:0.75rem;color:var(--tan);margin-top:0.6rem;font-weight:300">Final pricing depends on the setup and customization needed for your business.</p>
       </div>
       <a href="#contact" class="btn-primary">Let's Talk</a>
     </div>
@@ -1144,7 +1176,7 @@ footer a:hover{color:var(--navy)}
       </ul>
       <a href="#contact" class="btn-outline" style="margin-top:1.5rem;display:inline-block">Start With the Assistant</a>
     </div>
-    <div class="system-card">
+    <div class="system-card premium">
       <p class="system-num">Complete System</p>
       <h3>Home Service Lead System</h3>
       <p class="system-sub">For businesses that want the full process</p>
@@ -1156,7 +1188,7 @@ footer a:hover{color:var(--navy)}
         <li>Setup and customization</li>
         <li>30-day support</li>
       </ul>
-      <a href="#contact" class="btn-primary" style="margin-top:1.5rem;display:inline-block">Let's Build Your System</a>
+      <a href="#contact" class="btn-gold" style="margin-top:1.5rem;display:inline-block">Let's Build Your System</a>
     </div>
   </div>
 
@@ -1173,7 +1205,20 @@ footer a:hover{color:var(--navy)}
     <p>I've always taken pride in customer service. When someone reaches out to a business, that interaction is often their first impression. It shouldn't matter whether you're sitting at your desk with nothing going on or you're three jobs deep, dealing with an emergency and trying to keep the day moving. That customer should still feel like their inquiry matters.</p>
     <p>That's what led me to the systems side of things.</p>
     <p>I build simple systems that help businesses answer common questions, capture the information that matters, and keep new inquiries organized so they don't get lost when things get busy.</p>
-    <p style="margin-top:1.5rem;font-size:0.8rem;color:var(--tan);font-weight:300">10+ years in banking &amp; financial services · 4+ years managing a customer-facing business · 1 person building your system from setup to handoff</p>
+  </div>
+  <div class="stats-grid">
+    <div class="stat">
+      <div class="stat-num">10+</div>
+      <div class="stat-label">Years in banking &amp; financial services</div>
+    </div>
+    <div class="stat">
+      <div class="stat-num">4+</div>
+      <div class="stat-label">Years managing a customer-facing business</div>
+    </div>
+    <div class="stat">
+      <div class="stat-num">1</div>
+      <div class="stat-label">Person building your system from setup to handoff</div>
+    </div>
   </div>
 </section>
 
